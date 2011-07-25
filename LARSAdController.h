@@ -22,14 +22,31 @@
 
 @interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate> {
     
-@private
-    GADBannerView       *_adMobBannerView;
+
+    GADBannerView       *_googleAdBannerView;
     ADBannerView        *_iAdBannerView;
+@private
     UIView              *_parentView;
+    UIView              *_containerView;
+    UIViewController    *_parentViewController;
+    BOOL                _googleAdVisible;
+    BOOL                _iAdVisible;
 }
 
-@property (nonatomic, retain) GADBannerView     *adMobBannerView;
+@property (nonatomic, retain) GADBannerView     *googleAdBannerView;
 @property (nonatomic, retain) ADBannerView      *iAdBannerView;
 @property (nonatomic, assign) UIView            *parentView;
+@property (nonatomic, retain) UIView            *containerView;
+@property (nonatomic, assign) UIViewController  *parentViewController;
+@property (nonatomic, 
+           getter = isGoogleAdVisible)  BOOL    googleAdVisible;
+@property (nonatomic,
+           getter = isIAdVisible)       BOOL    iAdVisible;
+
+- (void)createContainerView;
+- (void)createGoogleAds;
+- (void)destroyGoogleAdsAnimated:(BOOL)animated;
+- (void)createIAds;
+- (void)destroyIAds;
 
 @end

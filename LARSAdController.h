@@ -43,6 +43,10 @@
 @property (nonatomic,
            getter = isIAdVisible)       BOOL    iAdVisible;
 
++ (LARSAdController *)sharedManager;
+- (NSUInteger)retainCount;
+- (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;
+
 - (void)createContainerView;
 - (void)createGoogleAds;
 - (void)destroyGoogleAdsAnimated:(BOOL)animated;

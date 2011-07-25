@@ -71,18 +71,24 @@ static LARSAdController *sharedController = nil;
 #pragma mark Public Methods
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController{
     //remove container from superview
-    //ad container to new view as subview at bottom
-    [self createContainerView];
-    
+    //  add ad container to new view as subview at bottom
     if (![[view subviews] containsObject:[self containerView]]) {
+        NSLog(@"Adding ad container to view");
         [self createIAds];
+        [self setParentView:view];
+        [self createContainerView];
+        
         [[self containerView] removeFromSuperview];
         [view addSubview:[self containerView]];
-        [[self containerView] setFrame:CGRectMake(0, 
-                                                  view.frame.size.height-self.containerView.frame.size.height, 
-                                                  self.containerView.frame.size.width, 
-                                                  self.containerView.frame.size.height)];
+//        [[self containerView] setFrame:CGRectMake(0, 
+//                                                  view.frame.size.height-self.containerView.frame.size.height, 
+//                                                  self.containerView.frame.size.width, 
+//                                                  self.containerView.frame.size.height)];
     }
+    else{
+        //ad container exists, bring to front
+    }
+    
     if (_googleAdBannerView) {
         [[self googleAdBannerView] setRootViewController:viewController];
     }
@@ -91,7 +97,7 @@ static LARSAdController *sharedController = nil;
 
 - (void)createContainerView{
     if (!_containerView) {
-        _containerView = [[UIView alloc] initWithFrame:CGRectZero];
+        _containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.parentView.frame.size.height-50, 480.0, 50.0)];
         [[self containerView] setAutoresizingMask:
                                         UIViewAutoresizingFlexibleTopMargin |
                                         UIViewAutoresizingFlexibleWidth
@@ -105,6 +111,19 @@ static LARSAdController *sharedController = nil;
     // if google ad is active
     //     release ad instance
     [self destroyGoogleAdsAnimated:YES];
+    
+    if (![self isIAdVisible]) {
+        [UIView animateWithDuration:0.250 
+                              delay:0.0 
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             [banner setFrame:CGRectOffset(banner.frame, 0.0, -banner.frame.size.height)];
+                         }
+                         completion:^(BOOL finished){
+                             [self setIAdVisible:YES];
+                         }
+         ];
+    }
 }
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
@@ -118,6 +137,19 @@ static LARSAdController *sharedController = nil;
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
     //if google ad instance is nil
     //  create new instance of google ad
+    if ([self isIAdVisible]) {
+        [UIView animateWithDuration:0.250 
+                              delay:0.0 
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             [banner setFrame:CGRectOffset(banner.frame, 0.0, banner.frame.size.height)];
+                         }
+                         completion:^(BOOL finished){
+                             [self setIAdVisible:NO];
+                         }
+         ];
+    }
+    
     if (!_googleAdBannerView) {
         [self createGoogleAds];
     }
@@ -207,33 +239,11 @@ static LARSAdController *sharedController = nil;
 #pragma mark -
 #pragma mark AdMob/Google Delegate Methods
 - (void)adViewDidReceiveAd:(GADBannerView *)bannerView{
-    if (![self isIAdVisible]) {
-        [UIView animateWithDuration:0.250 
-                              delay:0.0 
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             [bannerView setFrame:CGRectOffset(bannerView.frame, 0.0, bannerView.frame.size.height)];
-                         }
-                         completion:^(BOOL finished){
-                             [self setIAdVisible:YES];
-                         }
-         ];
-    }
+    
 }
 
 - (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
-    if ([self isIAdVisible]) {
-        [UIView animateWithDuration:0.250 
-                              delay:0.0 
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             [bannerView setFrame:CGRectOffset(bannerView.frame, 0.0, -bannerView.frame.size.height)];
-                         }
-                         completion:^(BOOL finished){
-                             [self setIAdVisible:NO];
-                         }
-         ];
-    }
+    
 }
 //
 //- (void)adViewWillPresentScreen:(GADBannerView *)bannerView{

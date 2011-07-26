@@ -74,9 +74,10 @@ static LARSAdController *sharedController = nil;
     //  add ad container to new view as subview at bottom
     if (![[view subviews] containsObject:[self containerView]]) {
         NSLog(@"Adding ad container to view");
-        [self createIAds];
+        
         [self setParentView:view];
         [self createContainerView];
+        [self createIAds];
         
         [[self containerView] removeFromSuperview];
         [view addSubview:[self containerView]];
@@ -87,21 +88,26 @@ static LARSAdController *sharedController = nil;
     }
     else{
         //ad container exists, bring to front
+        [view bringSubviewToFront:[self containerView]];
+        NSLog(@"Ad container already in subview - bringing to front");
     }
     
     if (_googleAdBannerView) {
         [[self googleAdBannerView] setRootViewController:viewController];
     }
+    
     [self setParentViewController:viewController];
 }
 
 - (void)createContainerView{
     if (!_containerView) {
-        _containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.parentView.frame.size.height-50, 480.0, 50.0)];
+        _containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.parentView.frame.size.height-50, 320.0, 50.0)];
         [[self containerView] setAutoresizingMask:
                                         UIViewAutoresizingFlexibleTopMargin |
                                         UIViewAutoresizingFlexibleWidth
         ];
+        [[self containerView] setBackgroundColor:[UIColor redColor]];
+        NSLog(@"Create container view");
     }
 }
 
@@ -121,18 +127,20 @@ static LARSAdController *sharedController = nil;
                          }
                          completion:^(BOOL finished){
                              [self setIAdVisible:YES];
+                             NSLog(@"iAd Animation Finished");
                          }
          ];
     }
+    NSLog(@"iAd Loaded");
 }
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
     return YES;
 }
 
-- (void)bannerViewActionDidFinish:(ADBannerView *)banner{
-    
-}
+//- (void)bannerViewActionDidFinish:(ADBannerView *)banner{
+//    
+//}
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
     //if google ad instance is nil
@@ -156,18 +164,19 @@ static LARSAdController *sharedController = nil;
     
     //if ad container is not a subview of the parent view
     //  add ad container as subview of parent
-    if ([[[self parentView] subviews] indexOfObject:[self containerView]] == -1) {
+    if (![[[self parentView] subviews] containsObject:[self containerView]]) {
         [[self parentView] addSubview:[self containerView]];
         [[self parentView] bringSubviewToFront:[self containerView]];
         [[self containerView] bringSubviewToFront:[self iAdBannerView]];
     }
+    NSLog(@"Failed to receive iAd");
 }
 
 #pragma mark -
 #pragma mark iAd Methods
 - (void)createIAds{
     //create offscreen
-    _iAdBannerView = [[ADBannerView alloc] initWithFrame:CGRectMake(0.0f, -50.0f, 480.0f, 50.0f)];
+    _iAdBannerView = [[ADBannerView alloc] initWithFrame:CGRectMake(0.0f, 50.0f, 320.0f, 50.0f)];
     
     if (ADBannerContentSizeIdentifierPortrait) {
         [[self iAdBannerView] setCurrentContentSizeIdentifier:ADBannerContentSizeIdentifierPortrait];
@@ -178,6 +187,7 @@ static LARSAdController *sharedController = nil;
     
     [[self iAdBannerView] setDelegate:self];
     [[self containerView] addSubview:[self iAdBannerView]];
+    NSLog(@"Creating iAds");
 }
 
 - (void)destroyIAds{
@@ -185,6 +195,7 @@ static LARSAdController *sharedController = nil;
     [[self iAdBannerView] setDelegate:nil];
     [_iAdBannerView release];
     _iAdBannerView = nil;
+    NSLog(@"Destroying iAds");
 }
 
 #pragma mark -
@@ -193,7 +204,7 @@ static LARSAdController *sharedController = nil;
     if (!_googleAdBannerView) {
         _googleAdBannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0f,
                                                                               self.containerView.frame.size.height-
-                                                                              GAD_SIZE_320x50.height,
+                                                                              GAD_SIZE_320x50.height+1.0,
                                                                               GAD_SIZE_320x50.width,
                                                                               GAD_SIZE_320x50.height)];
         [[self googleAdBannerView] setAdUnitID:kGoogleAdId];
@@ -204,10 +215,13 @@ static LARSAdController *sharedController = nil;
         [[self containerView] addSubview:[self googleAdBannerView]];
         [[self containerView] sendSubviewToBack:[self googleAdBannerView]];
     }
+    NSLog(@"Creating google ads");
 }
 
 - (void)destroyGoogleAdsAnimated:(BOOL)animated{
     if (_googleAdBannerView) {
+        NSLog(@"Destroying google ads");
+        
         if (animated) {
             [UIView animateWithDuration:0.250
                                   delay:0.0
@@ -216,7 +230,7 @@ static LARSAdController *sharedController = nil;
                                  [[self googleAdBannerView] setFrame:
                                       CGRectOffset(self.googleAdBannerView.frame, 
                                                    0.0, 
-                                                   -self.googleAdBannerView.frame.size.height)];
+                                                   self.googleAdBannerView.frame.size.height)];
                              }
                              completion:^(BOOL finished){
                                  dispatch_async(dispatch_get_main_queue(), ^{
@@ -232,18 +246,17 @@ static LARSAdController *sharedController = nil;
             [_googleAdBannerView release];
             _googleAdBannerView = nil;
         }
-        
     }
 }
 
 #pragma mark -
 #pragma mark AdMob/Google Delegate Methods
 - (void)adViewDidReceiveAd:(GADBannerView *)bannerView{
-    
+    NSLog(@"Google ad did receive ad");
 }
 
 - (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
-    
+    NSLog(@"Google ad failed to receive ad");
 }
 //
 //- (void)adViewWillPresentScreen:(GADBannerView *)bannerView{

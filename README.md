@@ -1,12 +1,13 @@
 # LARSAdController
 
 ## Description
-LARSAdController is a singleton class that manages iAds and Google Ads in a single container view.  Presently, only portrait view is supported.  If you'd like landscape support before I get to it, please fork and help out!
+`LARSAdController` is a singleton class that manages iAds and Google Ads in a single container view.  Presently, only portrait view is supported.  If you'd like landscape support before I get to it, please fork and help out!
 
 ## Usage
-    - (void)viewWillAppear:(BOOL)animated{
-        [[LARSAdController sharedManager] addAdContainerToView:[self view] withViewController:self];
-    }
+```- (void)viewWillAppear:(BOOL)animated{
+    [[LARSAdController sharedManager] addAdContainerToView:[self view] withViewController:self];
+}
+```
 
 ##License
 

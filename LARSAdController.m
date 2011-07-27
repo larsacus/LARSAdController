@@ -76,13 +76,14 @@ static LARSAdController *sharedController = nil;
     if (![[view subviews] containsObject:[self containerView]]) {
         NSLog(@"Adding ad container to view");
         
-        [[self containerView] removeFromSuperview];
+        //[[self containerView] removeFromSuperview];
         [self setParentViewController:viewController];
         [self setParentView:view];
         [self createContainerView];
         [self createIAds];
         
         [view addSubview:[self containerView]];
+        [self fixAdContainerFrame];
     }
     else{
         //ad container exists, and bring to front
@@ -105,6 +106,13 @@ static LARSAdController *sharedController = nil;
 
         NSLog(@"Create container view");
     }
+}
+
+- (void)fixAdContainerFrame{
+    [[self containerView] setFrame:CGRectMake(0.0, 
+                                              self.parentView.frame.size.height-self.containerView.frame.size.height, 
+                                              self.parentView.frame.size.width, 
+                                              self.containerView.frame.size.height)];
 }
 
 #pragma mark -

@@ -46,7 +46,7 @@
 + (LARSAdController *)sharedManager;
 - (NSUInteger)retainCount;
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;
-
+- (void)fixAdContainerFrame;
 - (void)createContainerView;
 - (void)createGoogleAds;
 - (void)destroyGoogleAdsAnimated:(BOOL)animated;

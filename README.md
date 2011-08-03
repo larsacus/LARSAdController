@@ -6,7 +6,7 @@
 ## Usage
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{
-[[LARSAdController sharedManager] addAdContainerToView:[self view] withViewController:self];
+    [[LARSAdController sharedManager] addAdContainerToView:[self view] withViewController:self];
 }
 ```
 

@@ -41,6 +41,7 @@ static LARSAdController *sharedController = nil;
         [sharedController setIAdVisible:NO];
         [sharedController setParentViewController:nil];
     }
+    NSLog(@"Created LARSAdController: %p", sharedController);
     return sharedController;
 }
 
@@ -61,6 +62,10 @@ static LARSAdController *sharedController = nil;
 
 - (NSUInteger)retainCount{
     return NSUIntegerMax;
+}
+
+- (oneway void)release{
+    //empty implementation to prevent user releasing
 }
 
 - (id)autorelease{
@@ -98,11 +103,15 @@ static LARSAdController *sharedController = nil;
 
 - (void)createContainerView{
     if (!_containerView) {
-        _containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.parentView.frame.size.height-50, 320.0, 50.0)];
+        _containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 
+                                                                  self.parentView.frame.size.height-50, 
+                                                                  320.0, 
+                                                                  50.0)];
         [[self containerView] setAutoresizingMask:
                                         UIViewAutoresizingFlexibleTopMargin |
                                         UIViewAutoresizingFlexibleWidth
         ];
+        [[self containerView] setClipsToBounds:YES];
 
         NSLog(@"Create container view");
     }
@@ -187,7 +196,7 @@ static LARSAdController *sharedController = nil;
         _iAdBannerView = [[ADBannerView alloc] initWithFrame:CGRectMake(0.0f, 50.0f, 320.0f, 50.0f)];
     }
     
-    if (NSClassFromString(@"ADBannerContentSizeIdentifierPortrait")) {
+    if (&ADBannerContentSizeIdentifierPortrait) {
         [[self iAdBannerView] setCurrentContentSizeIdentifier:ADBannerContentSizeIdentifierPortrait];
     }
     else{
@@ -269,6 +278,7 @@ static LARSAdController *sharedController = nil;
     NSLog(@"Google ad failed to receive ad");
 }
 
+// Unused Google Ad Delegate Methods
 //
 //- (void)adViewWillPresentScreen:(GADBannerView *)bannerView{
 //    

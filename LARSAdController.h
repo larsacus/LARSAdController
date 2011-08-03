@@ -44,7 +44,6 @@
            getter = isIAdVisible)       BOOL    iAdVisible;
 
 + (LARSAdController *)sharedManager;
-- (NSUInteger)retainCount;
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;
 - (void)fixAdContainerFrame;
 - (void)createContainerView;

@@ -31,6 +31,8 @@
     UIViewController    *_parentViewController;
     BOOL                _googleAdVisible;
     BOOL                _iAdVisible;
+    BOOL                _shouldAlertUserWhenLeaving;
+    NSString            *_googleAdPublisherId;
 }
 
 @property (nonatomic, retain) GADBannerView     *googleAdBannerView;
@@ -42,6 +44,8 @@
            getter = isGoogleAdVisible)  BOOL    googleAdVisible;
 @property (nonatomic,
            getter = isIAdVisible)       BOOL    iAdVisible;
+@property (nonatomic)         BOOL              shouldAlertUserWhenLeaving;
+@property (nonatomic, retain, readonly) NSString *googleAdPublisherId;
 
 + (LARSAdController *)sharedManager;
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;
@@ -49,6 +53,7 @@
 - (void)createContainerView;
 - (void)createGoogleAds;
 - (void)destroyGoogleAdsAnimated:(BOOL)animated;
+- (void)setGoogleAdPublisherId:(NSString *)publisherId;
 - (void)createIAds;
 - (void)destroyIAds;
 

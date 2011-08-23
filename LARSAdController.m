@@ -19,14 +19,13 @@
 @implementation LARSAdController
 
 @synthesize googleAdBannerView          = _googleAdBannerView;
-@synthesize iAdBannerView               = _iAdBannerView;
 @synthesize parentView                  = _parentView;
-@synthesize containerView               = _containerView;
 @synthesize googleAdVisible             = _googleAdVisible;
 @synthesize iAdVisible                  = _iAdVisible;
 @synthesize parentViewController        = _parentViewController;
 @synthesize shouldAlertUserWhenLeaving  = _shouldAlertUserWhenLeaving;
 @synthesize googleAdPublisherId         = _googleAdPublisherId;
+@synthesize lastOrientationWasPortrait  = _lastOrientationWasPortrait;
 
 //replace with your own google id
 #define kGoogleAdId @"a14c8986cea46d3"
@@ -82,11 +81,17 @@ static LARSAdController *sharedController = nil;
     //remove container from superview
     //  add ad container to new view as subview at bottom
     if (![[view subviews] containsObject:[self containerView]]) {
+        if (![[UIDevice currentDevice] isGeneratingDeviceOrientationNotifications]) {
+            [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        }
+        if (![self parentViewController]) {
+            [[NSNotificationCenter defaultCenter] addObserver:sharedController selector:@selector(deviceDidRotate) name:UIDeviceOrientationDidChangeNotification object:nil];
+        }
+        
         [self setParentViewController:viewController];
         [self setParentView:view];
-        [self createContainerView];
-        [self createIAds];
         
+        [[self containerView] addSubview:[self iAdBannerView]];
         [view addSubview:[self containerView]];
         [self fixAdContainerFrame];
     }
@@ -100,25 +105,57 @@ static LARSAdController *sharedController = nil;
     }
 }
 
-- (void)createContainerView{
+- (UIView *)containerView{
     if (!_containerView) {
-        _containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 
-                                                                  self.parentView.frame.size.height-50, 
-                                                                  320.0, 
-                                                                  50.0)];
-        [[self containerView] setAutoresizingMask:
-                                        UIViewAutoresizingFlexibleTopMargin |
-                                        UIViewAutoresizingFlexibleWidth
-        ];
-        [[self containerView] setClipsToBounds:YES];
+        CGRect frame = CGRectFromString([self containerSizeForDeviceOrientation]);
+        //frame.origin = CGPointMake(0.0f, CGRectGetMaxY(self.parentView.bounds));
+        
+        
+        _containerView = [[UIView alloc] initWithFrame:frame];
+        _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | 
+        UIViewAutoresizingFlexibleHeight | 
+        UIViewAutoresizingFlexibleTopMargin;
+        
+        NSLog(@"container view: %@", _containerView);
     }
+    return _containerView;
+}
+
+- (NSString *)containerSizeForDeviceOrientation{
+    float height;
+    float width;
+    if(UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])){ //must be landscape
+        if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
+            //ipad - size container appropriately for all ad sizes (1024x90)
+            height = 90.0f;
+            width = 1024.0f;
+        }
+        else{
+            //not an ipad - size container appropriately for all ad sizes (480x60)
+            height = 60.0f;
+            width = 480.0f;
+        }
+    }
+    else{
+        if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
+            //ipad - size container appropriately for all ad sizes (768x90)
+            height = 90.0f;
+            width = 768.0f;
+        }
+        else{
+            //not an ipad - size container appropriately for all ad sizes (320x50)
+            height = 50.0f;
+            width = 320.0f;
+        }
+    }
+    
+    CGRect frame = CGRectMake(0.0f, CGRectGetMaxY(self.parentView.bounds)-height, width, height);
+    return NSStringFromCGRect(frame);
 }
 
 - (void)fixAdContainerFrame{
-    [[self containerView] setFrame:CGRectMake(0.0, 
-                                              self.parentView.frame.size.height-self.containerView.frame.size.height, 
-                                              self.parentView.frame.size.width, 
-                                              self.containerView.frame.size.height)];
+    [[self containerView] setFrame:CGRectFromString([self containerSizeForDeviceOrientation])];
+    //[[self containerView] setCenter:CGPointMake(self.parentView.frame.size.width/2, self.containerView.center.y)];
 }
 
 #pragma mark -
@@ -126,6 +163,7 @@ static LARSAdController *sharedController = nil;
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner{
     // if google ad is active
     //     release ad instance
+    NSLog(@"iAd did receive ad");
     [self destroyGoogleAdsAnimated:YES];
     
     if (![self isIAdVisible]) {
@@ -153,6 +191,7 @@ static LARSAdController *sharedController = nil;
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
     //if google ad instance is nil
     //  create new instance of google ad
+    NSLog(@"iAd did fail to receive ad");
     if ([self isIAdVisible]) {
         [UIView animateWithDuration:0.250 
                               delay:0.0 
@@ -181,21 +220,35 @@ static LARSAdController *sharedController = nil;
 
 #pragma mark -
 #pragma mark iAd Methods
-- (void)createIAds{
-    //create offscreen
+- (ADBannerView *)iAdBannerView{
     if (!_iAdBannerView) {
-        _iAdBannerView = [[ADBannerView alloc] initWithFrame:CGRectMake(0.0f, 50.0f, 320.0f, 50.0f)];
+        NSString *contentSize;
+        if (&ADBannerContentSizeIdentifierPortrait != nil)
+        {
+            contentSize = UIInterfaceOrientationIsPortrait([[self parentViewController] interfaceOrientation]) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifierLandscape;
+        }
+        else
+        {
+            // user the older sizes 
+            contentSize = UIInterfaceOrientationIsPortrait([[self parentViewController] interfaceOrientation]) ? ADBannerContentSizeIdentifier320x50 : ADBannerContentSizeIdentifier480x32;
+        }
+
+        CGRect frame;
+        frame.size = [ADBannerView sizeFromBannerContentSizeIdentifier:contentSize];
+        frame.origin = CGPointMake(0.0f, CGRectGetMaxY(self.containerView.bounds));
+        
+        //create offscreen
+        _iAdBannerView = [[ADBannerView alloc] initWithFrame:frame];
+        
+        _iAdBannerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin;
+        _iAdBannerView.requiredContentSizeIdentifiers = (&ADBannerContentSizeIdentifierPortrait != nil) ?
+        [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil] : 
+        [NSSet setWithObjects:ADBannerContentSizeIdentifier320x50, ADBannerContentSizeIdentifier480x32, nil];
+         
+        [_iAdBannerView setDelegate:self];
+        [[self containerView] addSubview:_iAdBannerView];
     }
-    
-    if (&ADBannerContentSizeIdentifierPortrait) {
-        [[self iAdBannerView] setCurrentContentSizeIdentifier:ADBannerContentSizeIdentifierPortrait];
-    }
-    else{
-        [[self iAdBannerView] setCurrentContentSizeIdentifier:ADBannerContentSizeIdentifier320x50];
-    }
-    
-    [[self iAdBannerView] setDelegate:self];
-    [[self containerView] addSubview:[self iAdBannerView]];
+    return _iAdBannerView;
 }
 
 - (void)destroyIAds{
@@ -203,6 +256,42 @@ static LARSAdController *sharedController = nil;
     [[self iAdBannerView] setDelegate:nil];
     [_iAdBannerView release];
     _iAdBannerView = nil;
+}
+
+- (void)deviceDidRotate{
+    switch ([[UIDevice currentDevice] orientation]) {
+        case UIDeviceOrientationLandscapeLeft:
+        case UIDeviceOrientationLandscapeRight:
+            if (self.lastOrientationWasPortrait) {
+                NSLog(@"Now some form of landscape");
+                [self layoutBannerViewContainerForCurrentOrientation:YES];
+            }
+            self.lastOrientationWasPortrait = NO;
+            break;
+        case UIDeviceOrientationPortrait:
+        case UIDeviceOrientationPortraitUpsideDown:
+            if (!self.lastOrientationWasPortrait) {
+                NSLog(@"Now some form of portrait");
+                [self layoutBannerViewContainerForCurrentOrientation:YES];
+            }
+            self.lastOrientationWasPortrait = YES;
+        default:
+            break;
+    }
+    
+}
+
+- (void)layoutBannerViewContainerForCurrentOrientation:(BOOL)animated{
+    CGFloat animationDuration = animated ? 0.2f : 0.0f;
+    
+    // And finally animate the changes, running layout for the content view if required.
+    [UIView animateWithDuration:animationDuration
+                     animations:^{
+                         //self.parentView.frame = contentFrame;
+                         //[self.parentView layoutIfNeeded];
+                         self.containerView.frame = CGRectFromString([self containerSizeForDeviceOrientation]);
+                     }];
+    NSLog(@"container view: %@", self.containerView);
 }
 
 #pragma mark -

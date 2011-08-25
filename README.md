@@ -1,14 +1,31 @@
-# LARSAdController
+# `LARSAdController` 2.0
 
 ## Description
-`LARSAdController` is a singleton class that manages iAds and Google Ads in a single container view.  Presently, only portrait view is supported.  If you'd like landscape support before I get to it, please fork and help out!
+`LARSAdController` is a singleton class that manages iAds and Google Ads in a single container view.  All orientations and devices are supported (Pads and Pods).
 
 ## Usage
+For single-orientation support for all devices, simply add the following line in your `UIViewController`:
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{
     [[LARSAdController sharedManager] addAdContainerToView:[self view] withViewController:self];
 }
 ```
+
+That's it.  Technically, this can be added to any `UIView` that is large enough.
+
+If you would like to enable support for multiple orientations, add the following when you create add the container to the view, as well as in `willAnimateRotationToInterfaceOrientation:toInterfaceOrientation:duration:`:
+``` objective-c
+- (void)viewWillAppear:(BOOL)animated{
+    [[LARSAdController sharedManager] addAdContainerToView:self.view withParentViewController:self];
+    [[LARSAdController sharedManager] layoutBannerViewsForCurrentOrientation:self.interfaceOrientation];
+}
+
+-(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    [[LARSAdController sharedManager] layoutBannerViewsForCurrentOrientation:toInterfaceOrientation];
+}
+```
+
+There is currently not any support for auto-listening for interface orientation changes without the `viewController` delegate callback methods (yet).
 
 ##License
 

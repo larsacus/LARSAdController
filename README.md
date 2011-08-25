@@ -5,6 +5,7 @@
 
 ## Usage
 For single-orientation support for all devices, simply add the following line in your `UIViewController`:
+
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{
     [[LARSAdController sharedManager] addAdContainerToView:[self view] withViewController:self];
@@ -14,6 +15,7 @@ For single-orientation support for all devices, simply add the following line in
 That's it.  Technically, this can be added to any `UIView` that is large enough.
 
 If you would like to enable support for multiple orientations, add the following when you create add the container to the view, as well as in `willAnimateRotationToInterfaceOrientation:toInterfaceOrientation:duration:`:
+
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{
     [[LARSAdController sharedManager] addAdContainerToView:self.view withParentViewController:self];

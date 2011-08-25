@@ -34,30 +34,33 @@
     BOOL                _shouldAlertUserWhenLeaving;
     NSString            *_googleAdPublisherId;
     BOOL                _lastOrientationWasPortrait;
+    UIInterfaceOrientation _currentOrientation;
 }
 
-@property (nonatomic, retain) GADBannerView     *googleAdBannerView;
-@property (nonatomic, assign) UIView            *parentView;
-@property (nonatomic, assign) UIViewController  *parentViewController;
+@property (nonatomic, retain)           GADBannerView     *googleAdBannerView;
+@property (nonatomic, assign)           UIView            *parentView;
+@property (nonatomic, assign)           UIViewController  *parentViewController;
 @property (nonatomic, 
            getter = isGoogleAdVisible)  BOOL    googleAdVisible;
 @property (nonatomic,
            getter = isIAdVisible)       BOOL    iAdVisible;
-@property (nonatomic)         BOOL              shouldAlertUserWhenLeaving;
+@property (nonatomic)                   BOOL              shouldAlertUserWhenLeaving;
 @property (nonatomic, retain, readonly) NSString *googleAdPublisherId;
 @property (nonatomic)                   BOOL    lastOrientationWasPortrait;
+@property (nonatomic)                   UIInterfaceOrientation currentOrientation;
 
 + (LARSAdController *)sharedManager;
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;
 - (void)fixAdContainerFrame;
 - (void)createGoogleAds;
+- (void)recenterGoogleAdBannerView;
+- (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation;
 - (void)destroyGoogleAdsAnimated:(BOOL)animated;
 - (void)setGoogleAdPublisherId:(NSString *)publisherId;
 - (ADBannerView *)iAdBannerView;
 - (UIView *)containerView;
-- (NSString *)containerSizeForDeviceOrientation;
+- (NSString *)containerSizeForDeviceOrientation:(UIInterfaceOrientation)orientation;
 - (void)destroyIAds;
-- (void)layoutBannerViewContainerForCurrentOrientation:(BOOL)animated;
 - (void)deviceDidRotate;
 
 @end

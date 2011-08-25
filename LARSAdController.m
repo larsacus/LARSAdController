@@ -2,10 +2,8 @@
 //  LARSAdController.m
 //  Droid Light
 //
-//  Created by Lars on 7/24/11.
-//  Copyright 2011 Drink & Apple, Lars Anderson. All rights reserved.
+//  Created by Lars Anderson on 7/24/11.
 //
-
 //Copyright (c) 2011 Lars Anderson, drink&apple
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -46,8 +44,6 @@ static LARSAdController *sharedController = nil;
         [sharedController setParentViewController:nil];
         [sharedController setShouldAlertUserWhenLeaving:NO];
     }
-    // FIXME: Remove all NSLogs before production 
-    //NSLog(@"Created LARSAdController: %p", sharedController);
     return sharedController;
 }
 
@@ -104,60 +100,56 @@ static LARSAdController *sharedController = nil;
 
 - (UIView *)containerView{
     if (!_containerView) {
-        //CGRect frame = CGRectZero;
         CGFloat height = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? LARS_PAD_AD_CONTAINER_HEIGHT : LARS_POD_AD_CONTAINER_HEIGHT;
         CGRect frame = CGRectMake(0.0f, self.parentView.frame.size.height-height, self.parentView.frame.size.width, height);
-        _containerView = [[UIView alloc] initWithFrame:frame];
+        
+        _containerView                  = [[UIView alloc] initWithFrame:frame];
         _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | 
                                             UIViewAutoresizingFlexibleHeight | 
                                             UIViewAutoresizingFlexibleTopMargin;
-        _containerView.backgroundColor = [UIColor redColor];
+        _containerView.backgroundColor  = [UIColor clearColor];
     }
     return _containerView;
 }
 
 - (NSString *)containerSizeForDeviceOrientation:(UIInterfaceOrientation)orientation{
-    CGFloat height;
     CGFloat width = self.containerView.frame.size.width;
-    
     CGFloat xOffset = (UIInterfaceOrientationIsLandscape(orientation)) ? self.parentView.frame.size.width : self.parentView.frame.size.height;
+    
     if (UIInterfaceOrientationIsLandscape(orientation)) {
-        if (self.lastOrientationWasPortrait) {
+        if (self.lastOrientationWasPortrait)
             width = self.parentView.frame.size.height;
-            //self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierLandscape != nil) ? ADBannerContentSizeIdentifierLandscape : ADBannerContentSizeIdentifier480x32;
-        }
+        
         self.lastOrientationWasPortrait = NO;
     }
     else{//portrait
-        if (!self.lastOrientationWasPortrait) {
+        if (!self.lastOrientationWasPortrait)
             width = self.parentView.frame.size.width;
-            //self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierPortrait != nil) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifier320x50;
-        }
+        
         self.lastOrientationWasPortrait = YES;
     }
-    height = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? LARS_PAD_AD_CONTAINER_HEIGHT :LARS_POD_AD_CONTAINER_HEIGHT;
-    CGRect frame = CGRectMake(0.0f, xOffset-height, width, height);
+    
+    CGFloat height  = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? LARS_PAD_AD_CONTAINER_HEIGHT :LARS_POD_AD_CONTAINER_HEIGHT;
+    CGRect frame    = CGRectMake(0.0f, xOffset-height, width, height);
     
     return NSStringFromCGRect(frame);
 }
 
 - (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation{
-    // First, setup the banner's content size and adjustment based on the current orientation
     [self setCurrentOrientation:orientation];
     [self fixAdContainerFrame];
-    // by default content consumes the entire view area
-    CGRect contentFrame = self.containerView.bounds;
-    // the banner still needs to be adjusted further, but this is a reasonable starting point
-    // the y value will need to be adjusted by the banner height to get the final position
-	CGPoint bannerOrigin = CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame));
     
+    CGRect contentFrame     = self.containerView.bounds;
+	CGPoint bannerOrigin    = CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame));
+    
+    //change iAd layout
     if(UIInterfaceOrientationIsLandscape(orientation))
 		self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierLandscape != nil) ? ADBannerContentSizeIdentifierLandscape : ADBannerContentSizeIdentifier480x32;
     else
         self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierPortrait != nil) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifier320x50;
     
     if(self.iAdBannerView.bannerLoaded){
-        //adjust banner view up by height
+        //adjust banner view up by height if loaded
         bannerOrigin.y = CGRectGetMaxY(contentFrame)-self.iAdBannerView.frame.size.height;
     }
     
@@ -166,8 +158,6 @@ static LARSAdController *sharedController = nil;
                          self.iAdBannerView.frame = CGRectMake(bannerOrigin.x, bannerOrigin.y, self.iAdBannerView.frame.size.width, self.iAdBannerView.frame.size.height);
                      }];
     
-    NSLog(@"BannerView: %@", self.iAdBannerView);
-    
     [self recenterGoogleAdBannerView];
 }
 
@@ -175,18 +165,11 @@ static LARSAdController *sharedController = nil;
     [[self containerView] setFrame:CGRectFromString([self containerSizeForDeviceOrientation:self.currentOrientation])];
 }
 
-- (void)deviceDidRotate{
-    [self fixAdContainerFrame];
-    [self recenterGoogleAdBannerView];
-    //[self layoutBannerViewsForCurrentOrientation];
-}
-
 #pragma mark -
 #pragma mark iAd Delegate Methods
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner{
     // if google ad is active
     //     release ad instance
-    NSLog(@"iAd did receive ad");
     [self destroyGoogleAdsAnimated:YES];
     
     if (![self isIAdVisible]) {
@@ -214,7 +197,6 @@ static LARSAdController *sharedController = nil;
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
     //if google ad instance is nil
     //  create new instance of google ad
-    NSLog(@"iAd did fail to receive ad");
     if ([self isIAdVisible]) {
         [UIView animateWithDuration:0.250 
                               delay:0.0 
@@ -286,6 +268,7 @@ static LARSAdController *sharedController = nil;
     if (!_googleAdBannerView) {
         CGRect frame;
 
+        //create size depending on device and orientation
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             frame = CGRectMake(0.0f, self.containerView.frame.size.height-
                                GAD_SIZE_728x90.height+1.0, GAD_SIZE_728x90.width, GAD_SIZE_728x90.height);
@@ -362,13 +345,13 @@ static LARSAdController *sharedController = nil;
 
 #pragma mark -
 #pragma mark AdMob/Google Delegate Methods
-- (void)adViewDidReceiveAd:(GADBannerView *)bannerView{
-    NSLog(@"Google ad did receive ad");
-}
-
-- (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
-    NSLog(@"Google ad failed to receive ad");
-}
+//- (void)adViewDidReceiveAd:(GADBannerView *)bannerView{
+//    NSLog(@"Google ad did receive ad");
+//}
+//
+//- (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
+//    NSLog(@"Google ad failed to receive ad");
+//}
 
 // Unused Google Ad Delegate Methods
 //

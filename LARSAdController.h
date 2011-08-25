@@ -2,10 +2,8 @@
 //  LARSAdController.h
 //  Droid Light
 //
-//  Created by Lars on 7/24/11.
-//  Copyright 2011 Drink & Apple, Lars Anderson. All rights reserved.
+//  Created by Lars Anderson on 7/24/11.
 //
-
 //Copyright (c) 2011 Lars Anderson, drink&apple
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -21,20 +19,18 @@
 
 
 @interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate> {
-    
-
-    GADBannerView       *_googleAdBannerView;
-    ADBannerView        *_iAdBannerView;
 @private
-    UIView              *_parentView;
-    UIView              *_containerView;
-    UIViewController    *_parentViewController;
-    BOOL                _googleAdVisible;
-    BOOL                _iAdVisible;
-    BOOL                _shouldAlertUserWhenLeaving;
-    NSString            *_googleAdPublisherId;
-    BOOL                _lastOrientationWasPortrait;
-    UIInterfaceOrientation _currentOrientation;
+    GADBannerView           *_googleAdBannerView;
+    ADBannerView            *_iAdBannerView;
+    UIView                  *_parentView;
+    UIView                  *_containerView;
+    UIViewController        *_parentViewController;
+    BOOL                    _googleAdVisible;
+    BOOL                    _iAdVisible;
+    BOOL                    _shouldAlertUserWhenLeaving;
+    NSString                *_googleAdPublisherId;
+    BOOL                    _lastOrientationWasPortrait;
+    UIInterfaceOrientation  _currentOrientation;
 }
 
 @property (nonatomic, retain)           GADBannerView     *googleAdBannerView;
@@ -51,16 +47,19 @@
 
 + (LARSAdController *)sharedManager;
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;
-- (void)fixAdContainerFrame;
-- (void)createGoogleAds;
-- (void)recenterGoogleAdBannerView;
-- (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation;
-- (void)destroyGoogleAdsAnimated:(BOOL)animated;
 - (void)setGoogleAdPublisherId:(NSString *)publisherId;
+
+- (void)createGoogleAds;
 - (ADBannerView *)iAdBannerView;
 - (UIView *)containerView;
-- (NSString *)containerSizeForDeviceOrientation:(UIInterfaceOrientation)orientation;
+
 - (void)destroyIAds;
-- (void)deviceDidRotate;
+- (void)destroyGoogleAdsAnimated:(BOOL)animated;
+
+//orientation support
+- (NSString *)containerSizeForDeviceOrientation:(UIInterfaceOrientation)orientation;
+- (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation;
+- (void)fixAdContainerFrame;
+- (void)recenterGoogleAdBannerView;
 
 @end

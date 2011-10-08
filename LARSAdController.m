@@ -110,7 +110,7 @@ static LARSAdController *sharedController = nil;
                                             UIViewAutoresizingFlexibleHeight | 
                                             UIViewAutoresizingFlexibleTopMargin;
         _containerView.backgroundColor  = [UIColor clearColor];
-        _containerView.userInteractionEnabled = NO;
+        _containerView.userInteractionEnabled = NO;//off by default to ensure users can touch behind ad container
     }
     return _containerView;
 }
@@ -185,6 +185,7 @@ static LARSAdController *sharedController = nil;
                          completion:^(BOOL finished){
                              self.iAdVisible = YES;
                              [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
+                             [[self containerView] setUserInteractionEnabled:YES];
                          }
          ];
     }
@@ -211,6 +212,7 @@ static LARSAdController *sharedController = nil;
                          completion:^(BOOL finished){
                              self.iAdVisible = NO;
                              [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
+                             [[self containerView] setUserInteractionEnabled:NO];//google ad will re-enable userInteraction when necessary
                          }
          ];
     }
@@ -283,7 +285,7 @@ static LARSAdController *sharedController = nil;
             frame = CGRectMake(0.0f, 
                                self.containerView.frame.size.height, 
                                GAD_SIZE_320x50.width, 
-                               GAD_SIZE_320x50.height);
+                               GAD_SIZE_320x50.height-2.0f);//-2.0 for some google ads that are only 49px high
         }
         
         _googleAdBannerView = [[GADBannerView alloc] initWithFrame:frame];
@@ -368,6 +370,8 @@ static LARSAdController *sharedController = nil;
                      completion:^(BOOL finished){
                          self.googleAdVisible = YES;
                          [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
+                         [[self containerView] setUserInteractionEnabled:YES];
+                         [[self googleAdBannerView] setUserInteractionEnabled:YES];
                      }
      ];
     NSLog(@"Google ad did receive ad");
@@ -386,6 +390,7 @@ static LARSAdController *sharedController = nil;
                      completion:^(BOOL finished){
                          self.googleAdVisible = NO;
                          [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
+                         [[self containerView] setUserInteractionEnabled:NO];//assuming if a google ad fails to appear, there are no ads at all
                      }
      ];
     NSLog(@"Google ad failed to receive ad");

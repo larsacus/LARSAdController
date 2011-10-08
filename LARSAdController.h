@@ -38,14 +38,14 @@
 @property (nonatomic, assign)           UIView            *parentView;
 @property (nonatomic, assign)           UIViewController  *parentViewController;
 @property (nonatomic, 
-           getter = isGoogleAdVisible)  BOOL    googleAdVisible;
+           getter = isGoogleAdVisible)  BOOL              googleAdVisible;
 @property (nonatomic,
-           getter = isIAdVisible)       BOOL    iAdVisible;
+           getter = isIAdVisible)       BOOL              iAdVisible;
 @property (nonatomic)                   BOOL              shouldAlertUserWhenLeaving;
-@property (nonatomic, retain, readonly) NSString *googleAdPublisherId;
-@property (nonatomic)                   BOOL    lastOrientationWasPortrait;
+@property (nonatomic, retain, readonly) NSString          *googleAdPublisherId;
+@property (nonatomic)                   BOOL              lastOrientationWasPortrait;
 @property (nonatomic)                   UIInterfaceOrientation currentOrientation;
-@property (nonatomic, getter = areAnyAdsVisible) BOOL anyAdsVisible;
+@property (atomic, getter = areAnyAdsVisible) BOOL        anyAdsVisible;
 
 + (LARSAdController *)sharedManager;
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;

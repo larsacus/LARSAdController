@@ -31,6 +31,7 @@
     NSString                *_googleAdPublisherId;
     BOOL                    _lastOrientationWasPortrait;
     UIInterfaceOrientation  _currentOrientation;
+    BOOL                    _anyAdsVisible;
 }
 
 @property (nonatomic, retain)           GADBannerView     *googleAdBannerView;
@@ -44,6 +45,7 @@
 @property (nonatomic, retain, readonly) NSString *googleAdPublisherId;
 @property (nonatomic)                   BOOL    lastOrientationWasPortrait;
 @property (nonatomic)                   UIInterfaceOrientation currentOrientation;
+@property (nonatomic, getter = areAnyAdsVisible) BOOL anyAdsVisible;
 
 + (LARSAdController *)sharedManager;
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;

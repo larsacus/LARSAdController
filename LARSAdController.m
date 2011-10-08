@@ -24,10 +24,11 @@
 @synthesize shouldAlertUserWhenLeaving  = _shouldAlertUserWhenLeaving;
 @synthesize googleAdPublisherId         = _googleAdPublisherId;
 @synthesize lastOrientationWasPortrait  = _lastOrientationWasPortrait;
-@synthesize currentOrientation          =_currentOrientation;
+@synthesize currentOrientation          = _currentOrientation;
+@synthesize anyAdsVisible               = _anyAdsVisible;
 
 //replace with your own google id
-#define kGoogleAdId @"a14c8986cea46d3"
+#define kGoogleAdId @"a14e55c99c24b43"
 #define LARS_PAD_AD_CONTAINER_HEIGHT 90.0f
 #define LARS_POD_AD_CONTAINER_HEIGHT 50.0f
 
@@ -43,6 +44,7 @@ static LARSAdController *sharedController = nil;
         [sharedController setIAdVisible:NO];
         [sharedController setParentViewController:nil];
         [sharedController setShouldAlertUserWhenLeaving:NO];
+        [sharedController setAnyAdsVisible:NO];
     }
     return sharedController;
 }
@@ -108,6 +110,7 @@ static LARSAdController *sharedController = nil;
                                             UIViewAutoresizingFlexibleHeight | 
                                             UIViewAutoresizingFlexibleTopMargin;
         _containerView.backgroundColor  = [UIColor clearColor];
+        _containerView.userInteractionEnabled = NO;
     }
     return _containerView;
 }
@@ -180,7 +183,8 @@ static LARSAdController *sharedController = nil;
                              [banner setFrame:CGRectOffset(banner.frame, 0.0, -banner.frame.size.height)];
                          }
                          completion:^(BOOL finished){
-                             [self setIAdVisible:YES];
+                             self.iAdVisible = YES;
+                             [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
                          }
          ];
     }
@@ -205,7 +209,8 @@ static LARSAdController *sharedController = nil;
                              [banner setFrame:CGRectOffset(banner.frame, 0.0, banner.frame.size.height)];
                          }
                          completion:^(BOOL finished){
-                             [self setIAdVisible:NO];
+                             self.iAdVisible = NO;
+                             [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
                          }
          ];
     }
@@ -270,12 +275,15 @@ static LARSAdController *sharedController = nil;
 
         //create size depending on device and orientation
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            frame = CGRectMake(0.0f, self.containerView.frame.size.height-
-                               GAD_SIZE_728x90.height+1.0, GAD_SIZE_728x90.width, GAD_SIZE_728x90.height);
+            frame = CGRectMake(0.0f, self.containerView.frame.size.height, 
+                               GAD_SIZE_728x90.width, 
+                               GAD_SIZE_728x90.height);
         }
         else{
-            frame = CGRectMake(0.0f, self.containerView.frame.size.height-
-                               GAD_SIZE_320x50.height+1.0, GAD_SIZE_320x50.height, GAD_SIZE_320x50.width);
+            frame = CGRectMake(0.0f, 
+                               self.containerView.frame.size.height, 
+                               GAD_SIZE_320x50.width, 
+                               GAD_SIZE_320x50.height);
         }
         
         _googleAdBannerView = [[GADBannerView alloc] initWithFrame:frame];
@@ -303,7 +311,7 @@ static LARSAdController *sharedController = nil;
 
 - (void)destroyGoogleAdsAnimated:(BOOL)animated{
     if (_googleAdBannerView) {
-        if (animated) {
+        if (animated && self.googleAdVisible) {
             [UIView animateWithDuration:0.250
                                   delay:0.0
                                 options:UIViewAnimationOptionCurveEaseInOut
@@ -326,6 +334,8 @@ static LARSAdController *sharedController = nil;
             [[self googleAdBannerView] setRootViewController:nil];
             [_googleAdBannerView release];
             _googleAdBannerView = nil;
+            self.googleAdVisible = NO;
+            [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
         }
     }
 }
@@ -345,13 +355,41 @@ static LARSAdController *sharedController = nil;
 
 #pragma mark -
 #pragma mark AdMob/Google Delegate Methods
-//- (void)adViewDidReceiveAd:(GADBannerView *)bannerView{
-//    NSLog(@"Google ad did receive ad");
-//}
+- (void)adViewDidReceiveAd:(GADBannerView *)bannerView{
+    [UIView animateWithDuration:0.250
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         [[self googleAdBannerView] setFrame:
+                          CGRectOffset(self.googleAdBannerView.frame, 
+                                       0.0, 
+                                       -self.googleAdBannerView.frame.size.height)];
+                     }
+                     completion:^(BOOL finished){
+                         self.googleAdVisible = YES;
+                         [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
+                     }
+     ];
+    NSLog(@"Google ad did receive ad");
+}
 //
-//- (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
-//    NSLog(@"Google ad failed to receive ad");
-//}
+- (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
+    [UIView animateWithDuration:0.250
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         [[self googleAdBannerView] setFrame:
+                          CGRectOffset(self.googleAdBannerView.frame, 
+                                       0.0, 
+                                       self.googleAdBannerView.frame.size.height)];
+                     }
+                     completion:^(BOOL finished){
+                         self.googleAdVisible = NO;
+                         [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
+                     }
+     ];
+    NSLog(@"Google ad failed to receive ad");
+}
 
 // Unused Google Ad Delegate Methods
 //

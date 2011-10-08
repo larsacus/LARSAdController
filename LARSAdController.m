@@ -285,7 +285,7 @@ static LARSAdController *sharedController = nil;
             frame = CGRectMake(0.0f, 
                                self.containerView.frame.size.height, 
                                GAD_SIZE_320x50.width, 
-                               GAD_SIZE_320x50.height-2.0f);//-2.0 for some google ads that are only 49px high
+                               GAD_SIZE_320x50.height);
         }
         
         _googleAdBannerView = [[GADBannerView alloc] initWithFrame:frame];
@@ -365,7 +365,7 @@ static LARSAdController *sharedController = nil;
                          [[self googleAdBannerView] setFrame:
                           CGRectOffset(self.googleAdBannerView.frame, 
                                        0.0, 
-                                       -self.googleAdBannerView.frame.size.height)];
+                                       -(self.googleAdBannerView.frame.size.height-2.0f))];
                      }
                      completion:^(BOOL finished){
                          self.googleAdVisible = YES;
@@ -385,7 +385,7 @@ static LARSAdController *sharedController = nil;
                          [[self googleAdBannerView] setFrame:
                           CGRectOffset(self.googleAdBannerView.frame, 
                                        0.0, 
-                                       self.googleAdBannerView.frame.size.height)];
+                                       self.googleAdBannerView.frame.size.height-2.0f)];
                      }
                      completion:^(BOOL finished){
                          self.googleAdVisible = NO;

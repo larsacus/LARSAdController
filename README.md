@@ -15,12 +15,12 @@ For single-orientation support for all devices, simply add the following line in
 
 ## Framework Requirements
 In order to compile, you need to include the following Apple frameworks:
-1. `iAd.framework`
-2. `AudioToolbox.framework`
-3. `MessageUI.framework`
-4. `SystemConfiguration.framework`
+  1. `iAd.framework`
+  2. `AudioToolbox.framework`
+  3. `MessageUI.framework`
+  4. `SystemConfiguration.framework`
 
-You will also need the `Google AdMob Framework` available from (Google)[http://admob.com].
+You will also need the `Google AdMob Framework` available from [Google](http://admob.com).
 
 That's it.  Technically, this can be added to any `UIView` that is large enough.
 
@@ -47,7 +47,7 @@ If you would like to enable support for multiple orientations, add the following
   5. Modular support for more ad networks
 
 ##License (MIT)
-I would love attribution and a link to this page on GitHub (here)[https://github.com/larsacus/LARSAdController], but it is not required.
+I would love attribution and a link to this page on GitHub [here](https://github.com/larsacus/LARSAdController), but it is not required.
 
 Copyright (c) 2011 Lars Anderson, drink&apple
 

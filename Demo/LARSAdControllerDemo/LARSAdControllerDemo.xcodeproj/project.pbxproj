@@ -1,0 +1,387 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5548FA8D14608D1E00267890 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FA8C14608D1E00267890 /* UIKit.framework */; };
+		5548FA8F14608D1E00267890 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FA8E14608D1E00267890 /* Foundation.framework */; };
+		5548FA9114608D1E00267890 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FA9014608D1E00267890 /* CoreGraphics.framework */; };
+		5548FA9714608D1E00267890 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5548FA9514608D1E00267890 /* InfoPlist.strings */; };
+		5548FA9914608D1E00267890 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5548FA9814608D1E00267890 /* main.m */; };
+		5548FA9D14608D1E00267890 /* LARSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5548FA9C14608D1E00267890 /* LARSAppDelegate.m */; };
+		5548FAA014608D1E00267890 /* LARSMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5548FA9F14608D1E00267890 /* LARSMainViewController.m */; };
+		5548FAA314608D1E00267890 /* LARSFlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5548FAA214608D1E00267890 /* LARSFlipsideViewController.m */; };
+		5548FAA614608D1E00267890 /* LARSMainViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5548FAA414608D1E00267890 /* LARSMainViewController_iPhone.xib */; };
+		5548FAA914608D1E00267890 /* LARSMainViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5548FAA714608D1E00267890 /* LARSMainViewController_iPad.xib */; };
+		5548FAAC14608D1E00267890 /* LARSFlipsideViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5548FAAA14608D1E00267890 /* LARSFlipsideViewController.xib */; };
+		5548FAB414608D6600267890 /* LARSAdController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5548FAB314608D6500267890 /* LARSAdController.m */; };
+		5548FAC014608DEE00267890 /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FABD14608DEE00267890 /* libGoogleAdMobAds.a */; };
+		5548FAC114608DEE00267890 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5548FABE14608DEE00267890 /* README.md */; };
+		5548FAC214608DEE00267890 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5548FABF14608DEE00267890 /* README.txt */; };
+		5548FAC414608E2D00267890 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FAC314608E2D00267890 /* iAd.framework */; };
+		5548FAC814608E4B00267890 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FAC714608E4B00267890 /* SystemConfiguration.framework */; };
+		5548FACA14608E5900267890 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FAC914608E5900267890 /* MessageUI.framework */; };
+		5548FACC14608E6200267890 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FACB14608E6200267890 /* AudioToolbox.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5548FA8814608D1E00267890 /* LARSAdControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LARSAdControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5548FA8C14608D1E00267890 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		5548FA8E14608D1E00267890 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5548FA9014608D1E00267890 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		5548FA9414608D1E00267890 /* LARSAdControllerDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LARSAdControllerDemo-Info.plist"; sourceTree = "<group>"; };
+		5548FA9614608D1E00267890 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5548FA9814608D1E00267890 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5548FA9A14608D1E00267890 /* LARSAdControllerDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LARSAdControllerDemo-Prefix.pch"; sourceTree = "<group>"; };
+		5548FA9B14608D1E00267890 /* LARSAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LARSAppDelegate.h; sourceTree = "<group>"; };
+		5548FA9C14608D1E00267890 /* LARSAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LARSAppDelegate.m; sourceTree = "<group>"; };
+		5548FA9E14608D1E00267890 /* LARSMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LARSMainViewController.h; sourceTree = "<group>"; };
+		5548FA9F14608D1E00267890 /* LARSMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LARSMainViewController.m; sourceTree = "<group>"; };
+		5548FAA114608D1E00267890 /* LARSFlipsideViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LARSFlipsideViewController.h; sourceTree = "<group>"; };
+		5548FAA214608D1E00267890 /* LARSFlipsideViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LARSFlipsideViewController.m; sourceTree = "<group>"; };
+		5548FAA514608D1E00267890 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LARSMainViewController_iPhone.xib; sourceTree = "<group>"; };
+		5548FAA814608D1E00267890 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LARSMainViewController_iPad.xib; sourceTree = "<group>"; };
+		5548FAAB14608D1E00267890 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LARSFlipsideViewController.xib; sourceTree = "<group>"; };
+		5548FAB214608D6500267890 /* LARSAdController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LARSAdController.h; path = ../../../LARSAdController.h; sourceTree = "<group>"; };
+		5548FAB314608D6500267890 /* LARSAdController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LARSAdController.m; path = ../../../LARSAdController.m; sourceTree = "<group>"; };
+		5548FAB714608DEE00267890 /* GADBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADBannerView.h; sourceTree = "<group>"; };
+		5548FAB814608DEE00267890 /* GADBannerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADBannerViewDelegate.h; sourceTree = "<group>"; };
+		5548FAB914608DEE00267890 /* GADInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInterstitial.h; sourceTree = "<group>"; };
+		5548FABA14608DEE00267890 /* GADInterstitialDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInterstitialDelegate.h; sourceTree = "<group>"; };
+		5548FABB14608DEE00267890 /* GADRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADRequest.h; sourceTree = "<group>"; };
+		5548FABC14608DEE00267890 /* GADRequestError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADRequestError.h; sourceTree = "<group>"; };
+		5548FABD14608DEE00267890 /* libGoogleAdMobAds.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAdMobAds.a; sourceTree = "<group>"; };
+		5548FABE14608DEE00267890 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		5548FABF14608DEE00267890 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		5548FAC314608E2D00267890 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		5548FAC514608E4100267890 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		5548FAC714608E4B00267890 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		5548FAC914608E5900267890 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		5548FACB14608E6200267890 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5548FA8514608D1E00267890 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5548FACC14608E6200267890 /* AudioToolbox.framework in Frameworks */,
+				5548FACA14608E5900267890 /* MessageUI.framework in Frameworks */,
+				5548FAC814608E4B00267890 /* SystemConfiguration.framework in Frameworks */,
+				5548FAC414608E2D00267890 /* iAd.framework in Frameworks */,
+				5548FA8D14608D1E00267890 /* UIKit.framework in Frameworks */,
+				5548FA8F14608D1E00267890 /* Foundation.framework in Frameworks */,
+				5548FA9114608D1E00267890 /* CoreGraphics.framework in Frameworks */,
+				5548FAC014608DEE00267890 /* libGoogleAdMobAds.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5548FA7D14608D1D00267890 = {
+			isa = PBXGroup;
+			children = (
+				5548FACB14608E6200267890 /* AudioToolbox.framework */,
+				5548FAC914608E5900267890 /* MessageUI.framework */,
+				5548FAC714608E4B00267890 /* SystemConfiguration.framework */,
+				5548FAC514608E4100267890 /* MobileCoreServices.framework */,
+				5548FAC314608E2D00267890 /* iAd.framework */,
+				5548FAB514608D6A00267890 /* LARSAdController */,
+				5548FA9214608D1E00267890 /* LARSAdControllerDemo */,
+				5548FA8B14608D1E00267890 /* Frameworks */,
+				5548FA8914608D1E00267890 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5548FA8914608D1E00267890 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5548FA8814608D1E00267890 /* LARSAdControllerDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5548FA8B14608D1E00267890 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5548FA8C14608D1E00267890 /* UIKit.framework */,
+				5548FA8E14608D1E00267890 /* Foundation.framework */,
+				5548FA9014608D1E00267890 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5548FA9214608D1E00267890 /* LARSAdControllerDemo */ = {
+			isa = PBXGroup;
+			children = (
+				5548FA9B14608D1E00267890 /* LARSAppDelegate.h */,
+				5548FA9C14608D1E00267890 /* LARSAppDelegate.m */,
+				5548FA9E14608D1E00267890 /* LARSMainViewController.h */,
+				5548FA9F14608D1E00267890 /* LARSMainViewController.m */,
+				5548FAA114608D1E00267890 /* LARSFlipsideViewController.h */,
+				5548FAA214608D1E00267890 /* LARSFlipsideViewController.m */,
+				5548FAA414608D1E00267890 /* LARSMainViewController_iPhone.xib */,
+				5548FAA714608D1E00267890 /* LARSMainViewController_iPad.xib */,
+				5548FAAA14608D1E00267890 /* LARSFlipsideViewController.xib */,
+				5548FA9314608D1E00267890 /* Supporting Files */,
+			);
+			path = LARSAdControllerDemo;
+			sourceTree = "<group>";
+		};
+		5548FA9314608D1E00267890 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5548FA9414608D1E00267890 /* LARSAdControllerDemo-Info.plist */,
+				5548FA9514608D1E00267890 /* InfoPlist.strings */,
+				5548FA9814608D1E00267890 /* main.m */,
+				5548FA9A14608D1E00267890 /* LARSAdControllerDemo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5548FAB514608D6A00267890 /* LARSAdController */ = {
+			isa = PBXGroup;
+			children = (
+				5548FAB214608D6500267890 /* LARSAdController.h */,
+				5548FAB314608D6500267890 /* LARSAdController.m */,
+				5548FAB614608DEE00267890 /* GoogleAds */,
+			);
+			name = LARSAdController;
+			path = LARSAdControllerDemo;
+			sourceTree = "<group>";
+		};
+		5548FAB614608DEE00267890 /* GoogleAds */ = {
+			isa = PBXGroup;
+			children = (
+				5548FAB714608DEE00267890 /* GADBannerView.h */,
+				5548FAB814608DEE00267890 /* GADBannerViewDelegate.h */,
+				5548FAB914608DEE00267890 /* GADInterstitial.h */,
+				5548FABA14608DEE00267890 /* GADInterstitialDelegate.h */,
+				5548FABB14608DEE00267890 /* GADRequest.h */,
+				5548FABC14608DEE00267890 /* GADRequestError.h */,
+				5548FABD14608DEE00267890 /* libGoogleAdMobAds.a */,
+				5548FABE14608DEE00267890 /* README.md */,
+				5548FABF14608DEE00267890 /* README.txt */,
+			);
+			path = GoogleAds;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5548FA8714608D1E00267890 /* LARSAdControllerDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5548FAAF14608D1E00267890 /* Build configuration list for PBXNativeTarget "LARSAdControllerDemo" */;
+			buildPhases = (
+				5548FA8414608D1E00267890 /* Sources */,
+				5548FA8514608D1E00267890 /* Frameworks */,
+				5548FA8614608D1E00267890 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LARSAdControllerDemo;
+			productName = LARSAdControllerDemo;
+			productReference = 5548FA8814608D1E00267890 /* LARSAdControllerDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5548FA7F14608D1D00267890 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Mutual Mobile";
+			};
+			buildConfigurationList = 5548FA8214608D1D00267890 /* Build configuration list for PBXProject "LARSAdControllerDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5548FA7D14608D1D00267890;
+			productRefGroup = 5548FA8914608D1E00267890 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5548FA8714608D1E00267890 /* LARSAdControllerDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5548FA8614608D1E00267890 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5548FA9714608D1E00267890 /* InfoPlist.strings in Resources */,
+				5548FAA614608D1E00267890 /* LARSMainViewController_iPhone.xib in Resources */,
+				5548FAA914608D1E00267890 /* LARSMainViewController_iPad.xib in Resources */,
+				5548FAAC14608D1E00267890 /* LARSFlipsideViewController.xib in Resources */,
+				5548FAC114608DEE00267890 /* README.md in Resources */,
+				5548FAC214608DEE00267890 /* README.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5548FA8414608D1E00267890 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5548FA9914608D1E00267890 /* main.m in Sources */,
+				5548FA9D14608D1E00267890 /* LARSAppDelegate.m in Sources */,
+				5548FAA014608D1E00267890 /* LARSMainViewController.m in Sources */,
+				5548FAA314608D1E00267890 /* LARSFlipsideViewController.m in Sources */,
+				5548FAB414608D6600267890 /* LARSAdController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5548FA9514608D1E00267890 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5548FA9614608D1E00267890 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		5548FAA414608D1E00267890 /* LARSMainViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5548FAA514608D1E00267890 /* en */,
+			);
+			name = LARSMainViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		5548FAA714608D1E00267890 /* LARSMainViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5548FAA814608D1E00267890 /* en */,
+			);
+			name = LARSMainViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+		5548FAAA14608D1E00267890 /* LARSFlipsideViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5548FAAB14608D1E00267890 /* en */,
+			);
+			name = LARSFlipsideViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5548FAAD14608D1E00267890 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5548FAAE14608D1E00267890 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5548FAB014608D1E00267890 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LARSAdControllerDemo/LARSAdControllerDemo-Prefix.pch";
+				INFOPLIST_FILE = "LARSAdControllerDemo/LARSAdControllerDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/LARSAdControllerDemo/GoogleAds\"/**",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		5548FAB114608D1E00267890 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LARSAdControllerDemo/LARSAdControllerDemo-Prefix.pch";
+				INFOPLIST_FILE = "LARSAdControllerDemo/LARSAdControllerDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/LARSAdControllerDemo/GoogleAds\"/**",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5548FA8214608D1D00267890 /* Build configuration list for PBXProject "LARSAdControllerDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5548FAAD14608D1E00267890 /* Debug */,
+				5548FAAE14608D1E00267890 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5548FAAF14608D1E00267890 /* Build configuration list for PBXNativeTarget "LARSAdControllerDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5548FAB014608D1E00267890 /* Debug */,
+				5548FAB114608D1E00267890 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5548FA7F14608D1D00267890 /* Project object */;
+}

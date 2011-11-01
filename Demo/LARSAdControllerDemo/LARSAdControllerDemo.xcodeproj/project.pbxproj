@@ -19,13 +19,13 @@
 		5548FAA914608D1E00267890 /* LARSMainViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5548FAA714608D1E00267890 /* LARSMainViewController_iPad.xib */; };
 		5548FAAC14608D1E00267890 /* LARSFlipsideViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5548FAAA14608D1E00267890 /* LARSFlipsideViewController.xib */; };
 		5548FAB414608D6600267890 /* LARSAdController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5548FAB314608D6500267890 /* LARSAdController.m */; };
-		5548FAC014608DEE00267890 /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FABD14608DEE00267890 /* libGoogleAdMobAds.a */; };
-		5548FAC114608DEE00267890 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5548FABE14608DEE00267890 /* README.md */; };
-		5548FAC214608DEE00267890 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5548FABF14608DEE00267890 /* README.txt */; };
 		5548FAC414608E2D00267890 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FAC314608E2D00267890 /* iAd.framework */; };
 		5548FAC814608E4B00267890 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FAC714608E4B00267890 /* SystemConfiguration.framework */; };
 		5548FACA14608E5900267890 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FAC914608E5900267890 /* MessageUI.framework */; };
 		5548FACC14608E6200267890 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FACB14608E6200267890 /* AudioToolbox.framework */; };
+		5548FADC1460969500267890 /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5548FAD91460969500267890 /* libGoogleAdMobAds.a */; };
+		5548FADD1460969500267890 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5548FADA1460969500267890 /* README.md */; };
+		5548FADE1460969500267890 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5548FADB1460969500267890 /* README.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,20 +48,20 @@
 		5548FAAB14608D1E00267890 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LARSFlipsideViewController.xib; sourceTree = "<group>"; };
 		5548FAB214608D6500267890 /* LARSAdController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LARSAdController.h; path = ../../../LARSAdController.h; sourceTree = "<group>"; };
 		5548FAB314608D6500267890 /* LARSAdController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LARSAdController.m; path = ../../../LARSAdController.m; sourceTree = "<group>"; };
-		5548FAB714608DEE00267890 /* GADBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADBannerView.h; sourceTree = "<group>"; };
-		5548FAB814608DEE00267890 /* GADBannerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADBannerViewDelegate.h; sourceTree = "<group>"; };
-		5548FAB914608DEE00267890 /* GADInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInterstitial.h; sourceTree = "<group>"; };
-		5548FABA14608DEE00267890 /* GADInterstitialDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInterstitialDelegate.h; sourceTree = "<group>"; };
-		5548FABB14608DEE00267890 /* GADRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADRequest.h; sourceTree = "<group>"; };
-		5548FABC14608DEE00267890 /* GADRequestError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADRequestError.h; sourceTree = "<group>"; };
-		5548FABD14608DEE00267890 /* libGoogleAdMobAds.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAdMobAds.a; sourceTree = "<group>"; };
-		5548FABE14608DEE00267890 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		5548FABF14608DEE00267890 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		5548FAC314608E2D00267890 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5548FAC514608E4100267890 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		5548FAC714608E4B00267890 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		5548FAC914608E5900267890 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		5548FACB14608E6200267890 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		5548FAD31460969500267890 /* GADBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADBannerView.h; sourceTree = "<group>"; };
+		5548FAD41460969500267890 /* GADBannerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADBannerViewDelegate.h; sourceTree = "<group>"; };
+		5548FAD51460969500267890 /* GADInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInterstitial.h; sourceTree = "<group>"; };
+		5548FAD61460969500267890 /* GADInterstitialDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInterstitialDelegate.h; sourceTree = "<group>"; };
+		5548FAD71460969500267890 /* GADRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADRequest.h; sourceTree = "<group>"; };
+		5548FAD81460969500267890 /* GADRequestError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADRequestError.h; sourceTree = "<group>"; };
+		5548FAD91460969500267890 /* libGoogleAdMobAds.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAdMobAds.a; sourceTree = "<group>"; };
+		5548FADA1460969500267890 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		5548FADB1460969500267890 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +76,7 @@
 				5548FA8D14608D1E00267890 /* UIKit.framework in Frameworks */,
 				5548FA8F14608D1E00267890 /* Foundation.framework in Frameworks */,
 				5548FA9114608D1E00267890 /* CoreGraphics.framework in Frameworks */,
-				5548FAC014608DEE00267890 /* libGoogleAdMobAds.a in Frameworks */,
+				5548FADC1460969500267890 /* libGoogleAdMobAds.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,24 +149,24 @@
 			children = (
 				5548FAB214608D6500267890 /* LARSAdController.h */,
 				5548FAB314608D6500267890 /* LARSAdController.m */,
-				5548FAB614608DEE00267890 /* GoogleAds */,
+				5548FAD21460969500267890 /* GoogleAds */,
 			);
 			name = LARSAdController;
 			path = LARSAdControllerDemo;
 			sourceTree = "<group>";
 		};
-		5548FAB614608DEE00267890 /* GoogleAds */ = {
+		5548FAD21460969500267890 /* GoogleAds */ = {
 			isa = PBXGroup;
 			children = (
-				5548FAB714608DEE00267890 /* GADBannerView.h */,
-				5548FAB814608DEE00267890 /* GADBannerViewDelegate.h */,
-				5548FAB914608DEE00267890 /* GADInterstitial.h */,
-				5548FABA14608DEE00267890 /* GADInterstitialDelegate.h */,
-				5548FABB14608DEE00267890 /* GADRequest.h */,
-				5548FABC14608DEE00267890 /* GADRequestError.h */,
-				5548FABD14608DEE00267890 /* libGoogleAdMobAds.a */,
-				5548FABE14608DEE00267890 /* README.md */,
-				5548FABF14608DEE00267890 /* README.txt */,
+				5548FAD31460969500267890 /* GADBannerView.h */,
+				5548FAD41460969500267890 /* GADBannerViewDelegate.h */,
+				5548FAD51460969500267890 /* GADInterstitial.h */,
+				5548FAD61460969500267890 /* GADInterstitialDelegate.h */,
+				5548FAD71460969500267890 /* GADRequest.h */,
+				5548FAD81460969500267890 /* GADRequestError.h */,
+				5548FAD91460969500267890 /* libGoogleAdMobAds.a */,
+				5548FADA1460969500267890 /* README.md */,
+				5548FADB1460969500267890 /* README.txt */,
 			);
 			path = GoogleAds;
 			sourceTree = "<group>";
@@ -226,8 +226,8 @@
 				5548FAA614608D1E00267890 /* LARSMainViewController_iPhone.xib in Resources */,
 				5548FAA914608D1E00267890 /* LARSMainViewController_iPad.xib in Resources */,
 				5548FAAC14608D1E00267890 /* LARSFlipsideViewController.xib in Resources */,
-				5548FAC114608DEE00267890 /* README.md in Resources */,
-				5548FAC214608DEE00267890 /* README.txt in Resources */,
+				5548FADD1460969500267890 /* README.md in Resources */,
+				5548FADE1460969500267890 /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +339,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/LARSAdControllerDemo/GoogleAds\"/**",
+					"\"$(SRCROOT)/LARSAdControllerDemo/GoogleAds\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -355,6 +356,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/LARSAdControllerDemo/GoogleAds\"/**",
+					"\"$(SRCROOT)/LARSAdControllerDemo/GoogleAds\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -380,6 +382,7 @@
 				5548FAB114608D1E00267890 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

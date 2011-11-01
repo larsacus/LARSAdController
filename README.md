@@ -15,6 +15,7 @@ For single-orientation support for all devices, simply add the following line in
 
 ## Framework Requirements
 In order to compile, you need to include the following Apple frameworks:
+
   1. `iAd.framework`
   2. `AudioToolbox.framework`
   3. `MessageUI.framework`

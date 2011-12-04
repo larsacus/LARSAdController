@@ -42,7 +42,7 @@
 @property (nonatomic,
            getter = isIAdVisible)       BOOL              iAdVisible;
 @property (nonatomic)                   BOOL              shouldAlertUserWhenLeaving;
-@property (nonatomic, retain, readonly) NSString          *googleAdPublisherId;
+@property (nonatomic, copy)             NSString          *googleAdPublisherId;
 @property (nonatomic)                   BOOL              lastOrientationWasPortrait;
 @property (nonatomic)                   UIInterfaceOrientation currentOrientation;
 @property (atomic, getter = areAnyAdsVisible) BOOL        anyAdsVisible;

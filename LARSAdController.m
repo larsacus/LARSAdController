@@ -30,8 +30,8 @@
 
 //replace with your own google id
 #define kGoogleAdId @"a14e55c99c24b43"
-#define LARS_PAD_AD_CONTAINER_HEIGHT 90.0f
-#define LARS_POD_AD_CONTAINER_HEIGHT 50.0f
+static const CGFloat LARS_PAD_AD_CONTAINER_HEIGHT = 90.0f;
+static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 
 static LARSAdController *sharedController = nil;
 
@@ -117,7 +117,10 @@ static LARSAdController *sharedController = nil;
 - (UIView *)containerView{
     if (!_containerView) {
         CGFloat height = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? LARS_PAD_AD_CONTAINER_HEIGHT : LARS_POD_AD_CONTAINER_HEIGHT;
-        CGRect frame = CGRectMake(0.0f, self.parentView.frame.size.height-height, self.parentView.frame.size.width, height);
+        CGRect frame = CGRectMake(0.0f,
+                                  CGRectGetHeight(self.parentView.frame)-height,
+                                  CGRectGetWidth(self.parentView.frame),
+                                  height);
         
         _containerView                  = [[UIView alloc] initWithFrame:frame];
         _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | 
@@ -130,6 +133,7 @@ static LARSAdController *sharedController = nil;
         self.containerView.layer.shadowRadius = 10.0f;
         self.containerView.layer.shadowOffset = CGSizeMake(0.0f, -2.0f);
         self.containerView.layer.shouldRasterize = YES;
+        self.containerView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     }
     return _containerView;
 }

@@ -17,6 +17,7 @@
 #import "GADBannerView.h"
 #import "GADBannerViewDelegate.h"
 
+typedef void (^TapActionBlock)(void);
 
 @interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate> {
 @private
@@ -46,6 +47,8 @@
 @property (nonatomic)                   BOOL              lastOrientationWasPortrait;
 @property (nonatomic)                   UIInterfaceOrientation currentOrientation;
 @property (atomic, getter = areAnyAdsVisible) BOOL        anyAdsVisible;
+@property (nonatomic, copy)             TapActionBlock    removeAdsActionBlock;
+@property (nonatomic)                   BOOL              shouldDisplayRemoveAdsButton;
 
 + (LARSAdController *)sharedManager;
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;

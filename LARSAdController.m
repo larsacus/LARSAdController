@@ -15,6 +15,24 @@
 #import "LARSAdController.h"
 #import <QuartzCore/QuartzCore.h>
 
+@interface LARSMCHammerView : UIView {
+}
+@end
+
+@implementation LARSMCHammerView
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    DLog(@"Checking for tap under view");
+    for (UIView *subview in self.subviews) {
+        if([subview hitTest:point withEvent:event] != nil)
+            return subview;
+    }
+    
+    return nil;
+}
+
+@end
+
 @implementation LARSAdController
 
 @synthesize googleAdBannerView          = _googleAdBannerView;
@@ -27,11 +45,16 @@
 @synthesize lastOrientationWasPortrait  = _lastOrientationWasPortrait;
 @synthesize currentOrientation          = _currentOrientation;
 @synthesize anyAdsVisible               = _anyAdsVisible;
+@synthesize removeAdsActionBlock        = _removeAdsActionBlock;
+@synthesize shouldDisplayRemoveAdsButton= _shouldDisplayRemoveAdsButton;
 
 //replace with your own google id
 #define kGoogleAdId @"a14e55c99c24b43"
-static const CGFloat LARS_PAD_AD_CONTAINER_HEIGHT = 90.0f;
-static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
+static const CGFloat LARS_PAD_AD_CONTAINER_HEIGHT = 120.f;
+static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 120.f;
+static const CGFloat LARS_POD_AD_BANNER_HEIGHT = 50.f;
+static const CGFloat LARS_REMOVE_ADS_BUTTON_WIDTH = 30.f;
+static const CGFloat LARS_REMOVE_ADS_BUTTON_HEIGHT = 30.f;
 
 static LARSAdController *sharedController = nil;
 
@@ -46,6 +69,7 @@ static LARSAdController *sharedController = nil;
         [sharedController setParentViewController:nil];
         [sharedController setShouldAlertUserWhenLeaving:NO];
         [sharedController setAnyAdsVisible:NO];
+        [sharedController setShouldDisplayRemoveAdsButton:YES];
     }
     return sharedController;
 }
@@ -116,18 +140,57 @@ static LARSAdController *sharedController = nil;
 
 - (UIView *)containerView{
     if (!_containerView) {
+        UIImage *xImage = [UIImage imageNamed:@"x.png"];
         CGFloat height = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? LARS_PAD_AD_CONTAINER_HEIGHT : LARS_POD_AD_CONTAINER_HEIGHT;
         CGRect frame = CGRectMake(0.0f,
                                   CGRectGetHeight(self.parentView.frame)-height,
                                   CGRectGetWidth(self.parentView.frame),
                                   height);
         
-        _containerView                  = [[UIView alloc] initWithFrame:frame];
+        _containerView                  = [[LARSMCHammerView alloc] initWithFrame:frame];
         _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | 
                                             UIViewAutoresizingFlexibleHeight | 
                                             UIViewAutoresizingFlexibleTopMargin;
         _containerView.backgroundColor  = [UIColor clearColor];
-        _containerView.userInteractionEnabled = NO;//off by default to ensure users can touch behind ad container
+        //_containerView.userInteractionEnabled = NO;//off by default to ensure users can touch behind ad container
+        
+        if (self.shouldDisplayRemoveAdsButton == YES) {
+            //create remove ads button
+            
+            UIView *removeAdsButton = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(frame)-xImage.size.width*2,
+                                                                               -xImage.size.height*2,
+                                                                               xImage.size.width*3,
+                                                                               xImage.size.height*3)];
+            
+            UIImageView *xImageView = [[UIImageView alloc] initWithImage:xImage];
+            xImageView.frame = CGRectMake(5.f, 5.f, xImage.size.width, xImage.size.height);
+            xImageView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            removeAdsButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+            removeAdsButton.layer.borderColor = [UIColor blackColor].CGColor;
+            removeAdsButton.layer.borderWidth = 1.f;
+            removeAdsButton.layer.backgroundColor = [UIColor colorWithRed:1.f
+                                                                    green:1.f
+                                                                     blue:1.f
+                                                                    alpha:0.5].CGColor;
+            removeAdsButton.layer.cornerRadius = 10.f;
+            
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeAdsButtonTapped:)];
+            tapGesture.numberOfTapsRequired = 1;
+            tapGesture.numberOfTouchesRequired = 1;
+            
+            [removeAdsButton addGestureRecognizer:tapGesture];
+            
+            [removeAdsButton addSubview:xImageView];
+            [self.containerView addSubview:removeAdsButton];
+            [self.containerView sendSubviewToBack:removeAdsButton];
+            
+            [xImageView release];
+            [removeAdsButton release];
+            [tapGesture release];
+        }
+        self.containerView.layer.borderColor = [UIColor redColor].CGColor;
+        self.containerView.layer.borderWidth = 2.f;
         
         self.containerView.layer.shadowOpacity = 0.5f;
         self.containerView.layer.shadowRadius = 10.0f;
@@ -135,6 +198,8 @@ static LARSAdController *sharedController = nil;
         self.containerView.layer.shouldRasterize = YES;
         self.containerView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     }
+    
+    
     return _containerView;
 }
 
@@ -211,7 +276,7 @@ static LARSAdController *sharedController = nil;
                          completion:^(BOOL finished){
                              self.iAdVisible = YES;
                              [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
-                             [[self containerView] setUserInteractionEnabled:YES];
+                             //[[self containerView] setUserInteractionEnabled:YES];
                          }
          ];
     }
@@ -238,7 +303,7 @@ static LARSAdController *sharedController = nil;
                          completion:^(BOOL finished){
                              self.iAdVisible = NO;
                              [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
-                             [[self containerView] setUserInteractionEnabled:NO];//google ad will re-enable userInteraction when necessary
+                             //[[self containerView] setUserInteractionEnabled:NO];//google ad will re-enable userInteraction when necessary
                          }
          ];
     }
@@ -326,8 +391,8 @@ static LARSAdController *sharedController = nil;
         [[self googleAdBannerView] setDelegate:self];
         [[self googleAdBannerView] loadRequest:[GADRequest request]];
         
-        [[self containerView] addSubview:[self googleAdBannerView]];
-        [[self containerView] sendSubviewToBack:[self googleAdBannerView]];
+        //[[self containerView] addSubview:[self googleAdBannerView]];
+        [[self containerView] insertSubview:self.googleAdBannerView belowSubview:self.iAdBannerView];
     }
 }
 
@@ -392,7 +457,7 @@ static LARSAdController *sharedController = nil;
                      completion:^(BOOL finished){
                          self.googleAdVisible = YES;
                          [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
-                         [[self containerView] setUserInteractionEnabled:YES];
+                         //[[self containerView] setUserInteractionEnabled:YES];
                          [[self googleAdBannerView] setUserInteractionEnabled:YES];
                      }
      ];
@@ -412,7 +477,7 @@ static LARSAdController *sharedController = nil;
                      completion:^(BOOL finished){
                          self.googleAdVisible = NO;
                          [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
-                         [[self containerView] setUserInteractionEnabled:NO];//assuming if a google ad fails to appear, there are no ads at all
+                         //[[self containerView] setUserInteractionEnabled:NO];//assuming if a google ad fails to appear, there are no ads at all
                      }
      ];
     NSLog(@"Google ad failed to receive ad");
@@ -432,5 +497,25 @@ static LARSAdController *sharedController = nil;
 //- (void)adViewWillLeaveApplication:(GADBannerView *)bannerView{
 //
 //}
+
+#pragma mark - Actions
+- (void)removeAdsButtonTapped:(UITapGestureRecognizer *)gesture{
+    DLog(@"remove ads button tapped!");
+    
+    switch (gesture.state) {
+        case UIGestureRecognizerStateBegan:
+            //change container color to indicate a tap
+            break;
+        case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateCancelled:
+            if (self.removeAdsActionBlock != nil)
+                self.removeAdsActionBlock();
+            break;
+        default:
+            break;
+    }
+    
+    
+}
 
 @end

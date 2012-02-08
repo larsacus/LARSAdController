@@ -37,8 +37,8 @@
 
 //replace with your own google id
 #define kGoogleAdId @"a14e55c99c24b43"
-static const CGFloat LARS_PAD_AD_CONTAINER_HEIGHT = 90.0f;
-static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
+CGFloat const LARS_PAD_AD_CONTAINER_HEIGHT = 90.0f;
+CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 
 #pragma mark -
 #pragma mark Class Methods
@@ -50,11 +50,11 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedManager = [[super allocWithZone:NULL] init];
-        [_sharedManager setGoogleAdVisible:NO];
-        [_sharedManager setIAdVisible:NO];
-        [_sharedManager setParentViewController:nil];
-        [_sharedManager setShouldAlertUserWhenLeaving:NO];
-        [_sharedManager setAnyAdsVisible:NO];
+        _sharedManager.googleAdVisible = NO;
+        _sharedManager.iAdVisible = NO;
+        _sharedManager.parentViewController = nil;
+        _sharedManager.shouldAlertUserWhenLeaving = NO;
+        _sharedManager.anyAdsVisible = NO;
     });
     
     return _sharedManager;
@@ -106,22 +106,22 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController{
     //remove container from superview
     //  add ad container to new view as subview at bottom
-    if (![[view subviews] containsObject:[self containerView]]) {
-        [self setCurrentOrientation:viewController.interfaceOrientation];
-        [self setParentViewController:viewController];
-        [self setParentView:view];
+    if (![view.subviews containsObject:self.containerView]) {
+        self.currentOrientation = viewController.interfaceOrientation;
+        self.parentViewController = viewController;
+        self.parentView = view;
         
-        [[self containerView] addSubview:[self iAdBannerView]];
+        [self.containerView addSubview:self.iAdBannerView];
         [self fixAdContainerFrame];
-        [view addSubview:[self containerView]];
+        [view addSubview:self.containerView];
     }
     else{
         //ad container exists, and bring to front
-        [view bringSubviewToFront:[self containerView]];
+        [view bringSubviewToFront:self.containerView];
     }
     
     if (_googleAdBannerView) {
-        [[self googleAdBannerView] setRootViewController:[self parentViewController]];
+        self.googleAdBannerView.rootViewController = self.parentViewController;
     }
 }
 
@@ -173,7 +173,7 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 }
 
 - (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation{
-    [self setCurrentOrientation:orientation];
+    self.currentOrientation = orientation;
     [self fixAdContainerFrame];
     
     CGRect contentFrame     = self.containerView.bounds;
@@ -202,7 +202,7 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 }
 
 - (void)fixAdContainerFrame{
-    [[self containerView] setFrame:[self containerSizeForDeviceOrientation:self.currentOrientation]];
+    self.containerView.frame = [self containerSizeForDeviceOrientation:self.currentOrientation];
 }
 
 #pragma mark -
@@ -212,7 +212,7 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
     //     release ad instance
     [self destroyGoogleAdsAnimated:YES];
     
-    if (![self isIAdVisible]) {
+    if (!self.isIAdVisible) {
         [UIView animateWithDuration:0.250 
                               delay:0.0 
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -221,8 +221,8 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
                          }
                          completion:^(BOOL finished){
                              self.iAdVisible = YES;
-                             [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
-                             [[self containerView] setUserInteractionEnabled:YES];
+                             self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
+                             self.containerView.userInteractionEnabled = YES;
                          }
          ];
     }
@@ -239,7 +239,7 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
     //if google ad instance is nil
     //  create new instance of google ad
-    if ([self isIAdVisible]) {
+    if (self.isIAdVisible) {
         [UIView animateWithDuration:0.250 
                               delay:0.0 
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -248,8 +248,8 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
                          }
                          completion:^(BOOL finished){
                              self.iAdVisible = NO;
-                             [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
-                             [[self containerView] setUserInteractionEnabled:NO];//google ad will re-enable userInteraction when necessary
+                             self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
+                             self.containerView.userInteractionEnabled = NO;//google ad will re-enable userInteraction when necessary
                          }
          ];
     }
@@ -261,9 +261,9 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
     //if ad container is not a subview of the parent view
     //  add ad container as subview of parent
     if(self.containerView.superview != self.parentView){  
-        [[self parentView] addSubview:[self containerView]];
-        [[self parentView] bringSubviewToFront:[self containerView]];
-        [[self containerView] bringSubviewToFront:[self iAdBannerView]];
+        [self.parentView addSubview:self.containerView];
+        [self.parentView bringSubviewToFront:self.containerView];
+        [self.containerView bringSubviewToFront:self.iAdBannerView];
     }
 }
 
@@ -294,16 +294,15 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
         [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil] : 
         [NSSet setWithObjects:ADBannerContentSizeIdentifier320x50, ADBannerContentSizeIdentifier480x32, nil];
          
-        [_iAdBannerView setDelegate:self];
+        _iAdBannerView.delegate = self;
     }
     return _iAdBannerView;
 }
 
 - (void)destroyIAds{
-    [[self iAdBannerView] removeFromSuperview];
-    [[self iAdBannerView] setDelegate:nil];
-    [_iAdBannerView release];
-    _iAdBannerView = nil;
+    [self.iAdBannerView removeFromSuperview];
+    self.iAdBannerView.delegate = nil;
+    [_iAdBannerView release], _iAdBannerView = nil;
 }
 
 #pragma mark -
@@ -329,13 +328,13 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
         [self recenterGoogleAdBannerView];
         
         if(_googleAdPublisherId == nil)
-            [[self googleAdBannerView] setAdUnitID:kGoogleAdId];
+            self.googleAdBannerView.adUnitID = kGoogleAdId;
         else
             [self setGoogleAdPublisherId:self.googleAdPublisherId];
         
-        [[self googleAdBannerView] setRootViewController:[self parentViewController]];
-        [[self googleAdBannerView] setDelegate:self];
-        [[self googleAdBannerView] loadRequest:[GADRequest request]];
+        self.googleAdBannerView.rootViewController = self.parentViewController;
+        self.googleAdBannerView.delegate = self;
+        [self.googleAdBannerView loadRequest:[GADRequest request]];
         
         [self.containerView insertSubview:self.googleAdBannerView belowSubview:self.iAdBannerView];
     }
@@ -343,7 +342,7 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 
 - (void)recenterGoogleAdBannerView{
     if (_googleAdBannerView) {
-        [[self googleAdBannerView] setCenter:CGPointMake(self.containerView.frame.size.width/2, self.googleAdBannerView.center.y)];
+        self.googleAdBannerView.center = CGPointMake(self.containerView.frame.size.width/2, self.googleAdBannerView.center.y);
     }
 }
 
@@ -354,10 +353,10 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
                                   delay:0.f
                                 options:UIViewAnimationOptionCurveEaseInOut
                              animations:^{
-                                 [[self googleAdBannerView] setFrame:
+                                 self.googleAdBannerView.frame = 
                                       CGRectOffset(self.googleAdBannerView.frame, 
                                                    0.f, 
-                                                   self.googleAdBannerView.frame.size.height)];
+                                                   self.googleAdBannerView.frame.size.height);
                              }
                              completion:^(BOOL finished){
                                  dispatch_async(dispatch_get_main_queue(), ^{
@@ -367,13 +366,13 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
              ];
         }
         else{
-            [[self googleAdBannerView] removeFromSuperview];
-            [[self googleAdBannerView] setDelegate:nil];
-            [[self googleAdBannerView] setRootViewController:nil];
-            [_googleAdBannerView release];
-            _googleAdBannerView = nil;
+            [self.googleAdBannerView removeFromSuperview];
+            self.googleAdBannerView.delegate = nil;
+            self.googleAdBannerView.rootViewController = nil;
+            
+            [_googleAdBannerView release], _googleAdBannerView = nil;
             self.googleAdVisible = NO;
-            [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
+            self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
         }
     }
 }
@@ -383,7 +382,7 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
     _googleAdPublisherId = [publisherId copy];
     
     if (_googleAdBannerView != nil) {
-        [[self googleAdBannerView] setAdUnitID:self.googleAdPublisherId];
+        self.googleAdBannerView.adUnitID = self.googleAdPublisherId;
     }
 }
 
@@ -394,16 +393,16 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         [[self googleAdBannerView] setFrame:
+                         self.googleAdBannerView.frame = 
                           CGRectOffset(self.googleAdBannerView.frame, 
                                        0.f, 
-                                       -(self.googleAdBannerView.frame.size.height-2.0f))];
+                                       -(self.googleAdBannerView.frame.size.height-2.0f));
                      }
                      completion:^(BOOL finished){
                          self.googleAdVisible = YES;
-                         [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
-                         [[self containerView] setUserInteractionEnabled:YES];
-                         [[self googleAdBannerView] setUserInteractionEnabled:YES];
+                         self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
+                         self.containerView.userInteractionEnabled = YES;
+                         self.googleAdBannerView.userInteractionEnabled = YES;
                      }
      ];
     NSLog(@"Google ad did receive ad");
@@ -414,15 +413,15 @@ static const CGFloat LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         [[self googleAdBannerView] setFrame:
+                         self.googleAdBannerView.frame = 
                           CGRectOffset(self.googleAdBannerView.frame, 
                                        0.f, 
-                                       self.googleAdBannerView.frame.size.height-2.0f)];
+                                       self.googleAdBannerView.frame.size.height-2.0f);
                      }
                      completion:^(BOOL finished){
                          self.googleAdVisible = NO;
-                         [self setAnyAdsVisible:(_iAdVisible || _googleAdVisible)];
-                         [[self containerView] setUserInteractionEnabled:NO];//assuming if a google ad fails to appear, there are no ads at all
+                         self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
+                         self.containerView.userInteractionEnabled = NO;//assuming if a google ad fails to appear, there are no ads at all
                      }
      ];
     NSLog(@"Google ad failed to receive ad");

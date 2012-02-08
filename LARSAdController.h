@@ -17,6 +17,8 @@
 #import "GADBannerView.h"
 #import "GADBannerViewDelegate.h"
 
+extern CGFloat const LARS_PAD_AD_CONTAINER_HEIGHT;
+extern CGFloat const LARS_POD_AD_CONTAINER_HEIGHT;
 
 @interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate>
 

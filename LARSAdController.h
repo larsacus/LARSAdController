@@ -18,22 +18,9 @@
 #import "GADBannerViewDelegate.h"
 
 
-@interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate> {
-@private
-    GADBannerView           *_googleAdBannerView;
-    ADBannerView            *_iAdBannerView;
-    UIView                  *_parentView;
-    UIView                  *_containerView;
-    UIViewController        *_parentViewController;
-    BOOL                    _googleAdVisible;
-    BOOL                    _iAdVisible;
-    BOOL                    _shouldAlertUserWhenLeaving;
-    NSString                *_googleAdPublisherId;
-    BOOL                    _lastOrientationWasPortrait;
-    UIInterfaceOrientation  _currentOrientation;
-    BOOL                    _anyAdsVisible;
-}
+@interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate>
 
+@property (nonatomic, retain)           ADBannerView      *iAdBannerView;
 @property (nonatomic, retain)           GADBannerView     *googleAdBannerView;
 @property (nonatomic, assign)           UIView            *parentView;
 @property (nonatomic, assign)           UIViewController  *parentViewController;
@@ -59,7 +46,7 @@
 - (void)destroyGoogleAdsAnimated:(BOOL)animated;
 
 //orientation support
-- (NSString *)containerSizeForDeviceOrientation:(UIInterfaceOrientation)orientation;
+- (CGRect)containerSizeForDeviceOrientation:(UIInterfaceOrientation)orientation;
 - (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation;
 - (void)fixAdContainerFrame;
 - (void)recenterGoogleAdBannerView;

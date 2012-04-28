@@ -33,6 +33,9 @@ If you would like to enable support for multiple orientations, add the following
 }
 ```
 
+## Detailed Integration Instructions
+- Click here a more detailed [iAd integration tutorial](http://theonlylars.com/blog/2012/04/27/integrating-google-ads-with-iad/) blog post using LARSAdController.
+
 ## Limitations (Maybe this is where you come in?)
 
   2. Support to add ad container to the top of a UIView (so that it slides up instead of down)

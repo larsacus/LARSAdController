@@ -1,0 +1,323 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		46B9178F14425C5F007EF823 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9178E14425C5F007EF823 /* UIKit.framework */; };
+		46B9179114425C5F007EF823 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9179014425C5F007EF823 /* Foundation.framework */; };
+		46B9179314425C5F007EF823 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9179214425C5F007EF823 /* CoreGraphics.framework */; };
+		46B9179914425C60007EF823 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 46B9179714425C60007EF823 /* InfoPlist.strings */; };
+		46B9179B14425C60007EF823 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 46B9179A14425C60007EF823 /* main.m */; };
+		46B9179F14425C60007EF823 /* LARSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 46B9179E14425C60007EF823 /* LARSAppDelegate.m */; };
+		46B917A214425C60007EF823 /* LARSMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46B917A114425C60007EF823 /* LARSMasterViewController.m */; };
+		46B917A514425C60007EF823 /* LARSDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46B917A414425C60007EF823 /* LARSDetailViewController.m */; };
+		46B917A814425C60007EF823 /* LARSMasterViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B917A614425C60007EF823 /* LARSMasterViewController_iPhone.xib */; };
+		46B917AB14425C60007EF823 /* LARSMasterViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B917A914425C60007EF823 /* LARSMasterViewController_iPad.xib */; };
+		46B917AE14425C60007EF823 /* LARSDetailViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B917AC14425C60007EF823 /* LARSDetailViewController_iPhone.xib */; };
+		46B917B114425C60007EF823 /* LARSDetailViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B917AF14425C60007EF823 /* LARSDetailViewController_iPad.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		46B9178A14425C5F007EF823 /* adcontrollerdemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adcontrollerdemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		46B9178E14425C5F007EF823 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		46B9179014425C5F007EF823 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		46B9179214425C5F007EF823 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		46B9179614425C60007EF823 /* adcontrollerdemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "adcontrollerdemo-Info.plist"; sourceTree = "<group>"; };
+		46B9179814425C60007EF823 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		46B9179A14425C60007EF823 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		46B9179C14425C60007EF823 /* adcontrollerdemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "adcontrollerdemo-Prefix.pch"; sourceTree = "<group>"; };
+		46B9179D14425C60007EF823 /* LARSAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LARSAppDelegate.h; sourceTree = "<group>"; };
+		46B9179E14425C60007EF823 /* LARSAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LARSAppDelegate.m; sourceTree = "<group>"; };
+		46B917A014425C60007EF823 /* LARSMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LARSMasterViewController.h; sourceTree = "<group>"; };
+		46B917A114425C60007EF823 /* LARSMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LARSMasterViewController.m; sourceTree = "<group>"; };
+		46B917A314425C60007EF823 /* LARSDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LARSDetailViewController.h; sourceTree = "<group>"; };
+		46B917A414425C60007EF823 /* LARSDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LARSDetailViewController.m; sourceTree = "<group>"; };
+		46B917A714425C60007EF823 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LARSMasterViewController_iPhone.xib; sourceTree = "<group>"; };
+		46B917AA14425C60007EF823 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LARSMasterViewController_iPad.xib; sourceTree = "<group>"; };
+		46B917AD14425C60007EF823 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LARSDetailViewController_iPhone.xib; sourceTree = "<group>"; };
+		46B917B014425C60007EF823 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LARSDetailViewController_iPad.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		46B9178714425C5F007EF823 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				46B9178F14425C5F007EF823 /* UIKit.framework in Frameworks */,
+				46B9179114425C5F007EF823 /* Foundation.framework in Frameworks */,
+				46B9179314425C5F007EF823 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		46B9177F14425C5F007EF823 = {
+			isa = PBXGroup;
+			children = (
+				46B9179414425C5F007EF823 /* adcontrollerdemo */,
+				46B9178D14425C5F007EF823 /* Frameworks */,
+				46B9178B14425C5F007EF823 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		46B9178B14425C5F007EF823 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				46B9178A14425C5F007EF823 /* adcontrollerdemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		46B9178D14425C5F007EF823 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				46B9178E14425C5F007EF823 /* UIKit.framework */,
+				46B9179014425C5F007EF823 /* Foundation.framework */,
+				46B9179214425C5F007EF823 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		46B9179414425C5F007EF823 /* adcontrollerdemo */ = {
+			isa = PBXGroup;
+			children = (
+				46B9179D14425C60007EF823 /* LARSAppDelegate.h */,
+				46B9179E14425C60007EF823 /* LARSAppDelegate.m */,
+				46B917A014425C60007EF823 /* LARSMasterViewController.h */,
+				46B917A114425C60007EF823 /* LARSMasterViewController.m */,
+				46B917A314425C60007EF823 /* LARSDetailViewController.h */,
+				46B917A414425C60007EF823 /* LARSDetailViewController.m */,
+				46B917A614425C60007EF823 /* LARSMasterViewController_iPhone.xib */,
+				46B917A914425C60007EF823 /* LARSMasterViewController_iPad.xib */,
+				46B917AC14425C60007EF823 /* LARSDetailViewController_iPhone.xib */,
+				46B917AF14425C60007EF823 /* LARSDetailViewController_iPad.xib */,
+				46B9179514425C60007EF823 /* Supporting Files */,
+			);
+			path = adcontrollerdemo;
+			sourceTree = "<group>";
+		};
+		46B9179514425C60007EF823 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				46B9179614425C60007EF823 /* adcontrollerdemo-Info.plist */,
+				46B9179714425C60007EF823 /* InfoPlist.strings */,
+				46B9179A14425C60007EF823 /* main.m */,
+				46B9179C14425C60007EF823 /* adcontrollerdemo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		46B9178914425C5F007EF823 /* adcontrollerdemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 46B917B414425C60007EF823 /* Build configuration list for PBXNativeTarget "adcontrollerdemo" */;
+			buildPhases = (
+				46B9178614425C5F007EF823 /* Sources */,
+				46B9178714425C5F007EF823 /* Frameworks */,
+				46B9178814425C5F007EF823 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = adcontrollerdemo;
+			productName = adcontrollerdemo;
+			productReference = 46B9178A14425C5F007EF823 /* adcontrollerdemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46B9178114425C5F007EF823 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 46B9178414425C5F007EF823 /* Build configuration list for PBXProject "adcontrollerdemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 46B9177F14425C5F007EF823;
+			productRefGroup = 46B9178B14425C5F007EF823 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				46B9178914425C5F007EF823 /* adcontrollerdemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		46B9178814425C5F007EF823 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				46B9179914425C60007EF823 /* InfoPlist.strings in Resources */,
+				46B917A814425C60007EF823 /* LARSMasterViewController_iPhone.xib in Resources */,
+				46B917AB14425C60007EF823 /* LARSMasterViewController_iPad.xib in Resources */,
+				46B917AE14425C60007EF823 /* LARSDetailViewController_iPhone.xib in Resources */,
+				46B917B114425C60007EF823 /* LARSDetailViewController_iPad.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		46B9178614425C5F007EF823 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				46B9179B14425C60007EF823 /* main.m in Sources */,
+				46B9179F14425C60007EF823 /* LARSAppDelegate.m in Sources */,
+				46B917A214425C60007EF823 /* LARSMasterViewController.m in Sources */,
+				46B917A514425C60007EF823 /* LARSDetailViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		46B9179714425C60007EF823 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				46B9179814425C60007EF823 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		46B917A614425C60007EF823 /* LARSMasterViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				46B917A714425C60007EF823 /* en */,
+			);
+			name = LARSMasterViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		46B917A914425C60007EF823 /* LARSMasterViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				46B917AA14425C60007EF823 /* en */,
+			);
+			name = LARSMasterViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+		46B917AC14425C60007EF823 /* LARSDetailViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				46B917AD14425C60007EF823 /* en */,
+			);
+			name = LARSDetailViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		46B917AF14425C60007EF823 /* LARSDetailViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				46B917B014425C60007EF823 /* en */,
+			);
+			name = LARSDetailViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		46B917B214425C60007EF823 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		46B917B314425C60007EF823 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		46B917B514425C60007EF823 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";
+				INFOPLIST_FILE = "adcontrollerdemo/adcontrollerdemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		46B917B614425C60007EF823 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";
+				INFOPLIST_FILE = "adcontrollerdemo/adcontrollerdemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		46B9178414425C5F007EF823 /* Build configuration list for PBXProject "adcontrollerdemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46B917B214425C60007EF823 /* Debug */,
+				46B917B314425C60007EF823 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		46B917B414425C60007EF823 /* Build configuration list for PBXNativeTarget "adcontrollerdemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46B917B514425C60007EF823 /* Debug */,
+				46B917B614425C60007EF823 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 46B9178114425C5F007EF823 /* Project object */;
+}

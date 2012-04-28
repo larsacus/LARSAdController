@@ -17,23 +17,12 @@
 #import "GADBannerView.h"
 #import "GADBannerViewDelegate.h"
 
+extern CGFloat const LARS_PAD_AD_CONTAINER_HEIGHT;
+extern CGFloat const LARS_POD_AD_CONTAINER_HEIGHT;
 
-@interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate> {
-@private
-    GADBannerView           *_googleAdBannerView;
-    ADBannerView            *_iAdBannerView;
-    UIView                  *_parentView;
-    UIView                  *_containerView;
-    UIViewController        *_parentViewController;
-    BOOL                    _googleAdVisible;
-    BOOL                    _iAdVisible;
-    BOOL                    _shouldAlertUserWhenLeaving;
-    NSString                *_googleAdPublisherId;
-    BOOL                    _lastOrientationWasPortrait;
-    UIInterfaceOrientation  _currentOrientation;
-    BOOL                    _anyAdsVisible;
-}
+@interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate>
 
+@property (nonatomic, retain)           ADBannerView      *iAdBannerView;
 @property (nonatomic, retain)           GADBannerView     *googleAdBannerView;
 @property (nonatomic, assign)           UIView            *parentView;
 @property (nonatomic, assign)           UIViewController  *parentViewController;
@@ -42,7 +31,7 @@
 @property (nonatomic,
            getter = isIAdVisible)       BOOL              iAdVisible;
 @property (nonatomic)                   BOOL              shouldAlertUserWhenLeaving;
-@property (nonatomic, retain, readonly) NSString          *googleAdPublisherId;
+@property (nonatomic, copy)             NSString          *googleAdPublisherId;
 @property (nonatomic)                   BOOL              lastOrientationWasPortrait;
 @property (nonatomic)                   UIInterfaceOrientation currentOrientation;
 @property (atomic, getter = areAnyAdsVisible) BOOL        anyAdsVisible;
@@ -59,7 +48,7 @@
 - (void)destroyGoogleAdsAnimated:(BOOL)animated;
 
 //orientation support
-- (NSString *)containerSizeForDeviceOrientation:(UIInterfaceOrientation)orientation;
+- (CGRect)containerSizeForDeviceOrientation:(UIInterfaceOrientation)orientation;
 - (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation;
 - (void)fixAdContainerFrame;
 - (void)recenterGoogleAdBannerView;

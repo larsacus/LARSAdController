@@ -19,30 +19,24 @@ In order to compile, you need to include the following Apple frameworks:
   3. `MessageUI.framework`
   4. `SystemConfiguration.framework`
 
-You will also need the `Google AdMob Framework` available from [Google](http://admob.com).
+You will also need the `Google AdMob SDK` available from [Google](https://developers.google.com/mobile-ads-sdk/download#downloadios).
 
-That's it.  Technically, this can be added to any `UIView` that is large enough.
+That's it.  Technically, this can be added to any `UIView` that is large enough and managed by a view controller.
 
 If you would like to enable support for multiple orientations, add the following when you create add the container to the view, as well as in `willAnimateRotationToInterfaceOrientation:toInterfaceOrientation:duration:`:
 
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{
     [[LARSAdController sharedManager] addAdContainerToView:self.view withParentViewController:self];
-    [[LARSAdController sharedManager] setGoogleAdPublisherId:myPublisherId];
-    [[LARSAdController sharedManager] layoutBannerViewsForCurrentOrientation:self.interfaceOrientation];
-}
-
--(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-    [[LARSAdController sharedManager] layoutBannerViewsForCurrentOrientation:toInterfaceOrientation];
+    [[LARSAdController sharedManager] setGoogleAdPublisherId:myPublisherId]; //this only needs to be called the first time LARSAdController is called
+    [[LARSAdController sharedManager] setShouldHandleOrientationChanges:YES];
 }
 ```
 
 ## Limitations (Maybe this is where you come in?)
 
-  1. There is currently not any support for auto-listening for interface orientation changes without the `viewController` delegate callback methods (yet).
   2. Support to add ad container to the top of a UIView (so that it slides up instead of down)
   3. Support for other animation transitions out of the box
-  4. Support for smaller than full-width views (like in a pop-over controller on iPad)
   5. Modular support for more ad networks
 
 ##License (MIT)
@@ -57,6 +51,14 @@ The above copyright notice and this permission notice shall be included in all c
 *THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*
 
 ## Changelog
+###2.1
+- Added orientation auto-listening without use of view controller delegate callbacks
+- Added ability for ads to try and fit themselves into any view they are placed in.  Sizing is now done based on superview size vs just the orientation
+- Fixed Issue 3 - "Container frame is incorrect when returning from clicked ad"
+- Fixed issue where ad would not display again when returning from clicked ad
+- Moved some method signatures from .h to private interface in .m file
+- Updated example project
+
 ###2.0.1
 -----
 - Added demo project to make up for my instructions' shortfall

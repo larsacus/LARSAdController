@@ -7,10 +7,7 @@
 //
 
 #import "LARSAppDelegate.h"
-
-#import "LARSMasterViewController.h"
-
-#import "LARSDetailViewController.h"
+#import "LARSExampleViewController.h"
 
 @implementation LARSAppDelegate
 
@@ -30,23 +27,11 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        LARSMasterViewController *masterViewController = [[[LARSMasterViewController alloc] initWithNibName:@"LARSMasterViewController_iPhone" bundle:nil] autorelease];
-        self.navigationController = [[[UINavigationController alloc] initWithRootViewController:masterViewController] autorelease];
-        self.window.rootViewController = self.navigationController;
-    } else {
-        LARSMasterViewController *masterViewController = [[[LARSMasterViewController alloc] initWithNibName:@"LARSMasterViewController_iPad" bundle:nil] autorelease];
-        UINavigationController *masterNavigationController = [[[UINavigationController alloc] initWithRootViewController:masterViewController] autorelease];
-        
-        LARSDetailViewController *detailViewController = [[[LARSDetailViewController alloc] initWithNibName:@"LARSDetailViewController_iPad" bundle:nil] autorelease];
-        UINavigationController *detailNavigationController = [[[UINavigationController alloc] initWithRootViewController:detailViewController] autorelease];
-    	
-        self.splitViewController = [[[UISplitViewController alloc] init] autorelease];
-        self.splitViewController.delegate = detailViewController;
-        self.splitViewController.viewControllers = [NSArray arrayWithObjects:masterNavigationController, detailNavigationController, nil];
-        
-        self.window.rootViewController = self.splitViewController;
-    }
+    
+    LARSExampleViewController *root = [[LARSExampleViewController alloc] init];
+    [self.window setRootViewController:root];
+    [root release];
+    
     [self.window makeKeyAndVisible];
     return YES;
 }

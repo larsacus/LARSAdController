@@ -47,4 +47,6 @@ extern CGFloat const LARS_POD_AD_CONTAINER_HEIGHT;
 
 - (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation;
 
+- (UIView *)containerView;
+
 @end

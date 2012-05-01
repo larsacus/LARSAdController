@@ -21,7 +21,6 @@
     UIView *_containerView;
 }
 - (void)createGoogleAds;
-- (UIView *)containerView;
 
 - (void)destroyIAds;
 - (void)destroyGoogleAdsAnimated:(BOOL)animated;

@@ -23,7 +23,7 @@ You will also need the `Google AdMob SDK` available from [Google](https://develo
 
 That's it.  Technically, this can be added to any `UIView` that is large enough and managed by a view controller.
 
-If you would like to enable support for multiple orientations, add the following when you create add the container to the view, as well as in `willAnimateRotationToInterfaceOrientation:toInterfaceOrientation:duration:`:
+If you would like to enable support for multiple orientations, add the following when you create and add the container to the view:
 
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{

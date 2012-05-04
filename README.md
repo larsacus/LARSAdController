@@ -2,12 +2,24 @@
 `LARSAdController` is a singleton class that manages iAds and Google Ads in a single container view.  All orientations and devices are supported (Pads and Pods).
 
 ## Usage
+###Single Orientation
 For single-orientation support for all devices, simply add the following line in your `UIViewController`:
 
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{
     [[LARSAdController sharedManager] addAdContainerToView:[self view] withViewController:self];
     [[LARSAdController sharedManager] setGoogleAdPublisherId:myPublisherId]; //change publisher id unless you want me to have your monies (only once per singleton, though)
+}
+```
+
+### Multiple Orientations
+If you would like to enable support for multiple orientations, add the following when you create and add the container to the view:
+
+``` objective-c
+- (void)viewWillAppear:(BOOL)animated{
+    [[LARSAdController sharedManager] addAdContainerToView:self.view withParentViewController:self];
+    [[LARSAdController sharedManager] setGoogleAdPublisherId:myPublisherId]; //this only needs to be called the first time LARSAdController is called
+    [[LARSAdController sharedManager] setShouldHandleOrientationChanges:YES];
 }
 ```
 
@@ -22,16 +34,6 @@ In order to compile, you need to include the following Apple frameworks:
 You will also need the `Google AdMob SDK` available from [Google](https://developers.google.com/mobile-ads-sdk/download#downloadios).
 
 That's it.  Technically, this can be added to any `UIView` that is large enough and managed by a view controller.
-
-If you would like to enable support for multiple orientations, add the following when you create and add the container to the view:
-
-``` objective-c
-- (void)viewWillAppear:(BOOL)animated{
-    [[LARSAdController sharedManager] addAdContainerToView:self.view withParentViewController:self];
-    [[LARSAdController sharedManager] setGoogleAdPublisherId:myPublisherId]; //this only needs to be called the first time LARSAdController is called
-    [[LARSAdController sharedManager] setShouldHandleOrientationChanges:YES];
-}
-```
 
 ## Detailed Integration Instructions
 - Click here a more detailed [iAd integration tutorial](http://theonlylars.com/blog/2012/04/27/integrating-google-ads-with-iad/) blog post using LARSAdController.

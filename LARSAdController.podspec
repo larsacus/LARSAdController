@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source = {:git => 'https://github.com/larsacus/LARSAdController.git', :tag => '2.1.0'}
   s.platform = :ios, '4.0'
   s.homepage = 'https://github.com/larsacus/LARSAdController'
-  s.source_files = 'LARSAdController.{h,m}'
+  s.source_files = 'LARSAdController.h'
   s.license = 'MIT'
   s.preserve_paths = 'LICENSE'
   s.frameworks = 'iAd'

@@ -147,7 +147,7 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
         
         _containerView = [[UIView alloc] initWithFrame:frame];
         _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | 
-                                            UIViewAutoresizingFlexibleTopMargin;
+        UIViewAutoresizingFlexibleTopMargin;
         _containerView.backgroundColor  = [UIColor clearColor];
         _containerView.clipsToBounds = NO;
         _containerView.userInteractionEnabled = NO;//off by default to ensure users can touch behind ad container
@@ -197,7 +197,10 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 - (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation{
     self.currentOrientation = orientation;
     [self fixAdContainerFrame];
-
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    
     //change iAd layout
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (CGRectGetWidth(self.containerView.frame) < 1024.f) {
@@ -215,6 +218,8 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
             self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierLandscape != nil) ? ADBannerContentSizeIdentifierLandscape : ADBannerContentSizeIdentifier480x32;
         }
     }
+    
+#pragma clang diagnostic pop
     
     [self recenterGoogleAdBannerView];
 }
@@ -304,13 +309,16 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
     if (!_iAdBannerView) {
         NSString *contentSize;
         
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         if ((&ADBannerContentSizeIdentifierLandscape != nil)) {
             contentSize = UIInterfaceOrientationIsPortrait(self.currentOrientation) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifierLandscape;
         }
         else {
             contentSize = UIInterfaceOrientationIsPortrait(self.currentOrientation) ? ADBannerContentSizeIdentifier320x50 : ADBannerContentSizeIdentifier480x32;
         }
-
+#pragma clang diagnostic pop
+        
         CGRect frame;
         frame.size = [ADBannerView sizeFromBannerContentSizeIdentifier:contentSize];
         
@@ -320,12 +328,16 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
         _iAdBannerView = [[ADBannerView alloc] initWithFrame:frame];
         _iAdBannerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         if ((&ADBannerContentSizeIdentifierLandscape != nil)) {
-        _iAdBannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil];
+            _iAdBannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil];
         }
         else{
             _iAdBannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifier320x50, ADBannerContentSizeIdentifier480x32, nil];
         }
+#pragma clang diagnostic pop
+        
         _iAdBannerView.delegate = self;
     }
     return _iAdBannerView;
@@ -342,7 +354,7 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 - (void)createGoogleAds{
     if (_googleAdBannerView == nil) {
         CGRect frame;
-
+        
         //create size depending on device and orientation
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             frame = CGRectMake(0.0f, self.containerView.frame.size.height, 
@@ -387,9 +399,9 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
                                 options:UIViewAnimationOptionCurveEaseInOut
                              animations:^{
                                  self.googleAdBannerView.frame = 
-                                      CGRectOffset(self.googleAdBannerView.frame, 
-                                                   0.f, 
-                                                   self.googleAdBannerView.frame.size.height);
+                                 CGRectOffset(self.googleAdBannerView.frame, 
+                                              0.f, 
+                                              self.googleAdBannerView.frame.size.height);
                              }
                              completion:^(BOOL finished){
                                  dispatch_async(dispatch_get_main_queue(), ^{
@@ -427,9 +439,9 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.googleAdBannerView.frame = 
-                          CGRectOffset(self.googleAdBannerView.frame, 
-                                       0.f, 
-                                       -(self.googleAdBannerView.frame.size.height-2.0f));
+                         CGRectOffset(self.googleAdBannerView.frame, 
+                                      0.f, 
+                                      -(self.googleAdBannerView.frame.size.height-2.0f));
                      }
                      completion:^(BOOL finished){
                          self.googleAdVisible = YES;
@@ -447,9 +459,9 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.googleAdBannerView.frame = 
-                          CGRectOffset(self.googleAdBannerView.frame, 
-                                       0.f, 
-                                       self.googleAdBannerView.frame.size.height-2.0f);
+                         CGRectOffset(self.googleAdBannerView.frame, 
+                                      0.f, 
+                                      self.googleAdBannerView.frame.size.height-2.0f);
                      }
                      completion:^(BOOL finished){
                          self.googleAdVisible = NO;

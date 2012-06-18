@@ -9,8 +9,8 @@ Pod::Spec.new do |s|
   s.platform = :ios, '4.0'
   s.homepage = 'https://github.com/larsacus/LARSAdController'
   s.source_files = 'LARSAdController.{h,m}'
-  s.license = { :type => 'MIT', :file => 'LICENSE' }
+  s.license = 'MIT'
+  s.preserve_paths = 'LICENSE'
   s.frameworks = 'iAd'
-  s.clean_paths = ['Example']
-  s.dependencies = 'GoogleAds'
+  s.dependency 'GoogleAds', :git => "https://github.com/larsacus/GoogleAds.git"
 end

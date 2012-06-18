@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage = 'https://github.com/larsacus/LARSAdController'
   s.author = {'Lars Anderson' => 'iAm@theonlylars.com'}
   s.source = {:git => 'https://github.com/larsacus/LARSAdController.git', :tag => '2.1.0'}
-  s.platform = :ios, '4.0'
+  s.platform = :ios
   s.homepage = 'https://github.com/larsacus/LARSAdController'
   s.source_files = 'LARSAdController.h'
   s.license = 'MIT'

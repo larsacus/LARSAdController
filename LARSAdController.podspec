@@ -12,5 +12,5 @@ Pod::Spec.new do |s|
   s.license = 'MIT'
   s.preserve_paths = 'LICENSE'
   s.frameworks = 'iAd'
-  s.dependency 'GoogleAds', :git => "https://github.com/larsacus/GoogleAds.git"
+  s.dependency 'GoogleAds', :git => "git://github.com/larsacus/GoogleAds.git"
 end

@@ -12,14 +12,19 @@
 //
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import "LARSAdController.h"
-#import "GADBannerView.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface LARSAdController() {
-@private
-    UIView *_containerView;
-}
+#import "LARSAdController.h"
+#import "GADBannerView.h"
+
+@interface LARSAdController()
+
+@property (nonatomic) BOOL lastOrientationWasPortrait;
+@property (nonatomic) UIInterfaceOrientation currentOrientation;
+@property (nonatomic, retain, readwrite) UIView *containerView;
+@property (nonatomic,
+           getter = isRegisteredForOrientationChanges) BOOL registeredForOrientationChanges;
+
 - (void)createGoogleAds;
 
 - (void)destroyIAds;
@@ -43,17 +48,16 @@
 @synthesize googleAdVisible             = _googleAdVisible;
 @synthesize iAdVisible                  = _iAdVisible;
 @synthesize parentViewController        = _parentViewController;
-@synthesize shouldAlertUserWhenLeaving  = _shouldAlertUserWhenLeaving;
 @synthesize googleAdPublisherId         = _googleAdPublisherId;
 @synthesize lastOrientationWasPortrait  = _lastOrientationWasPortrait;
 @synthesize currentOrientation          = _currentOrientation;
 @synthesize anyAdsVisible               = _anyAdsVisible;
 @synthesize shouldHandleOrientationChanges = _shouldHandleOrientationChanges;
+@synthesize containerView               = _containerView;
+@synthesize registeredForOrientationChanges = _registeredForOrientationChanges;
 
-//replace with your own google id
-#define kGoogleAdId @"a14e55c99c24b43"
-CGFloat const LARS_PAD_AD_CONTAINER_HEIGHT = 90.0f;
-CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
+CGFloat const kLARSAdContainerHeightPad = 90.0f;
+CGFloat const kLARSAdContainerHeightPod = 50.0f;
 
 #pragma mark -
 #pragma mark Class Methods
@@ -139,7 +143,7 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 
 - (UIView *)containerView{
     if (!_containerView) {
-        CGFloat height = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? LARS_PAD_AD_CONTAINER_HEIGHT : LARS_POD_AD_CONTAINER_HEIGHT;
+        CGFloat height = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? kLARSAdContainerHeightPad : kLARSAdContainerHeightPod;
         CGRect frame = CGRectMake(0.0f,
                                   CGRectGetHeight(self.parentView.frame)-height,
                                   CGRectGetWidth(self.parentView.frame),
@@ -167,13 +171,19 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
     CGFloat yOrigin;
     
     if (UIInterfaceOrientationIsLandscape(orientation)) {
-        NSLog(@"View is landscape");
+#ifdef LARSADCONTROLLER_DEBUG
+            NSLog(@"View is landscape");
+#endif
+        
         yOrigin = CGRectGetWidth(self.parentView.frame);
         width = CGRectGetHeight(self.parentView.frame);
         self.lastOrientationWasPortrait = NO;
     }
     else{//portrait
-        NSLog(@"View is portrait");
+#ifdef LARSADCONTROLLER_DEBUG
+            NSLog(@"View is portrait");
+#endif
+        
         yOrigin = CGRectGetHeight(self.parentView.frame);
         width = CGRectGetWidth(self.parentView.frame);
         self.lastOrientationWasPortrait = YES;
@@ -181,10 +191,10 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
     
     CGFloat height;
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
-        height = LARS_PAD_AD_CONTAINER_HEIGHT; 
+        height = kLARSAdContainerHeightPad; 
     }
     else{
-        height = LARS_POD_AD_CONTAINER_HEIGHT;
+        height = kLARSAdContainerHeightPod;
     }
     
     yOrigin = yOrigin - height;
@@ -352,7 +362,7 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 #pragma mark -
 #pragma mark AdMob/Google Methods
 - (void)createGoogleAds{
-    if (_googleAdBannerView == nil) {
+    if (_googleAdBannerView == nil && _googleAdPublisherId) {
         CGRect frame;
         
         //create size depending on device and orientation
@@ -372,16 +382,15 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
         _googleAdBannerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
         [self recenterGoogleAdBannerView];
         
-        if(_googleAdPublisherId == nil)
-            self.googleAdBannerView.adUnitID = kGoogleAdId;
-        else
-            [self setGoogleAdPublisherId:self.googleAdPublisherId];
-        
+        self.googleAdBannerView.adUnitID = self.googleAdPublisherId;
         self.googleAdBannerView.rootViewController = self.parentViewController;
         self.googleAdBannerView.delegate = self;
         [self.googleAdBannerView loadRequest:[GADRequest request]];
         
         [self.containerView insertSubview:self.googleAdBannerView belowSubview:self.iAdBannerView];
+    }
+    else if(!_googleAdPublisherId){
+        NSLog(@"%@ WARNING: Google Ad Publisher ID not set. No ads will be served until you set one using setGoogleAdPublisherId:!", NSStringFromClass(self.class));
     }
 }
 
@@ -450,7 +459,9 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
                          self.googleAdBannerView.userInteractionEnabled = YES;
                      }
      ];
-    NSLog(@"Google ad did receive ad");
+#ifdef LARSADCONTROLLER_DEBUG
+        NSLog(@"Google ad did receive ad");
+#endif
 }
 //
 - (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
@@ -469,7 +480,9 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
                          self.containerView.userInteractionEnabled = NO;//assuming if a google ad fails to appear, there are no ads at all
                      }
      ];
-    NSLog(@"Google ad failed to receive ad");
+#ifdef LARSADCONTROLLER_DEBUG
+        NSLog(@"Google ad failed to receive ad");
+#endif
 }
 
 // Unused Google Ad Delegate Methods
@@ -489,18 +502,36 @@ CGFloat const LARS_POD_AD_CONTAINER_HEIGHT = 50.0f;
 
 #pragma mark - Orientation Handlers
 - (void)registerForDeviceRotationNotifications{
-    NSLog(@"Registering for orientation notifications");
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOrientationNotification:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    if (!self.isRegisteredForOrientationChanges) {
+#ifdef LARSADCONTROLLER_DEBUG
+        NSLog(@"Registering for orientation notifications");
+#endif
+        
+        self.registeredForOrientationChanges = YES;
+        
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOrientationNotification:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    }
 }
 
 - (void)unRegisterFromDeviceRotationNotifications{
-    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    if (self.isRegisteredForOrientationChanges == YES) {
+#ifdef LARSADCONTROLLER_DEBUG
+        NSLog(@"Unregistering for orientation notifications");
+#endif
+        
+        [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+        
+        self.registeredForOrientationChanges = NO;
+    }
 }
 
 - (void)handleOrientationNotification:(NSNotification *)orientationNotification{
-    NSLog(@"Handling orientation change");
+#ifdef LARSADCONTROLLER_DEBUG
+        NSLog(@"Handling orientation change");
+#endif
+    
     double delayInSeconds = 0.01f;
     
     //interface orientation wasn't always guaranteed without dispatch_after

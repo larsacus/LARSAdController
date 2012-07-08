@@ -13,40 +13,75 @@
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GADBannerViewDelegate.h"
 #import <iAd/iAd.h>
 
-extern CGFloat const LARS_PAD_AD_CONTAINER_HEIGHT;
-extern CGFloat const LARS_POD_AD_CONTAINER_HEIGHT;
+#import "GADBannerViewDelegate.h"
 
 @class GADBannerView;
 @class ADBannerView;
 
 @interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate>
 
-@property (nonatomic, retain)           ADBannerView      *iAdBannerView;
-@property (nonatomic, retain)           GADBannerView     *googleAdBannerView;
-@property (nonatomic, assign)           UIView            *parentView;
-@property (nonatomic, assign)           UIViewController  *parentViewController;
-@property (nonatomic, 
-           getter = isGoogleAdVisible)  BOOL              googleAdVisible;
-@property (nonatomic,
-           getter = isIAdVisible)       BOOL              iAdVisible;
-@property (nonatomic)                   BOOL              shouldAlertUserWhenLeaving;
-@property (nonatomic, copy)             NSString          *googleAdPublisherId;
-@property (nonatomic)                   BOOL              lastOrientationWasPortrait;
-@property (nonatomic)                   UIInterfaceOrientation currentOrientation;
-@property (atomic,
-           getter = areAnyAdsVisible)   BOOL              anyAdsVisible;
-@property (nonatomic,
-           getter = isHandlingOrientationChanges) BOOL    shouldHandleOrientationChanges;
+/** The banner view instance for iAds. */
+@property (nonatomic, retain) ADBannerView *iAdBannerView;
 
+/** The banner view instance for Google Ads */
+@property (nonatomic, retain) GADBannerView *googleAdBannerView;
+
+/** The parent view that the shared instance is currently hosted in. */
+@property (nonatomic, retain) UIView *parentView;
+
+/** The parent view controller that the shared instance is currently hosted in. Typically, this is the same view controller that is managing parentView. */
+@property (nonatomic, retain) UIViewController *parentViewController;
+
+/** A boolean flag that indicates if a Google ad is currently being displayed. */
+@property (nonatomic, 
+           getter = isGoogleAdVisible) BOOL googleAdVisible;
+
+/** A boolean flag that indicates if an iAd ad is currently being displayed. */
+@property (nonatomic,
+           getter = isIAdVisible) BOOL iAdVisible;
+
+/** Your google ad publisher id. */
+@property (nonatomic, copy) NSString *googleAdPublisherId;
+
+/** A boolean flag that indicates if _any_ ads are currently being displayed. */
+@property (atomic,
+           getter = areAnyAdsVisible) BOOL anyAdsVisible;
+
+/** A boolean flag that indicates if the shared instance should be automatically listening for and handling rotation changes.
+ 
+ Rotation changes will be listened for, but will only rotate if the view controller that the ads are being hosted in support the given orientation. For example, if your view controller only supports the portrait orientation, but the user changes to landscape, the ad controller will fire the code to ask your view controller if it should support the new device orientation. If your view controller returns YES, then the ad controller will layout the ad banner for that orientation.
+ */
+@property (nonatomic,
+           getter = isHandlingOrientationChanges) BOOL shouldHandleOrientationChanges;
+
+/** The container view that the ads are contained in. Exposed so you can do anything you would want with it. */
+@property (nonatomic, retain, readonly) UIView *containerView;
+
+/** Class method that gives access to the shared instance. */
 + (LARSAdController *)sharedManager;
+
+/** The primary method of adding your ads to a view and view controller. For some, this will be the only method that is ever called besides setting googleAdPublisherId. Call this method in every view controller's viewWillAppear method in order to add the shared ad instance to your view heirarchy.
+ 
+ @param view The view you would like the ad container added to.
+ @param viewController The view controller that will be managing the ad.
+ */
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;
+
+/** The publisher ID to serve Google Ads using. Set this as your first call in your first view controller to set the Google ad unit ID for the shared instance.
+ 
+ Only needs to be set once per application launch.
+ 
+ @param publisherId The publisher ID that was given to you from Google to serve ads using.
+ */
 - (void)setGoogleAdPublisherId:(NSString *)publisherId;
 
+/** Lays out the currently displayed banner view for the given orientation.
+ 
+ @warning Deprecated.  You may still use this method in your view controller's willAnimateRotationFromOrientation:toOrientation: method, but using the shouldHandleOrientationChanges property to tell singleton to automatically listen for orientation changes will automatically call this method without needing to place the call in your view controller manually.
+ @param orientation The orientation that the ad container should layout for.
+ */
 - (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation;
-
-- (UIView *)containerView;
 
 @end

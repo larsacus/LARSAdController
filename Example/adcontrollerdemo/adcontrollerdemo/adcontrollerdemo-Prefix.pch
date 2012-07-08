@@ -12,3 +12,7 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 #endif
+
+#ifndef LARSADCONTROLLER_DEBUG
+#define LARSADCONTROLLER_DEBUG
+#endif

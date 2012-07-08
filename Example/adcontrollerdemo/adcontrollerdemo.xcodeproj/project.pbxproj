@@ -202,7 +202,7 @@
 		46B9178114425C5F007EF823 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 46B9178414425C5F007EF823 /* Build configuration list for PBXProject "adcontrollerdemo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -309,6 +309,7 @@
 		46B917B514425C60007EF823 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";
 				INFOPLIST_FILE = "adcontrollerdemo/adcontrollerdemo-Info.plist";
@@ -318,6 +319,7 @@
 					"\"$(SRCROOT)/../GoogleAds\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

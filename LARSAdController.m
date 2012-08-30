@@ -259,11 +259,15 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     [self destroyGoogleAdsAnimated:YES];
     
     if (!self.isIAdVisible) {
+        CGRect newFrame;
+        newFrame.origin = CGPointMake(CGRectGetMinX(banner.frame), CGRectGetHeight(self.containerView.frame) - CGRectGetHeight(banner.frame));
+        newFrame.size = banner.frame.size;
+        
         [UIView animateWithDuration:0.250 
                               delay:0.0 
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-                             [banner setFrame:CGRectOffset(banner.frame, 0.0, -banner.frame.size.height)];
+                             banner.frame = newFrame;
                          }
                          completion:^(BOOL finished){
                              self.iAdVisible = YES;
@@ -286,11 +290,15 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     //if google ad instance is nil
     //  create new instance of google ad
     if (self.isIAdVisible) {
+        CGRect newFrame;
+        newFrame.origin = CGPointMake(CGRectGetMinX(banner.frame), CGRectGetHeight(self.containerView.frame));
+        newFrame.size = banner.frame.size;
+        
         [UIView animateWithDuration:0.250 
                               delay:0.0 
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-                             [banner setFrame:CGRectOffset(banner.frame, 0.0, banner.frame.size.height)];
+                             banner.frame = newFrame;
                          }
                          completion:^(BOOL finished){
                              self.iAdVisible = NO;
@@ -407,10 +415,12 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                                   delay:0.f
                                 options:UIViewAnimationOptionCurveEaseInOut
                              animations:^{
-                                 self.googleAdBannerView.frame = 
-                                 CGRectOffset(self.googleAdBannerView.frame, 
-                                              0.f, 
-                                              self.googleAdBannerView.frame.size.height);
+                                 CGRect frame;
+                                 frame.origin = CGPointMake(self.googleAdBannerView.frame.origin.x,
+                                                            CGRectGetHeight(self.containerView.frame));
+                                 frame.size = self.googleAdBannerView.frame.size;
+                                 
+                                 self.googleAdBannerView.frame = frame;
                              }
                              completion:^(BOOL finished){
                                  dispatch_async(dispatch_get_main_queue(), ^{
@@ -443,14 +453,16 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 #pragma mark -
 #pragma mark AdMob/Google Delegate Methods
 - (void)adViewDidReceiveAd:(GADBannerView *)bannerView{
+    CGRect newFrame;
+    newFrame.origin = CGPointMake(self.iAdBannerView.frame.origin.x,
+                                  CGRectGetHeight(self.containerView.frame) - CGRectGetHeight(self.iAdBannerView.frame));
+    newFrame.size = self.iAdBannerView.frame.size;
+    
     [UIView animateWithDuration:0.25f
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.googleAdBannerView.frame = 
-                         CGRectOffset(self.googleAdBannerView.frame, 
-                                      0.f, 
-                                      -(self.googleAdBannerView.frame.size.height-2.0f));
+                         self.googleAdBannerView.frame = newFrame;
                      }
                      completion:^(BOOL finished){
                          self.googleAdVisible = YES;
@@ -465,14 +477,16 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 //
 - (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
+    CGRect newFrame;
+    newFrame.origin = CGPointMake(CGRectGetMinX(self.googleAdBannerView.frame),
+                                  CGRectGetHeight(self.containerView.frame));
+    newFrame.size = self.googleAdBannerView.frame.size;
+    
     [UIView animateWithDuration:0.25f
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.googleAdBannerView.frame = 
-                         CGRectOffset(self.googleAdBannerView.frame, 
-                                      0.f, 
-                                      self.googleAdBannerView.frame.size.height-2.0f);
+                         self.googleAdBannerView.frame = newFrame;
                      }
                      completion:^(BOOL finished){
                          self.googleAdVisible = NO;

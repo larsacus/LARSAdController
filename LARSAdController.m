@@ -25,6 +25,11 @@
 @property (nonatomic,
            getter = isRegisteredForOrientationChanges) BOOL registeredForOrientationChanges;
 
+/*
+ Contains the ads so they will clip since the outer container does not clip subviews to retain shadows
+ */
+@property (strong, nonatomic) UIView *clippingContainer;
+
 - (void)createGoogleAds;
 
 - (void)destroyIAds;
@@ -41,20 +46,6 @@
 @end
 
 @implementation LARSAdController
-
-@synthesize iAdBannerView               = _iAdBannerView;
-@synthesize googleAdBannerView          = _googleAdBannerView;
-@synthesize parentView                  = _parentView;
-@synthesize googleAdVisible             = _googleAdVisible;
-@synthesize iAdVisible                  = _iAdVisible;
-@synthesize parentViewController        = _parentViewController;
-@synthesize googleAdPublisherId         = _googleAdPublisherId;
-@synthesize lastOrientationWasPortrait  = _lastOrientationWasPortrait;
-@synthesize currentOrientation          = _currentOrientation;
-@synthesize anyAdsVisible               = _anyAdsVisible;
-@synthesize shouldHandleOrientationChanges = _shouldHandleOrientationChanges;
-@synthesize containerView               = _containerView;
-@synthesize registeredForOrientationChanges = _registeredForOrientationChanges;
 
 CGFloat const kLARSAdContainerHeightPad = 90.0f;
 CGFloat const kLARSAdContainerHeightPod = 50.0f;
@@ -125,7 +116,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         self.parentViewController = viewController;
         self.parentView = view;
         
-        [self.containerView addSubview:self.iAdBannerView];
+        [self.clippingContainer addSubview:self.iAdBannerView];
         [self fixAdContainerFrame];
         [view addSubview:self.containerView];
     }
@@ -162,6 +153,14 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         _containerView.layer.shadowOffset = CGSizeMake(0.f, 0.f);
         _containerView.layer.shouldRasterize = YES;
         _containerView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+        
+        _clippingContainer = [[UIView alloc] initWithFrame:_containerView.bounds];
+        self.clippingContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.clippingContainer.backgroundColor = [UIColor clearColor];
+        self.clippingContainer.clipsToBounds = YES;
+        self.clippingContainer.userInteractionEnabled = YES;
+        
+        [_containerView addSubview:self.clippingContainer];
     }
     return _containerView;
 }
@@ -275,7 +274,15 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                              self.containerView.userInteractionEnabled = YES;
                          }
          ];
+        
+#ifdef LARSADCONTROLLER_DEBUG
+        NSLog(@"%@: iAd frame after ad load: %@", NSStringFromClass([self class]), NSStringFromCGRect(newFrame));
+#endif
     }
+    
+#ifdef LARSADCONTROLLER_DEBUG
+    NSLog(@"%@: iAd did load ad", NSStringFromClass([self class]));
+#endif
 }
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
@@ -306,6 +313,9 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                              self.containerView.userInteractionEnabled = NO;//google ad will re-enable userInteraction when necessary
                          }
          ];
+#ifdef LARSADCONTROLLER_DEBUG
+        NSLog(@"%@: iAd frame after ad fail: %@", NSStringFromClass([self class]), NSStringFromCGRect(newFrame));
+#endif
     }
     
     if (!_googleAdBannerView) {
@@ -317,8 +327,16 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     if(self.containerView.superview != self.parentView){  
         [self.parentView addSubview:self.containerView];
         [self.parentView bringSubviewToFront:self.containerView];
-        [self.containerView bringSubviewToFront:self.iAdBannerView];
+        [self.clippingContainer bringSubviewToFront:self.iAdBannerView];
     }
+    
+#ifdef LARSADCONTROLLER_DEBUG
+    NSLog(@"%@: iAd frame after ad fail: %@", NSStringFromClass([self class]), NSStringFromCGRect(self.iAdBannerView.frame));
+#endif
+    
+#ifdef LARSADCONTROLLER_DEBUG
+    NSLog(@"%@: iAd did fail to receive ad", NSStringFromClass([self class]));
+#endif
 }
 
 #pragma mark -
@@ -395,7 +413,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         self.googleAdBannerView.delegate = self;
         [self.googleAdBannerView loadRequest:[GADRequest request]];
         
-        [self.containerView insertSubview:self.googleAdBannerView belowSubview:self.iAdBannerView];
+        [self.clippingContainer insertSubview:self.googleAdBannerView belowSubview:self.iAdBannerView];
     }
     else if(!_googleAdPublisherId){
         NSLog(@"%@ WARNING: Google Ad Publisher ID not set. No ads will be served until you set one using setGoogleAdPublisherId:!", NSStringFromClass(self.class));
@@ -472,7 +490,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                      }
      ];
 #ifdef LARSADCONTROLLER_DEBUG
-        NSLog(@"Google ad did receive ad");
+    NSLog(@"%@: Google ad did receive ad", NSStringFromClass([self class]));
 #endif
 }
 //
@@ -495,7 +513,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                      }
      ];
 #ifdef LARSADCONTROLLER_DEBUG
-        NSLog(@"Google ad failed to receive ad");
+    NSLog(@"%@: Google ad did fail to receive ad", NSStringFromClass([self class]));
 #endif
 }
 

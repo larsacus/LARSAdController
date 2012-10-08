@@ -1,0 +1,3 @@
+[submodule "Example/AdMob"]
+	path = Example/AdMob
+	url = https://github.com/larsacus/GoogleAds.git

@@ -20,30 +20,26 @@
 @class GADBannerView;
 @class ADBannerView;
 
-@interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate>
+@protocol LARSAdControllerDelegate <NSObject>
 
-/** The banner view instance for iAds. */
-@property (nonatomic, retain) ADBannerView *iAdBannerView;
+@required
+- (void)adFailedForNetworkAdapterClass:(Class)class;
+- (void)adSucceededForNetworkAdapterClass:(Class)class;
 
-/** The banner view instance for Google Ads */
-@property (nonatomic, retain) GADBannerView *googleAdBannerView;
+@end
+
+@interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate, LARSAdControllerDelegate>
+
+@property (strong, nonatomic) NSMutableArray *registeredClasses;
+@property (strong, nonatomic) NSMutableDictionary *adapterClassPublisherIds;
+@property (strong, nonatomic) NSMutableDictionary *adapterInstances;
+
 
 /** The parent view that the shared instance is currently hosted in. */
 @property (nonatomic, retain) UIView *parentView;
 
 /** The parent view controller that the shared instance is currently hosted in. Typically, this is the same view controller that is managing parentView. */
 @property (nonatomic, retain) UIViewController *parentViewController;
-
-/** A boolean flag that indicates if a Google ad is currently being displayed. */
-@property (nonatomic, 
-           getter = isGoogleAdVisible) BOOL googleAdVisible;
-
-/** A boolean flag that indicates if an iAd ad is currently being displayed. */
-@property (nonatomic,
-           getter = isIAdVisible) BOOL iAdVisible;
-
-/** Your google ad publisher id. */
-@property (nonatomic, copy) NSString *googleAdPublisherId;
 
 /** A boolean flag that indicates if _any_ ads are currently being displayed. */
 @property (atomic,
@@ -68,14 +64,6 @@
  @param viewController The view controller that will be managing the ad.
  */
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;
-
-/** The publisher ID to serve Google Ads using. Set this as your first call in your first view controller to set the Google ad unit ID for the shared instance.
- 
- Only needs to be set once per application launch.
- 
- @param publisherId The publisher ID that was given to you from Google to serve ads using.
- */
-- (void)setGoogleAdPublisherId:(NSString *)publisherId;
 
 /** Lays out the currently displayed banner view for the given orientation.
  

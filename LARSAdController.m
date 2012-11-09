@@ -16,6 +16,7 @@
 
 #import "LARSAdController.h"
 #import "GADBannerView.h"
+#import "LARSAdAdapter.h"
 
 @interface LARSAdController()
 
@@ -30,15 +31,9 @@
  */
 @property (strong, nonatomic) UIView *clippingContainer;
 
-- (void)createGoogleAds;
-
-- (void)destroyIAds;
-- (void)destroyGoogleAdsAnimated:(BOOL)animated;
-
 //orientation support
 - (CGRect)containerFrameForInterfaceOrientation:(UIInterfaceOrientation)orientation;
 - (void)fixAdContainerFrame;
-- (void)recenterGoogleAdBannerView;
 
 - (void)registerForDeviceRotationNotifications;
 - (void)unRegisterFromDeviceRotationNotifications;
@@ -60,13 +55,17 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedManager = [[super allocWithZone:NULL] init];
+        
+        _sharedManager.registeredClasses = [NSMutableArray array];
+        _sharedManager.adapterClassPublisherIds = [NSMutableDictionary dictionary];
+        _sharedManager.adapterInstances = [NSMutableDictionary dictionary];
     });
     
     return _sharedManager;
 }
 
 + (id)allocWithZone:(NSZone *)zone{
-    return [[self sharedManager] retain];
+    return [self sharedManager];
 }
 
 #pragma mark -
@@ -76,34 +75,9 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     return self;
 }
 
-- (id)retain{
-    return self;
-}
-
-- (NSUInteger)retainCount{
-    return NSUIntegerMax;
-}
-
-- (oneway void)release{
-    //empty implementation to prevent user releasing
-}
-
-- (id)autorelease{
-    return self;
-}
-
 - (void)dealloc{//this should never get called
-    _googleAdBannerView.delegate = nil;
-    [_googleAdBannerView release]   , _googleAdBannerView = nil;
-    
-    _iAdBannerView.delegate = nil;
-    [_iAdBannerView release]        , _iAdBannerView = nil;
-    
-    [_googleAdPublisherId release]  , _googleAdPublisherId = nil;
-    
-    [_containerView release]        , _containerView = nil;
-    
-    [super dealloc];
+    _containerView = nil;
+    _clippingContainer = nil;
 }
 
 #pragma mark -
@@ -116,7 +90,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         self.parentViewController = viewController;
         self.parentView = view;
         
-        [self.clippingContainer addSubview:self.iAdBannerView];
+        //TODO: add ad network banner to clipping container
+        
         [self fixAdContainerFrame];
         [view addSubview:self.containerView];
     }
@@ -125,9 +100,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         [view bringSubviewToFront:self.containerView];
     }
     
-    if (_googleAdBannerView) {
-        self.googleAdBannerView.rootViewController = self.parentViewController;
-    }
+    //TODO: set view controller on ad banners that require it
     
     [self layoutBannerViewsForCurrentOrientation:viewController.interfaceOrientation];
 }
@@ -203,35 +176,35 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     return newFrame;
 }
 
-- (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation{
-    self.currentOrientation = orientation;
-    [self fixAdContainerFrame];
-    
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    
-    //change iAd layout
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (CGRectGetWidth(self.containerView.frame) < 1024.f) {
-            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierPortrait != nil) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifier320x50;
-        }
-        else {
-            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierLandscape != nil) ? ADBannerContentSizeIdentifierLandscape : ADBannerContentSizeIdentifier480x32;
-        }
-    }
-    else{
-        if (CGRectGetWidth(self.containerView.frame) < 480.f) {
-            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierPortrait != nil) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifier320x50;
-        }
-        else{
-            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierLandscape != nil) ? ADBannerContentSizeIdentifierLandscape : ADBannerContentSizeIdentifier480x32;
-        }
-    }
-    
-#pragma clang diagnostic pop
-    
-    [self recenterGoogleAdBannerView];
-}
+//- (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation{
+//    self.currentOrientation = orientation;
+//    [self fixAdContainerFrame];
+//    
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//    
+//    //change iAd layout
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+//        if (CGRectGetWidth(self.containerView.frame) < 1024.f) {
+//            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierPortrait != nil) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifier320x50;
+//        }
+//        else {
+//            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierLandscape != nil) ? ADBannerContentSizeIdentifierLandscape : ADBannerContentSizeIdentifier480x32;
+//        }
+//    }
+//    else{
+//        if (CGRectGetWidth(self.containerView.frame) < 480.f) {
+//            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierPortrait != nil) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifier320x50;
+//        }
+//        else{
+//            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierLandscape != nil) ? ADBannerContentSizeIdentifierLandscape : ADBannerContentSizeIdentifier480x32;
+//        }
+//    }
+//    
+//#pragma clang diagnostic pop
+//    
+//    [self recenterGoogleAdBannerView];
+//}
 
 - (void)fixAdContainerFrame{
     self.containerView.frame = [self containerFrameForInterfaceOrientation:self.currentOrientation];
@@ -250,289 +223,217 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     }
 }
 
-#pragma mark -
-#pragma mark iAd Delegate Methods
-- (void)bannerViewDidLoadAd:(ADBannerView *)banner{
-    // if google ad is active
-    //     release ad instance
-    [self destroyGoogleAdsAnimated:YES];
-    
-    if (!self.isIAdVisible) {
-        CGRect newFrame;
-        newFrame.origin = CGPointMake(CGRectGetMinX(banner.frame), CGRectGetHeight(self.containerView.frame) - CGRectGetHeight(banner.frame));
-        newFrame.size = banner.frame.size;
-        
-        [UIView animateWithDuration:0.250 
-                              delay:0.0 
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             banner.frame = newFrame;
-                         }
-                         completion:^(BOOL finished){
-                             self.iAdVisible = YES;
-                             self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
-                             self.containerView.userInteractionEnabled = YES;
-                         }
-         ];
-        
-#ifdef LARSADCONTROLLER_DEBUG
-        NSLog(@"%@: iAd frame after ad load: %@", NSStringFromClass([self class]), NSStringFromCGRect(newFrame));
-#endif
-    }
-    
-#ifdef LARSADCONTROLLER_DEBUG
-    NSLog(@"%@: iAd did load ad", NSStringFromClass([self class]));
-#endif
+//#pragma mark -
+//#pragma mark iAd Delegate Methods
+//- (void)bannerViewDidLoadAd:(ADBannerView *)banner{
+//    // if google ad is active
+//    //     release ad instance
+//    [self destroyGoogleAdsAnimated:YES];
+//    
+//    if (!self.isIAdVisible) {
+//        CGRect newFrame;
+//        newFrame.origin = CGPointMake(CGRectGetMinX(banner.frame), CGRectGetHeight(self.containerView.frame) - CGRectGetHeight(banner.frame));
+//        newFrame.size = banner.frame.size;
+//        
+//        [UIView animateWithDuration:0.250 
+//                              delay:0.0 
+//                            options:UIViewAnimationOptionCurveEaseInOut
+//                         animations:^{
+//                             banner.frame = newFrame;
+//                         }
+//                         completion:^(BOOL finished){
+//                             self.iAdVisible = YES;
+//                             self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
+//                             self.containerView.userInteractionEnabled = YES;
+//                         }
+//         ];
+//        
+//#ifdef LARSADCONTROLLER_DEBUG
+//        NSLog(@"%@: iAd frame after ad load: %@", NSStringFromClass([self class]), NSStringFromCGRect(newFrame));
+//#endif
+//    }
+//    
+//#ifdef LARSADCONTROLLER_DEBUG
+//    NSLog(@"%@: iAd did load ad", NSStringFromClass([self class]));
+//#endif
+//}
+//
+//- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
+//    return YES;
+//}
+//
+//- (void)bannerViewActionDidFinish:(ADBannerView *)banner{
+//    [self layoutBannerViewsForCurrentOrientation:self.parentViewController.interfaceOrientation];
+//}
+//
+//- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
+//    //if google ad instance is nil
+//    //  create new instance of google ad
+//    if (self.isIAdVisible) {
+//        CGRect newFrame;
+//        newFrame.origin = CGPointMake(CGRectGetMinX(banner.frame), CGRectGetHeight(self.containerView.frame));
+//        newFrame.size = banner.frame.size;
+//        
+//        [UIView animateWithDuration:0.250 
+//                              delay:0.0 
+//                            options:UIViewAnimationOptionCurveEaseInOut
+//                         animations:^{
+//                             banner.frame = newFrame;
+//                         }
+//                         completion:^(BOOL finished){
+//                             self.iAdVisible = NO;
+//                             self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
+//                             self.containerView.userInteractionEnabled = NO;//google ad will re-enable userInteraction when necessary
+//                         }
+//         ];
+//#ifdef LARSADCONTROLLER_DEBUG
+//        NSLog(@"%@: iAd frame after ad fail: %@", NSStringFromClass([self class]), NSStringFromCGRect(newFrame));
+//#endif
+//    }
+//    
+//    //TODO: activate next ad network
+//    
+//    //if ad container is not a subview of the parent view
+//    //  add ad container as subview of parent
+//    if(self.containerView.superview != self.parentView){  
+//        [self.parentView addSubview:self.containerView];
+//        [self.parentView bringSubviewToFront:self.containerView];
+//        [self.clippingContainer bringSubviewToFront:self.iAdBannerView];
+//    }
+//    
+//#ifdef LARSADCONTROLLER_DEBUG
+//    NSLog(@"%@: iAd frame after ad fail: %@", NSStringFromClass([self class]), NSStringFromCGRect(self.iAdBannerView.frame));
+//#endif
+//    
+//#ifdef LARSADCONTROLLER_DEBUG
+//    NSLog(@"%@: iAd did fail to receive ad", NSStringFromClass([self class]));
+//#endif
+//}
+
+//#pragma mark -
+//#pragma mark iAd Methods
+//- (ADBannerView *)iAdBannerView{
+//    if (!_iAdBannerView) {
+//        NSString *contentSize;
+//        
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//        if ((&ADBannerContentSizeIdentifierLandscape != nil)) {
+//            contentSize = UIInterfaceOrientationIsPortrait(self.currentOrientation) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifierLandscape;
+//        }
+//        else {
+//            contentSize = UIInterfaceOrientationIsPortrait(self.currentOrientation) ? ADBannerContentSizeIdentifier320x50 : ADBannerContentSizeIdentifier480x32;
+//        }
+//#pragma clang diagnostic pop
+//        
+//        CGRect frame;
+//        frame.size = [ADBannerView sizeFromBannerContentSizeIdentifier:contentSize];
+//        
+//        //create offscreen
+//        frame.origin = CGPointMake(0.0f, CGRectGetMaxY(self.containerView.bounds));
+//        
+//        _iAdBannerView = [[ADBannerView alloc] initWithFrame:frame];
+//        _iAdBannerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+//        
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//        if ((&ADBannerContentSizeIdentifierLandscape != nil)) {
+//            _iAdBannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil];
+//        }
+//        else{
+//            _iAdBannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifier320x50, ADBannerContentSizeIdentifier480x32, nil];
+//        }
+//#pragma clang diagnostic pop
+//        
+//        _iAdBannerView.delegate = self;
+//    }
+//    return _iAdBannerView;
+//}
+
+//- (void)destroyIAds{
+//    [self.iAdBannerView removeFromSuperview];
+//    self.iAdBannerView.delegate = nil;
+//    [_iAdBannerView release], _iAdBannerView = nil;
+//}
+
+#pragma mark - Ad Management
+- (void)registerAdAdapter:(Class)class withPublisherId:(NSString *)publisherId{
+    [self.registeredClasses addObject:class];
+    [self.adapterClassPublisherIds setObject:publisherId forKey:NSStringFromClass(class)];
 }
 
-- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
+- (void)registerAdAdapter:(Class)class{
+    [self.registeredClasses addObject:class];
+}
+
+#pragma mark - Ad Adapter Delegate
+- (void)adFailedForNetworkAdapterClass:(Class)class{
+    //get index of adapter class
+    NSInteger failedNetworkIndex = [self.registeredClasses indexOfObject:class];
+    
+    if (failedNetworkIndex < self.registeredClasses.count-1) {
+        //trigger next ad network in line
+        Class currentClass = [self.registeredClasses objectAtIndex:failedNetworkIndex+1];
+        
+        if([self startAdNetworkAdapterClass:currentClass] == NO){
+            [self adFailedForNetworkAdapterClass:currentClass];
+        }
+    }
+}
+
+- (void)adSucceededForNetworkAdapterClass:(Class)class{
+    //get index of adapter class
+    NSInteger succeededNetworkIndex = [self.registeredClasses indexOfObject:class];
+    
+    //Halt all networks with lower priority than succeeded network
+    for (int i = succeededNetworkIndex; i < self.registeredClasses.count; i++) {
+        [self haltAdNetworkAdapterClass:self.registeredClasses[i]];
+    }
+}
+
+- (BOOL)startAdNetworkAdapterClass:(Class)class{
+    id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    
+    if (!adapter) {
+        //TODO: Stard adapter and add banner to container
+        adapter = [[class alloc] init];
+        adapter.adManager = self;
+        
+        NSString *publisherId = [self.adapterClassPublisherIds objectForKey:NSStringFromClass(class)];
+        if (publisherId) {
+            [adapter setPublisherId:publisherId];
+        }
+        else if([class resolveClassMethod:@selector(requiresPublisherId)]){
+            NSLog(@"%@ WARNING: Ad network adapter %@ requires a publisher ID, but none was specified when instance was allocated!", NSStringFromClass([self class]), NSStringFromClass(class));
+            return NO;
+        }
+        
+        [self.adapterInstances setObject:adapter forKey:NSStringFromClass(class)];
+    }
+    
+    //TODO: add adapter banner view to container
+    //TODO: animate on screen
+    
     return YES;
 }
 
-- (void)bannerViewActionDidFinish:(ADBannerView *)banner{
-    [self layoutBannerViewsForCurrentOrientation:self.parentViewController.interfaceOrientation];
-}
-
-- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
-    //if google ad instance is nil
-    //  create new instance of google ad
-    if (self.isIAdVisible) {
-        CGRect newFrame;
-        newFrame.origin = CGPointMake(CGRectGetMinX(banner.frame), CGRectGetHeight(self.containerView.frame));
-        newFrame.size = banner.frame.size;
-        
-        [UIView animateWithDuration:0.250 
-                              delay:0.0 
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             banner.frame = newFrame;
-                         }
-                         completion:^(BOOL finished){
-                             self.iAdVisible = NO;
-                             self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
-                             self.containerView.userInteractionEnabled = NO;//google ad will re-enable userInteraction when necessary
-                         }
-         ];
-#ifdef LARSADCONTROLLER_DEBUG
-        NSLog(@"%@: iAd frame after ad fail: %@", NSStringFromClass([self class]), NSStringFromCGRect(newFrame));
-#endif
-    }
+- (void)haltAdNetworkAdapterClass:(Class)class{
+    id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
     
-    if (!_googleAdBannerView) {
-        [self createGoogleAds];
-    }
-    
-    //if ad container is not a subview of the parent view
-    //  add ad container as subview of parent
-    if(self.containerView.superview != self.parentView){  
-        [self.parentView addSubview:self.containerView];
-        [self.parentView bringSubviewToFront:self.containerView];
-        [self.clippingContainer bringSubviewToFront:self.iAdBannerView];
-    }
-    
-#ifdef LARSADCONTROLLER_DEBUG
-    NSLog(@"%@: iAd frame after ad fail: %@", NSStringFromClass([self class]), NSStringFromCGRect(self.iAdBannerView.frame));
-#endif
-    
-#ifdef LARSADCONTROLLER_DEBUG
-    NSLog(@"%@: iAd did fail to receive ad", NSStringFromClass([self class]));
-#endif
-}
-
-#pragma mark -
-#pragma mark iAd Methods
-- (ADBannerView *)iAdBannerView{
-    if (!_iAdBannerView) {
-        NSString *contentSize;
+    if (adapter.adVisible) {
+        //TODO: visually hide ad
         
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        if ((&ADBannerContentSizeIdentifierLandscape != nil)) {
-            contentSize = UIInterfaceOrientationIsPortrait(self.currentOrientation) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifierLandscape;
-        }
-        else {
-            contentSize = UIInterfaceOrientationIsPortrait(self.currentOrientation) ? ADBannerContentSizeIdentifier320x50 : ADBannerContentSizeIdentifier480x32;
-        }
-#pragma clang diagnostic pop
-        
-        CGRect frame;
-        frame.size = [ADBannerView sizeFromBannerContentSizeIdentifier:contentSize];
-        
-        //create offscreen
-        frame.origin = CGPointMake(0.0f, CGRectGetMaxY(self.containerView.bounds));
-        
-        _iAdBannerView = [[ADBannerView alloc] initWithFrame:frame];
-        _iAdBannerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-        
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        if ((&ADBannerContentSizeIdentifierLandscape != nil)) {
-            _iAdBannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil];
+        if ([adapter respondsToSelector:@selector(pauseAdRequests)]) {
+            [adapter pauseAdRequests];
         }
         else{
-            _iAdBannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifier320x50, ADBannerContentSizeIdentifier480x32, nil];
-        }
-#pragma clang diagnostic pop
-        
-        _iAdBannerView.delegate = self;
-    }
-    return _iAdBannerView;
-}
-
-- (void)destroyIAds{
-    [self.iAdBannerView removeFromSuperview];
-    self.iAdBannerView.delegate = nil;
-    [_iAdBannerView release], _iAdBannerView = nil;
-}
-
-#pragma mark -
-#pragma mark AdMob/Google Methods
-- (void)createGoogleAds{
-    if (_googleAdBannerView == nil && _googleAdPublisherId) {
-        CGRect frame;
-        
-        //create size depending on device and orientation
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            frame = CGRectMake(0.0f, self.containerView.frame.size.height, 
-                               GAD_SIZE_728x90.width, 
-                               GAD_SIZE_728x90.height);
-        }
-        else{
-            frame = CGRectMake(0.0f, 
-                               self.containerView.frame.size.height, 
-                               GAD_SIZE_320x50.width, 
-                               GAD_SIZE_320x50.height);
-        }
-        
-        _googleAdBannerView = [[GADBannerView alloc] initWithFrame:frame];
-        _googleAdBannerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-        [self recenterGoogleAdBannerView];
-        
-        self.googleAdBannerView.adUnitID = self.googleAdPublisherId;
-        self.googleAdBannerView.rootViewController = self.parentViewController;
-        self.googleAdBannerView.delegate = self;
-        [self.googleAdBannerView loadRequest:[GADRequest request]];
-        
-        [self.clippingContainer insertSubview:self.googleAdBannerView belowSubview:self.iAdBannerView];
-    }
-    else if(!_googleAdPublisherId){
-        NSLog(@"%@ WARNING: Google Ad Publisher ID not set. No ads will be served until you set one using setGoogleAdPublisherId:!", NSStringFromClass(self.class));
-    }
-}
-
-- (void)recenterGoogleAdBannerView{
-    if (_googleAdBannerView) {
-        self.googleAdBannerView.center = CGPointMake(self.containerView.frame.size.width/2, self.googleAdBannerView.center.y);
-    }
-}
-
-- (void)destroyGoogleAdsAnimated:(BOOL)animated{
-    if (_googleAdBannerView) {
-        if (animated && self.googleAdVisible) {
-            [UIView animateWithDuration:0.25f
-                                  delay:0.f
-                                options:UIViewAnimationOptionCurveEaseInOut
-                             animations:^{
-                                 CGRect frame;
-                                 frame.origin = CGPointMake(self.googleAdBannerView.frame.origin.x,
-                                                            CGRectGetHeight(self.containerView.frame));
-                                 frame.size = self.googleAdBannerView.frame.size;
-                                 
-                                 self.googleAdBannerView.frame = frame;
-                             }
-                             completion:^(BOOL finished){
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                     [self destroyGoogleAdsAnimated:NO];
-                                 });
-                             }
-             ];
-        }
-        else{
-            [self.googleAdBannerView removeFromSuperview];
-            self.googleAdBannerView.delegate = nil;
-            self.googleAdBannerView.rootViewController = nil;
-            
-            [_googleAdBannerView release], _googleAdBannerView = nil;
-            self.googleAdVisible = NO;
-            self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
+            //TODO: deallocate adapter instance
         }
     }
 }
-
-- (void)setGoogleAdPublisherId:(NSString *)publisherId{
-    [_googleAdPublisherId autorelease];
-    _googleAdPublisherId = [publisherId copy];
-    
-    if (_googleAdBannerView != nil) {
-        self.googleAdBannerView.adUnitID = self.googleAdPublisherId;
-    }
-}
-
-#pragma mark -
-#pragma mark AdMob/Google Delegate Methods
-- (void)adViewDidReceiveAd:(GADBannerView *)bannerView{
-    CGRect newFrame;
-    newFrame.origin = CGPointMake(self.iAdBannerView.frame.origin.x,
-                                  CGRectGetHeight(self.containerView.frame) - CGRectGetHeight(self.iAdBannerView.frame));
-    newFrame.size = self.iAdBannerView.frame.size;
-    
-    [UIView animateWithDuration:0.25f
-                          delay:0.f
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         self.googleAdBannerView.frame = newFrame;
-                     }
-                     completion:^(BOOL finished){
-                         self.googleAdVisible = YES;
-                         self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
-                         self.containerView.userInteractionEnabled = YES;
-                         self.googleAdBannerView.userInteractionEnabled = YES;
-                     }
-     ];
-#ifdef LARSADCONTROLLER_DEBUG
-    NSLog(@"%@: Google ad did receive ad", NSStringFromClass([self class]));
-#endif
-}
-//
-- (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
-    CGRect newFrame;
-    newFrame.origin = CGPointMake(CGRectGetMinX(self.googleAdBannerView.frame),
-                                  CGRectGetHeight(self.containerView.frame));
-    newFrame.size = self.googleAdBannerView.frame.size;
-    
-    [UIView animateWithDuration:0.25f
-                          delay:0.f
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         self.googleAdBannerView.frame = newFrame;
-                     }
-                     completion:^(BOOL finished){
-                         self.googleAdVisible = NO;
-                         self.anyAdsVisible = (self.isIAdVisible || self.isGoogleAdVisible);
-                         self.containerView.userInteractionEnabled = NO;//assuming if a google ad fails to appear, there are no ads at all
-                     }
-     ];
-#ifdef LARSADCONTROLLER_DEBUG
-    NSLog(@"%@: Google ad did fail to receive ad", NSStringFromClass([self class]));
-#endif
-}
-
-// Unused Google Ad Delegate Methods
-//
-//- (void)adViewWillPresentScreen:(GADBannerView *)bannerView{
-//    
-//}
-//
-//- (void)adViewDidDismissScreen:(GADBannerView *)bannerView{
-//}
-
-//
-//
-//- (void)adViewWillLeaveApplication:(GADBannerView *)bannerView{
-//
-//}
 
 #pragma mark - Orientation Handlers
+//TODO: add iOS 6 rotation support
 - (void)registerForDeviceRotationNotifications{
     if (!self.isRegisteredForOrientationChanges) {
 #ifdef LARSADCONTROLLER_DEBUG

@@ -21,8 +21,6 @@
     [view setBackgroundColor:[UIColor orangeColor]];
     
     self.view = view;
-    
-    [view release];
 }
 
 - (void)viewWillAppear:(BOOL)animated{

@@ -15,22 +15,13 @@
 @synthesize navigationController = _navigationController;
 @synthesize splitViewController = _splitViewController;
 
-- (void)dealloc
-{
-    [_window release];
-    [_navigationController release];
-    [_splitViewController release];
-    [super dealloc];
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
     LARSExampleViewController *root = [[LARSExampleViewController alloc] init];
     [self.window setRootViewController:root];
-    [root release];
     
     [self.window makeKeyAndVisible];
     return YES;

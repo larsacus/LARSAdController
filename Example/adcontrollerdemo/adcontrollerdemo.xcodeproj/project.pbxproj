@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		465B4295162381FC00CBC997 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 465B4294162381FC00CBC997 /* CoreData.framework */; };
 		465B42971623820900CBC997 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 465B42961623820900CBC997 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4691CC50164E24CF00559F58 /* LARSAdControlleriAdAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4691CC4F164E24CF00559F58 /* LARSAdControlleriAdAdapter.m */; };
 		46B9178F14425C5F007EF823 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9178E14425C5F007EF823 /* UIKit.framework */; };
 		46B9179114425C5F007EF823 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9179014425C5F007EF823 /* Foundation.framework */; };
 		46B9179314425C5F007EF823 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9179214425C5F007EF823 /* CoreGraphics.framework */; };
@@ -30,6 +31,8 @@
 /* Begin PBXFileReference section */
 		465B4294162381FC00CBC997 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		465B42961623820900CBC997 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		4691CC4E164E24CF00559F58 /* LARSAdControlleriAdAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LARSAdControlleriAdAdapter.h; path = ../../../LARSAdControlleriAdAdapter.h; sourceTree = "<group>"; };
+		4691CC4F164E24CF00559F58 /* LARSAdControlleriAdAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LARSAdControlleriAdAdapter.m; path = ../../../LARSAdControlleriAdAdapter.m; sourceTree = "<group>"; };
 		46B9178A14425C5F007EF823 /* adcontrollerdemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adcontrollerdemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46B9178E14425C5F007EF823 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		46B9179014425C5F007EF823 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -136,6 +139,8 @@
 				46F2928B164CBE1F00AB7775 /* LARSAdAdapter.h */,
 				46F2928E164CC27900AB7775 /* LARSAdControllerAdMobAdapter.h */,
 				46F2928F164CC27900AB7775 /* LARSAdControllerAdMobAdapter.m */,
+				4691CC4E164E24CF00559F58 /* LARSAdControlleriAdAdapter.h */,
+				4691CC4F164E24CF00559F58 /* LARSAdControlleriAdAdapter.m */,
 				46C1EAFD154C868500EBFEF1 /* LARSExampleViewController.h */,
 				46C1EAFE154C868500EBFEF1 /* LARSExampleViewController.m */,
 				46B9179514425C60007EF823 /* Supporting Files */,
@@ -258,6 +263,7 @@
 				46C1EAE4154C6F3E00EBFEF1 /* LARSAdController.m in Sources */,
 				46C1EAFF154C868500EBFEF1 /* LARSExampleViewController.m in Sources */,
 				46F29290164CC27900AB7775 /* LARSAdControllerAdMobAdapter.m in Sources */,
+				4691CC50164E24CF00559F58 /* LARSAdControlleriAdAdapter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

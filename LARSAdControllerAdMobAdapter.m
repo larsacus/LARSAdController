@@ -22,19 +22,17 @@
 
 - (GADBannerView *)bannerView{
     if (_bannerView == nil && _publisherId) {
-        CGRect frame;
         
-        //create size depending on device and orientation
+        CGFloat height;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            frame.size = CGSizeMake(GAD_SIZE_728x90.width,
-                                    GAD_SIZE_728x90.height);
+            height = GAD_SIZE_728x90.height;
         }
         else{
-            frame.size = CGSizeMake(GAD_SIZE_320x50.width,
-                                    GAD_SIZE_320x50.height);
+            height = GAD_SIZE_320x50.height;
         }
         
-        _bannerView = [[GADBannerView alloc] initWithFrame:frame];
+        //start in portrait
+        _bannerView = [[GADBannerView alloc] initWithAdSize:GADAdSizeFullWidthPortraitWithHeight(height)];
         _bannerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
 //        [self recenterbannerView];
         
@@ -50,6 +48,16 @@
     }
     
     return _bannerView;
+}
+
+- (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
+    //TODO: see if more sizes are needed here
+    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+        self.bannerView.adSize = kGADAdSizeSmartBannerLandscape;
+    }
+    else{
+        self.bannerView.adSize = kGADAdSizeSmartBannerPortrait;
+    }
 }
 
 //- (void)recenterbannerView{

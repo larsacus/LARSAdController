@@ -19,6 +19,7 @@
 + (BOOL)requiresPublisherId;
 //- (void)adBannerDidLoadAd:(id)bannerView;
 //- (void)adBanner:(id)bannerView didFailToReceiveAdWithError:(NSError *)error;
+- (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 
 @optional
 - (void)startAdRequests;

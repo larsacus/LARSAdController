@@ -8,6 +8,7 @@
 
 #import "LARSExampleViewController.h"
 #import "LARSAdController.h"
+#import "LARSAdControlleriAdAdapter.h"
 
 @interface LARSExampleViewController ()
 
@@ -24,8 +25,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    [[LARSAdController sharedManager] registerAdClass:[LARSAdControlleriAdAdapter class]];
     [[LARSAdController sharedManager] addAdContainerToView:self.view withParentViewController:self];
-    [[LARSAdController sharedManager] setShouldHandleOrientationChanges:YES];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{

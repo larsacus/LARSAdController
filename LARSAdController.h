@@ -17,6 +17,13 @@
 
 #import "GADBannerViewDelegate.h"
 
+//Debug logging
+#ifdef LARSADCONTROLLER_DEBUG
+#define TOLLog(...) NSLog(__VA_ARGS__)
+#else
+#define TOLLog(...) /* */
+#endif
+
 @class GADBannerView;
 @class ADBannerView;
 
@@ -29,6 +36,9 @@
 @end
 
 @interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate, LARSAdControllerDelegate>
+
+- (void)registerAdClass:(Class)class withPublisherId:(NSString *)publisherId;
+- (void)registerAdClass:(Class)class;
 
 @property (strong, nonatomic) NSMutableArray *registeredClasses;
 @property (strong, nonatomic) NSMutableDictionary *adapterClassPublisherIds;
@@ -43,14 +53,7 @@
 
 /** A boolean flag that indicates if _any_ ads are currently being displayed. */
 @property (atomic,
-           getter = areAnyAdsVisible) BOOL anyAdsVisible;
-
-/** A boolean flag that indicates if the shared instance should be automatically listening for and handling rotation changes.
- 
- Rotation changes will be listened for, but will only rotate if the view controller that the ads are being hosted in support the given orientation. For example, if your view controller only supports the portrait orientation, but the user changes to landscape, the ad controller will fire the code to ask your view controller if it should support the new device orientation. If your view controller returns YES, then the ad controller will layout the ad banner for that orientation.
- */
-@property (nonatomic,
-           getter = isHandlingOrientationChanges) BOOL shouldHandleOrientationChanges;
+           getter = isAdVisible) BOOL adVisible;
 
 /** The container view that the ads are contained in. Exposed so you can do anything you would want with it. */
 @property (nonatomic, retain, readonly) UIView *containerView;
@@ -65,11 +68,11 @@
  */
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController;
 
-/** Lays out the currently displayed banner view for the given orientation.
+/** Destroys all ad banners that are currently requesting ads from their ad network.
  
- @warning Deprecated.  You may still use this method in your view controller's willAnimateRotationFromOrientation:toOrientation: method, but using the shouldHandleOrientationChanges property to tell singleton to automatically listen for orientation changes will automatically call this method without needing to place the call in your view controller manually.
- @param orientation The orientation that the ad container should layout for.
+ Call this when a user has purchased an in-app purchase to remove ads.  This will go through each ad network class you have registered, remove it from the view heirarchy, then clean it up appropriately.
+ 
+ @warning Some ads may not clean up if there is a full-screen ad being interacted with.
  */
-- (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation;
-
+- (void)destroyAllAdBanners;
 @end

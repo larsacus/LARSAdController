@@ -143,18 +143,14 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     CGFloat yOrigin;
     
     if (UIInterfaceOrientationIsLandscape(orientation)) {
-#ifdef LARSADCONTROLLER_DEBUG
-            NSLog(@"View is landscape");
-#endif
+        TOLLog(@"View is landscape");
         
         yOrigin = CGRectGetWidth(self.parentView.frame);
         width = CGRectGetHeight(self.parentView.frame);
         self.lastOrientationWasPortrait = NO;
     }
     else{//portrait
-#ifdef LARSADCONTROLLER_DEBUG
-            NSLog(@"View is portrait");
-#endif
+        TOLLog(@"View is portrait");
         
         yOrigin = CGRectGetHeight(self.parentView.frame);
         width = CGRectGetWidth(self.parentView.frame);
@@ -176,45 +172,39 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     return newFrame;
 }
 
-//- (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation{
-//    self.currentOrientation = orientation;
-//    [self fixAdContainerFrame];
-//    
-//#pragma clang diagnostic push
-//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-//    
-//    //change iAd layout
-//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-//        if (CGRectGetWidth(self.containerView.frame) < 1024.f) {
-//            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierPortrait != nil) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifier320x50;
-//        }
-//        else {
-//            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierLandscape != nil) ? ADBannerContentSizeIdentifierLandscape : ADBannerContentSizeIdentifier480x32;
-//        }
-//    }
-//    else{
-//        if (CGRectGetWidth(self.containerView.frame) < 480.f) {
-//            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierPortrait != nil) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifier320x50;
-//        }
-//        else{
-//            self.iAdBannerView.currentContentSizeIdentifier = (&ADBannerContentSizeIdentifierLandscape != nil) ? ADBannerContentSizeIdentifierLandscape : ADBannerContentSizeIdentifier480x32;
-//        }
-//    }
-//    
-//#pragma clang diagnostic pop
-//    
-//    [self recenterGoogleAdBannerView];
-//}
+- (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation{
+    self.currentOrientation = orientation;
+    [self fixAdContainerFrame];
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    
+    //change iAd layout
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (CGRectGetWidth(self.containerView.frame) < 1024.f) {
+            //TODO: layout for iPad portrait
+        }
+        else {
+            //TODO: layout for iPad landscape
+        }
+    }
+    else{
+        if (CGRectGetWidth(self.containerView.frame) < 480.f) {
+            //TODO: layout for Pod portrait
+        }
+        else{
+            //TODO: layout for Pod landscape
+        }
+    }
+    
+#pragma clang diagnostic pop
+}
 
 - (void)fixAdContainerFrame{
     self.containerView.frame = [self containerFrameForInterfaceOrientation:self.currentOrientation];
 }
 
 - (void)setShouldHandleOrientationChanges:(BOOL)shouldHandleOrientationChanges{
-    [self willChangeValueForKey:@"shouldHandleOrientationChanges"];
-    _shouldHandleOrientationChanges = shouldHandleOrientationChanges;
-    [self didChangeValueForKey:@"shouldHandleOrientationChanges"];
-    
     if (shouldHandleOrientationChanges == YES) {
         [self registerForDeviceRotationNotifications];
     }
@@ -224,12 +214,12 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 #pragma mark - Ad Management
-- (void)registerAdAdapter:(Class)class withPublisherId:(NSString *)publisherId{
+- (void)registerAdClass:(Class)class withPublisherId:(NSString *)publisherId{
     [self.registeredClasses addObject:class];
     [self.adapterClassPublisherIds setObject:publisherId forKey:NSStringFromClass(class)];
 }
 
-- (void)registerAdAdapter:(Class)class{
+- (void)registerAdClass:(Class)class{
     [self.registeredClasses addObject:class];
 }
 
@@ -262,7 +252,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
     
     if (!adapter) {
-        //TODO: Stard adapter and add banner to container
+        //TODO: Start adapter and add banner to container
         adapter = [[class alloc] init];
         adapter.adManager = self;
         
@@ -270,9 +260,11 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         if (publisherId) {
             [adapter setPublisherId:publisherId];
         }
-        else if([class resolveClassMethod:@selector(requiresPublisherId)]){
-            NSLog(@"%@ WARNING: Ad network adapter %@ requires a publisher ID, but none was specified when instance was allocated!", NSStringFromClass([self class]), NSStringFromClass(class));
-            return NO;
+        else if([adapter respondsToSelector:@selector(requiresPublisherId)]){
+            if ([adapter requiresPublisherId]) {
+                NSLog(@"%@ WARNING: Ad network adapter %@ requires a publisher ID, but none was specified when instance was allocated!", NSStringFromClass([self class]), NSStringFromClass(class));
+                return NO;
+            }
         }
         
         [self.adapterInstances setObject:adapter forKey:NSStringFromClass(class)];
@@ -294,7 +286,20 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
             [adapter pauseAdRequests];
         }
         else{
-            //TODO: deallocate adapter instance
+            BOOL destroyed = NO;
+            
+            if ([adapter respondsToSelector:@selector(canDestroyAdBanner)]) {
+                if ([adapter canDestroyAdBanner]) {
+                    [adapter.bannerView removeFromSuperview];
+                    [self.adapterInstances removeObjectForKey:NSStringFromClass(class)];
+                    
+                    destroyed = YES;
+                }
+            }
+            
+            if (destroyed == NO) {
+                //TODO: add adapter class to list of banners to wait on and destroy when available (like when banner view action completes)
+            }
         }
     }
 }
@@ -303,9 +308,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 //TODO: add iOS 6 rotation support
 - (void)registerForDeviceRotationNotifications{
     if (!self.isRegisteredForOrientationChanges) {
-#ifdef LARSADCONTROLLER_DEBUG
-        NSLog(@"Registering for orientation notifications");
-#endif
+        TOLLog(@"Registering for orientation notifications");
         
         self.registeredForOrientationChanges = YES;
         
@@ -316,9 +319,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 
 - (void)unRegisterFromDeviceRotationNotifications{
     if (self.isRegisteredForOrientationChanges == YES) {
-#ifdef LARSADCONTROLLER_DEBUG
-        NSLog(@"Unregistering for orientation notifications");
-#endif
+        TOLLog(@"Unregistering for orientation notifications");
         
         [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -328,9 +329,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 - (void)handleOrientationNotification:(NSNotification *)orientationNotification{
-#ifdef LARSADCONTROLLER_DEBUG
-        NSLog(@"Handling orientation change");
-#endif
+    TOLLog(@"Handling orientation change");
     
     double delayInSeconds = 0.01f;
     
@@ -339,6 +338,10 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [self layoutBannerViewsForCurrentOrientation:self.parentViewController.interfaceOrientation];
     });
+}
+
+- (void)destroyAllAdBanners{
+    //TODO: implement destroyAllAdBanners
 }
 
 @end

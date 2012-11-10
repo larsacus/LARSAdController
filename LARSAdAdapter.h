@@ -16,14 +16,13 @@
 @property (nonatomic) BOOL adVisible;
 @property (weak, nonatomic) id <LARSAdControllerDelegate> adManager;
 
-+ (BOOL)requiresPublisherId;
-//- (void)adBannerDidLoadAd:(id)bannerView;
-//- (void)adBanner:(id)bannerView didFailToReceiveAdWithError:(NSError *)error;
+- (BOOL)requiresPublisherId;
 - (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 
 @optional
 - (void)startAdRequests;
 - (void)pauseAdRequests;
+- (BOOL)canDestroyAdBanner;
 
 @property (copy, nonatomic) NSString *publisherId;
 

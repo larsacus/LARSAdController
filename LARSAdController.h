@@ -19,10 +19,24 @@
 
 //Debug logging
 #ifdef LARSADCONTROLLER_DEBUG
-#define TOLLog(...) NSLog(__VA_ARGS__)
+#define TOLLog(fmt, ...) NSLog((@"%@: " fmt), NSStringFromClass(self.class), ##__VA_ARGS__)
 #else
 #define TOLLog(...) /* */
 #endif
+
+#define TOLWLog(fmt, ...) NSLog((@"%@ WARNING: " fmt), NSStringFromClass(self.class), ##__VA_ARGS__)
+
+typedef NS_ENUM(NSInteger, LARSAdControllerPresentationType){
+    LARSAdControllerPresentationTypeBottom = 0,
+    LARSAdControllerPresentationTypeTop,
+    LARSAdControllerPresentationTypeLeft,
+    LARSAdControllerPresentationTypeRight
+};
+
+typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
+    LARSAdControllerPinLocationBottom =  0,
+    LARSAdControllerPinLocationTop
+};
 
 @class GADBannerView;
 @class ADBannerView;
@@ -43,6 +57,8 @@
 @property (strong, nonatomic) NSMutableArray *registeredClasses;
 @property (strong, nonatomic) NSMutableDictionary *adapterClassPublisherIds;
 @property (strong, nonatomic) NSMutableDictionary *adapterInstances;
+@property (nonatomic) LARSAdControllerPresentationType presentationType;
+@property (nonatomic) LARSAdControllerPinLocation pinningLocation;
 
 
 /** The parent view that the shared instance is currently hosted in. */

@@ -50,6 +50,11 @@
     return _bannerView;
 }
 
+#pragma mark - Optional Adapter Implementation
+- (NSString *)friendlyNetworkDescription{
+    return @"iAds";
+}
+
 #pragma mark -
 #pragma mark iAd Delegate Methods
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner{
@@ -58,7 +63,7 @@
         [self.adManager adSucceededForNetworkAdapterClass:self.class];
     }
 
-    TOLLog(@"%@: iAd did load ad", NSStringFromClass([self class]));
+    TOLLog(@"iAd did load ad", NSStringFromClass([self class]));
 }
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
@@ -76,7 +81,7 @@
         [self.adManager adFailedForNetworkAdapterClass:self.class];
     }
 
-    TOLLog(@"%@: iAd did fail to receive ad", NSStringFromClass([self class]));
+    TOLLog(@"iAd did fail to receive ad", NSStringFromClass([self class]));
 }
 
 - (BOOL)canDestroyAdBanner{

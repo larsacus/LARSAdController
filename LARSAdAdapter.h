@@ -24,6 +24,8 @@
 - (void)pauseAdRequests;
 - (BOOL)canDestroyAdBanner;
 
+- (NSString *)friendlyNetworkDescription;
+
 @property (copy, nonatomic) NSString *publisherId;
 
 @end

@@ -90,7 +90,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         self.parentViewController = viewController;
         self.parentView = view;
         
-        //TODO: add ad network banner to clipping container
+        [self startAdNetworkAdapterClassAtIndex:0];
         
         [self fixAdContainerFrame];
         [view addSubview:self.containerView];
@@ -99,8 +99,6 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         //ad container exists, and bring to front
         [view bringSubviewToFront:self.containerView];
     }
-    
-    //TODO: set view controller on ad banners that require it
     
     [self layoutBannerViewsForCurrentOrientation:viewController.interfaceOrientation];
 }
@@ -230,11 +228,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     
     if (failedNetworkIndex < self.registeredClasses.count-1) {
         //trigger next ad network in line
-        Class currentClass = [self.registeredClasses objectAtIndex:failedNetworkIndex+1];
-        
-        if([self startAdNetworkAdapterClass:currentClass] == NO){
-            [self adFailedForNetworkAdapterClass:currentClass];
-        }
+        [self startAdNetworkAdapterClassAtIndex:failedNetworkIndex+1];
     }
 }
 
@@ -246,13 +240,116 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     for (int i = succeededNetworkIndex; i < self.registeredClasses.count; i++) {
         [self haltAdNetworkAdapterClass:self.registeredClasses[i]];
     }
+    
+    id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    
+    if (adapter.adVisible == NO) {
+        //TODO: animate ad on-screen
+    }
+}
+
+- (void)animateBannerForAdapterVisible:(id <LARSAdAdapter>)adapter{
+    
+    [adapter layoutBannerForInterfaceOrientation:self.currentOrientation];
+    
+    if ([self.clippingContainer.subviews containsObject:adapter.bannerView] == NO) {
+        //configure initial state for banner view off-screen
+        adapter.bannerView.frame = [self initialBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+    }
+    
+    //TODO: Enable modular animation final states (animate from top, left, etc.) - not just bottom
+    CGRect finalFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.presentationType];
+    
+    [UIView animateWithDuration:0.25f
+                          delay:0.f
+                        options:UIViewAnimationOptionAllowAnimatedContent | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         adapter.bannerView.frame = finalFrame;
+                     }
+                     completion:^(BOOL finished) {
+                         //TODO: set ad as visible
+                         adapter.adVisible = YES;
+                         self.clippingContainer.userInteractionEnabled = YES;
+                     }];
+}
+
+- (CGRect)initialBannerFrameForAdapter:(id<LARSAdAdapter>)adapter presentationAnimationType:(LARSAdControllerPresentationType)presentationType{
+    
+    CGRect beginState;
+    CGSize bannerViewSize = adapter.bannerView.frame.size;
+    
+    //TODO: complete remaining states
+    
+    CGRect finalBannerFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+    
+    switch (presentationType) {
+        case LARSAdControllerPresentationTypeBottom:
+            beginState.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame) - bannerViewSize.width/2,
+                                            CGRectGetHeight(self.clippingContainer.frame));
+            break;
+        case LARSAdControllerPresentationTypeLeft:
+            beginState.origin = CGPointMake(-bannerViewSize.width,
+                                            finalBannerFrame.origin.y);
+
+            break;
+        case LARSAdControllerPresentationTypeRight:
+            beginState.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame),
+                                            finalBannerFrame.origin.y);
+            break;
+        case LARSAdControllerPresentationTypeTop:
+            beginState.origin = CGPointMake(finalBannerFrame.origin.x,
+                                            -bannerViewSize.height);
+            break;
+        default:
+            break;
+    }
+    
+    beginState.size = bannerViewSize;
+    
+    return beginState;
+}
+
+- (CGRect)finalBannerFrameForAdapter:(id<LARSAdAdapter>)adapter withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
+
+    CGRect finalFrame;
+    CGSize bannerViewSize = adapter.bannerView.frame.size;
+    
+    switch (pinningLocation) {
+        case LARSAdControllerPinLocationBottom:
+            finalFrame.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame) - bannerViewSize.width/2,
+                                            CGRectGetHeight(self.clippingContainer.frame) - bannerViewSize.height);
+            break;
+        case LARSAdControllerPinLocationTop:
+            finalFrame.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame) - bannerViewSize.width/2,
+                                            0.f);
+            break;
+    }
+    
+    finalFrame.size = bannerViewSize;
+    
+    return finalFrame;
+}
+
+- (void)startAdNetworkAdapterClassAtIndex:(NSInteger)index{
+    if ((index == 0) &&
+        (self.registeredClasses.count == 0)) {
+        TOLWLog(@"There are no registered ad network adapter classes. Please register an ad network class using %@ before attempting to add ad container view into your view heirarchy.", NSStringFromSelector(@selector(registerAdClass:)));
+    }
+    else if (index < self.registeredClasses.count) {
+        Class currentClass = [self.registeredClasses objectAtIndex:index];
+        
+        if([self startAdNetworkAdapterClass:currentClass] == NO){
+            [self adFailedForNetworkAdapterClass:currentClass];
+        }
+    }
 }
 
 - (BOOL)startAdNetworkAdapterClass:(Class)class{
     id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
     
     if (!adapter) {
-        //TODO: Start adapter and add banner to container
+        TOLLog(@"Creating new instance of adapter class \"%@\"", NSStringFromClass(class));
+        
         adapter = [[class alloc] init];
         adapter.adManager = self;
         
@@ -262,13 +359,17 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         }
         else if([adapter respondsToSelector:@selector(requiresPublisherId)]){
             if ([adapter requiresPublisherId]) {
-                NSLog(@"%@ WARNING: Ad network adapter %@ requires a publisher ID, but none was specified when instance was allocated!", NSStringFromClass([self class]), NSStringFromClass(class));
+                TOLWLog(@"Ad network adapter %@ requires a publisher ID, but none was specified when instance was initialized! Please set a publisher ID from your ad network vendor and set during adapter registration using %@", NSStringFromClass(class), NSStringFromSelector(@selector(registerAdClass:withPublisherId:)));
                 return NO;
             }
         }
         
+        TOLLog(@"Successfully created \"%@\" instance", NSStringFromClass(class));
+        
         [self.adapterInstances setObject:adapter forKey:NSStringFromClass(class)];
     }
+    
+    [self.clippingContainer addSubview:adapter.bannerView];
     
     //TODO: add adapter banner view to container
     //TODO: animate on screen

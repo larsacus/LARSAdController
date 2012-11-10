@@ -31,7 +31,7 @@
         [self.bannerView loadRequest:[GADRequest request]];
     }
     else if(!_publisherId){
-        NSLog(@"%@ WARNING: Google Ad Publisher ID not set. No ads will be served until you set one using setPublisherId:forClass: on %@!", NSStringFromClass(self.class), @"LARSAdController");
+        TOLWLog(@"%@ WARNING: Google Ad Publisher ID not set. No ads will be served until you set one using setPublisherId:forClass: on %@!", NSStringFromClass(self.class), @"LARSAdController");
     }
     
     return _bannerView;
@@ -62,6 +62,10 @@
     if (_bannerView != nil) {
         self.bannerView.adUnitID = self.publisherId;
     }
+}
+
+- (NSString *)friendlyNetworkDescription{
+    return @"Google Ads";
 }
 
 #pragma mark - AdMob Delegate Methods

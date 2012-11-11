@@ -63,7 +63,7 @@
         [self.adManager adSucceededForNetworkAdapterClass:self.class];
     }
 
-    TOLLog(@"iAd did load ad", NSStringFromClass([self class]));
+    TOLLog(@"iAd did load ad");
 }
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
@@ -71,7 +71,7 @@
 }
 
 - (void)bannerViewActionDidFinish:(ADBannerView *)banner{
-    //TODO: replace this
+    //TODO: implement this
 //    [self layoutBannerViewsForCurrentOrientation:self.parentViewController.interfaceOrientation];
 }
 
@@ -81,7 +81,7 @@
         [self.adManager adFailedForNetworkAdapterClass:self.class];
     }
 
-    TOLLog(@"iAd did fail to receive ad", NSStringFromClass([self class]));
+    TOLLog(@"iAd did fail to receive ad");
 }
 
 - (BOOL)canDestroyAdBanner{

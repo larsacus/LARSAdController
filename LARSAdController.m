@@ -90,7 +90,9 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         self.parentViewController = viewController;
         self.parentView = view;
         
-        [self startAdNetworkAdapterClassAtIndex:0];
+        if (self.adapterInstances.count == 0) {
+            [self startAdNetworkAdapterClassAtIndex:0];
+        }
         
         [self fixAdContainerFrame];
         [view addSubview:self.containerView];
@@ -177,21 +179,21 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     
-    //change iAd layout
+    //TODO: Build layouts for container
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (CGRectGetWidth(self.containerView.frame) < 1024.f) {
-            //TODO: layout for iPad portrait
+
         }
         else {
-            //TODO: layout for iPad landscape
+
         }
     }
     else{
         if (CGRectGetWidth(self.containerView.frame) < 480.f) {
-            //TODO: layout for Pod portrait
+
         }
         else{
-            //TODO: layout for Pod landscape
+
         }
     }
     
@@ -202,16 +204,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     self.containerView.frame = [self containerFrameForInterfaceOrientation:self.currentOrientation];
 }
 
-- (void)setShouldHandleOrientationChanges:(BOOL)shouldHandleOrientationChanges{
-    if (shouldHandleOrientationChanges == YES) {
-        [self registerForDeviceRotationNotifications];
-    }
-    else{
-        [self unRegisterFromDeviceRotationNotifications];
-    }
-}
-
-#pragma mark - Ad Management
+#pragma mark - Ad Network Management
 - (void)registerAdClass:(Class)class withPublisherId:(NSString *)publisherId{
     [self.registeredClasses addObject:class];
     [self.adapterClassPublisherIds setObject:publisherId forKey:NSStringFromClass(class)];
@@ -225,6 +218,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 - (void)adFailedForNetworkAdapterClass:(Class)class{
     //get index of adapter class
     NSInteger failedNetworkIndex = [self.registeredClasses indexOfObject:class];
+    
+    [self haltAdNetworkAdapterClass:class];
     
     if (failedNetworkIndex < self.registeredClasses.count-1) {
         //trigger next ad network in line
@@ -244,11 +239,12 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
     
     if (adapter.adVisible == NO) {
-        //TODO: animate ad on-screen
+        [self animateBannerForAdapterVisible:adapter withCompletion:nil];
     }
 }
 
-- (void)animateBannerForAdapterVisible:(id <LARSAdAdapter>)adapter{
+#pragma mark - Banner Frames
+- (void)animateBannerForAdapterVisible:(id <LARSAdAdapter>)adapter withCompletion:(void(^)(void))completion{
     
     [adapter layoutBannerForInterfaceOrientation:self.currentOrientation];
     
@@ -257,8 +253,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         adapter.bannerView.frame = [self initialBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
     }
     
-    //TODO: Enable modular animation final states (animate from top, left, etc.) - not just bottom
-    CGRect finalFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.presentationType];
+    CGRect finalFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
     
     [UIView animateWithDuration:0.25f
                           delay:0.f
@@ -267,46 +262,66 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                          adapter.bannerView.frame = finalFrame;
                      }
                      completion:^(BOOL finished) {
-                         //TODO: set ad as visible
                          adapter.adVisible = YES;
                          self.clippingContainer.userInteractionEnabled = YES;
+                         
+                         if (completion) {
+                             completion();
+                         }
+                     }];
+}
+
+- (void)animateBannerForAdapterHidden:(id <LARSAdAdapter>)adapter withCompletion:(void(^)(void))completion{
+//    [adapter layoutBannerForInterfaceOrientation:self.currentOrientation];x
+    
+    CGRect finalFrame = [self initialBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+    
+    [UIView animateWithDuration:0.25f
+                          delay:0.f
+                        options:UIViewAnimationOptionAllowAnimatedContent | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         adapter.bannerView.frame = finalFrame;
+                     }
+                     completion:^(BOOL finished) {
+                         adapter.adVisible = NO;
+                         
+                         if (completion) {
+                             completion();
+                         }
                      }];
 }
 
 - (CGRect)initialBannerFrameForAdapter:(id<LARSAdAdapter>)adapter presentationAnimationType:(LARSAdControllerPresentationType)presentationType{
     
-    CGRect beginState;
+    CGRect beginFrame;
     CGSize bannerViewSize = adapter.bannerView.frame.size;
-    
-    //TODO: complete remaining states
-    
     CGRect finalBannerFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
     
     switch (presentationType) {
         case LARSAdControllerPresentationTypeBottom:
-            beginState.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame) - bannerViewSize.width/2,
+            beginFrame.origin = CGPointMake((CGRectGetWidth(self.clippingContainer.frame) - bannerViewSize.width)/2,
                                             CGRectGetHeight(self.clippingContainer.frame));
             break;
         case LARSAdControllerPresentationTypeLeft:
-            beginState.origin = CGPointMake(-bannerViewSize.width,
+            beginFrame.origin = CGPointMake(-bannerViewSize.width,
                                             finalBannerFrame.origin.y);
 
             break;
         case LARSAdControllerPresentationTypeRight:
-            beginState.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame),
+            beginFrame.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame),
                                             finalBannerFrame.origin.y);
             break;
         case LARSAdControllerPresentationTypeTop:
-            beginState.origin = CGPointMake(finalBannerFrame.origin.x,
+            beginFrame.origin = CGPointMake(finalBannerFrame.origin.x,
                                             -bannerViewSize.height);
-            break;
-        default:
             break;
     }
     
-    beginState.size = bannerViewSize;
+    beginFrame.size = bannerViewSize;
     
-    return beginState;
+    TOLLog(@"Initial banner frame: %@", NSStringFromCGRect(beginFrame));
+    
+    return beginFrame;
 }
 
 - (CGRect)finalBannerFrameForAdapter:(id<LARSAdAdapter>)adapter withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
@@ -316,20 +331,23 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     
     switch (pinningLocation) {
         case LARSAdControllerPinLocationBottom:
-            finalFrame.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame) - bannerViewSize.width/2,
+            finalFrame.origin = CGPointMake((CGRectGetWidth(self.clippingContainer.frame) - bannerViewSize.width)/2,
                                             CGRectGetHeight(self.clippingContainer.frame) - bannerViewSize.height);
             break;
         case LARSAdControllerPinLocationTop:
-            finalFrame.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame) - bannerViewSize.width/2,
+            finalFrame.origin = CGPointMake((CGRectGetWidth(self.clippingContainer.frame) - bannerViewSize.width)/2,
                                             0.f);
             break;
     }
     
     finalFrame.size = bannerViewSize;
     
+    TOLLog(@"Final banner frame: %@", NSStringFromCGRect(finalFrame));
+    
     return finalFrame;
 }
 
+#pragma mark - Starting/Stopping
 - (void)startAdNetworkAdapterClassAtIndex:(NSInteger)index{
     if ((index == 0) &&
         (self.registeredClasses.count == 0)) {
@@ -367,12 +385,15 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         TOLLog(@"Successfully created \"%@\" instance", NSStringFromClass(class));
         
         [self.adapterInstances setObject:adapter forKey:NSStringFromClass(class)];
+        
+        adapter.bannerView.frame = [self initialBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+        
+        [self.clippingContainer addSubview:adapter.bannerView];
     }
     
-    [self.clippingContainer addSubview:adapter.bannerView];
-    
-    //TODO: add adapter banner view to container
-    //TODO: animate on screen
+    if (adapter.adVisible = NO) {
+        [self animateBannerForAdapterVisible:adapter withCompletion:nil];
+    }
     
     return YES;
 }
@@ -381,27 +402,27 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
     
     if (adapter.adVisible) {
-        //TODO: visually hide ad
-        
-        if ([adapter respondsToSelector:@selector(pauseAdRequests)]) {
-            [adapter pauseAdRequests];
-        }
-        else{
-            BOOL destroyed = NO;
-            
-            if ([adapter respondsToSelector:@selector(canDestroyAdBanner)]) {
-                if ([adapter canDestroyAdBanner]) {
-                    [adapter.bannerView removeFromSuperview];
-                    [self.adapterInstances removeObjectForKey:NSStringFromClass(class)];
-                    
-                    destroyed = YES;
+        [self animateBannerForAdapterHidden:adapter withCompletion:^{
+            if ([adapter respondsToSelector:@selector(pauseAdRequests)]) {
+                [adapter pauseAdRequests];
+            }
+            else{
+                BOOL destroyed = NO;
+                
+                if ([adapter respondsToSelector:@selector(canDestroyAdBanner)]) {
+                    if ([adapter canDestroyAdBanner]) {
+                        [adapter.bannerView removeFromSuperview];
+                        [self.adapterInstances removeObjectForKey:NSStringFromClass(class)];
+                        
+                        destroyed = YES;
+                    }
+                }
+                
+                if (destroyed == NO) {
+                    //TODO: add adapter class to list of banners to wait on and destroy when available (like when banner view action completes)
                 }
             }
-            
-            if (destroyed == NO) {
-                //TODO: add adapter class to list of banners to wait on and destroy when available (like when banner view action completes)
-            }
-        }
+        }];
     }
 }
 
@@ -439,6 +460,15 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [self layoutBannerViewsForCurrentOrientation:self.parentViewController.interfaceOrientation];
     });
+}
+
+- (void)setShouldHandleOrientationChanges:(BOOL)shouldHandleOrientationChanges{
+    if (shouldHandleOrientationChanges == YES) {
+        [self registerForDeviceRotationNotifications];
+    }
+    else{
+        [self unRegisterFromDeviceRotationNotifications];
+    }
 }
 
 - (void)destroyAllAdBanners{

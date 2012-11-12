@@ -15,6 +15,8 @@
     _bannerView = nil;
     
     self.adManager = nil;
+    
+    TOLLog(@"dealloc");
 }
 
 #pragma mark - Required Adapter Implementation 
@@ -71,8 +73,9 @@
 }
 
 - (void)bannerViewActionDidFinish:(ADBannerView *)banner{
-    //TODO: implement this
-//    [self layoutBannerViewsForCurrentOrientation:self.parentViewController.interfaceOrientation];
+    if([self.adManager respondsToSelector:@selector(adInstanceNowAvailableForDeallocation:)]){
+        [self.adManager adInstanceNowAvailableForDeallocation:self];
+    }
 }
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{

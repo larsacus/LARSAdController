@@ -24,13 +24,35 @@
     self.view = view;
 }
 
-- (void)viewWillAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    TOLLog(@"view did: %@", self.view);
+    
     [[LARSAdController sharedManager] registerAdClass:[LARSAdControlleriAdAdapter class]];
-    [[LARSAdController sharedManager] addAdContainerToView:self.view withParentViewController:self];
+    [[LARSAdController sharedManager] addAdContainerToViewInViewController:self];
 }
 
+//Deprecated
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
     return YES;
 }
+
+//New iOS 6 stuff
+- (BOOL)shouldAutorotate{
+    return YES;
+}
+
+- (NSUInteger)supportedInterfaceOrientations{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+//- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
+////    [[UIApplication sharedApplication] delegate] application:<#(UIApplication *)#> supportedInterfaceOrientationsForWindow:<#(UIWindow *)#>
+//    if([self respondsToSelector:@selector(supportedInterfaceOrientations)] == NO){
+//       //pre-iOS 6
+//    }
+//    
+//    //schema launch argument: UIApplicationSupportedInterfaceOrientationsEnabled?
+//}
 
 @end

@@ -17,6 +17,7 @@
 
 #import "GADBannerViewDelegate.h"
 
+
 //Debug logging
 #ifdef LARSADCONTROLLER_DEBUG
 #define TOLLog(fmt, ...) NSLog((@"%@: " fmt), NSStringFromClass(self.class), ##__VA_ARGS__)
@@ -40,12 +41,18 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 
 @class GADBannerView;
 @class ADBannerView;
+@protocol LARSAdAdapter;
+
+@interface LARSAdContainer : UIView
+
+@end
 
 @protocol LARSAdControllerDelegate <NSObject>
 
 @required
 - (void)adFailedForNetworkAdapterClass:(Class)class;
 - (void)adSucceededForNetworkAdapterClass:(Class)class;
+- (void)adInstanceNowAvailableForDeallocation:(id <LARSAdAdapter>)adInstance;
 
 @end
 
@@ -62,20 +69,28 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 
 
 /** The parent view that the shared instance is currently hosted in. */
-@property (nonatomic, retain) UIView *parentView;
+@property (nonatomic, readonly, weak) UIView *parentView;
 
 /** The parent view controller that the shared instance is currently hosted in. Typically, this is the same view controller that is managing parentView. */
-@property (nonatomic, retain) UIViewController *parentViewController;
+@property (nonatomic, readonly, weak) UIViewController *parentViewController;
 
 /** A boolean flag that indicates if _any_ ads are currently being displayed. */
-@property (atomic,
-           getter = isAdVisible) BOOL adVisible;
+@property (nonatomic,
+           getter = isAdVisible, readonly) BOOL adVisible;
 
 /** The container view that the ads are contained in. Exposed so you can do anything you would want with it. */
-@property (nonatomic, retain, readonly) UIView *containerView;
+@property (nonatomic, strong, readonly) LARSAdContainer *containerView;
 
 /** Class method that gives access to the shared instance. */
 + (LARSAdController *)sharedManager;
+
+/** The primary method of adding your ads to a view and view controller. For some, this will be the only method that is ever called besides setting googleAdPublisherId. Call this method in every view controller's viewWillAppear method in order to add the shared ad instance to your view heirarchy.
+ 
+ This method will call addAdContainerToView:withParentViewController: with viewController.view as the view parameter.
+ 
+ @param viewController The view controller that will be managing the ad.
+ */
+- (void)addAdContainerToViewInViewController:(UIViewController *)viewController;
 
 /** The primary method of adding your ads to a view and view controller. For some, this will be the only method that is ever called besides setting googleAdPublisherId. Call this method in every view controller's viewWillAppear method in order to add the shared ad instance to your view heirarchy.
  

@@ -7,7 +7,7 @@
 //
 
 #import "LARSExampleViewController.h"
-#import "LARSAdController.h"
+//#import "LARSAdController.h"
 
 @interface LARSExampleViewController ()
 
@@ -23,16 +23,24 @@
     self.view = view;
 }
 
-- (void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
+/** If this view controller did not inherit from TOLAdViewController, then you would
+      need to uncomment the below method and implement adding the ad container to
+      the view yourself. You will also need to uncomment line 10 to import the class.
+ */
+/*
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     
     [[LARSAdController sharedManager] addAdContainerToViewInViewController:self];
 }
+ */
 
 //Deprecated
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
     return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
+#endif
 
 //New iOS 6 stuff
 - (BOOL)shouldAutorotate{
@@ -42,14 +50,5 @@
 - (NSUInteger)supportedInterfaceOrientations{
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }
-
-//- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
-////    [[UIApplication sharedApplication] delegate] application:<#(UIApplication *)#> supportedInterfaceOrientationsForWindow:<#(UIWindow *)#>
-//    if([self respondsToSelector:@selector(supportedInterfaceOrientations)] == NO){
-//       //pre-iOS 6
-//    }
-//    
-//    //schema launch argument: UIApplicationSupportedInterfaceOrientationsEnabled?
-//}
 
 @end

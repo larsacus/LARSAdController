@@ -2,7 +2,7 @@
 `LARSAdController` 3.0 is a singleton ad management class that manages ad classes that conform to the `LARSAdAdapter` protocol. Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.
 
 ## Usage
-`LARSAdController` 2.0 forced you opt-in to rotation-handling.  This is no longer necessary as the ad management class will auto-detect your current orientation given that your current view controller that the ad container lives in is correctly setup.
+Back in the days of yore, `LARSAdController` 2.0 forced you opt-in to rotation-handling.  This is no longer necessary as the ad management class will auto-detect your current orientation given that your current view controller that the ad container lives in is correctly setup.
 
 The first step is to register your ad classes that the ad manager will use. The ad networks take priority in the order they were added in, so the first network registered is the highest priority, the second is below that, and so on:
 
@@ -60,19 +60,17 @@ You will also need the `Google AdMob SDK` available from [Google](https://develo
 
 That's it.  Technically, this can be added to any `UIView` that is large enough and managed by a view controller.
 
-## Detailed Integration Instructions
+##Other Requirements
+1. iOS 5.0+
+2. Xcode 4.3+ - LLVM 4.0 support. Objective-C container literals are used.
+
+## Detailed Integration Instructions (UPDATE THIS)
 - Click here a more detailed [iAd integration tutorial](http://theonlylars.com/blog/2012/04/27/integrating-google-ads-with-iad/) blog post using LARSAdController.
-
-## Limitations (Maybe this is where you come in?)
-
-  2. Support to add ad container to the top of a UIView (so that it slides up instead of down)
-  3. Support for other animation transitions out of the box
-  5. Modular support for more ad networks
 
 ##License (MIT)
 I would love attribution and a link to this page on GitHub [here](https://github.com/larsacus/LARSAdController), but it is not required.
 
-Copyright (c) 2011 Lars Anderson, drink&apple
+Copyright (c) 2011 Lars Anderson, theonlylars
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -87,6 +85,8 @@ The above copyright notice and this permission notice shall be included in all c
 - Added modular network protocol for network adapters to conform to
 - Added modular ad network handling
 - Removed option to opt-in to orientation-handling. Now automatically queries view controller's orientation.
+- Now ARC-ready!
+- Added Google Ad test-ad support - will now serve test ads when running in debug mode (#def DEBUG=1)
 
 ###2.1
 -----

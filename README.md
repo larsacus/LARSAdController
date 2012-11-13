@@ -56,7 +56,7 @@ Two new properties are available on `LARSAdController`:
 @property (nonatomic) LARSAdControllerPinLocation pinningLocation;
 ```
 
-The properties for `presentationType` are as follows:
+The options for `presentationType` are as follows. These options will slide the ad banner in and out from the direction indicated in the enum:
 
 ``` objective-c
 typedef NS_ENUM(NSInteger, LARSAdControllerPresentationType){
@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPresentationType){
 };
 ```
 
-These options will slide the ad banner in and out from the direction indicated in the enum.
+These options will pin the ad view container to the bottom (default) or top of the view you specify and layout the banner inside the container accordingly:
 
 ``` objective-c
 typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
@@ -75,8 +75,6 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
     LARSAdControllerPinLocationTop
 };
 ```
-
-These options will pin the ad view container to the bottom (default) or top of the view you specify and layout the banner inside the container accordingly.
 
 ##Currently Available Ad Network Adapters
 1. iAd - `LARSAdControlleriAdAdapter`
@@ -112,7 +110,7 @@ That's it.  Technically, this can be added to any `UIView` that is large enough 
 ## Detailed Integration Instructions (UPDATE THIS)
 - Click here a more detailed [iAd integration tutorial](http://theonlylars.com/blog/2012/04/27/integrating-google-ads-with-iad/) blog post using LARSAdController.
 
-##Creating a New Ad Network Adapted
+##Creating a New Ad Network Adapter
 
 *FILL THIS OUT*
 

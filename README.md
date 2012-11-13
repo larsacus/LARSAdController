@@ -37,6 +37,47 @@ or the simpler version:
 
 Once the current highest-priority ad network fails to obtain an ad, it will continue to wait for an ad while the next-highest priority ad network is allocated and sends a request.  Once the ad network in priority above this network obtains an ad again, it will hide the lower-priority ad banner and display the higher-priority network banner.
 
+###Ultra-Lazy Implementation
+To make your life even _easier_, all you need to do is have each of your view controllers that you would like to have an ad pinned to the top or bottom of your view controller's view is to have your view controller subclasses inherit from `TOLAdViewController`. This will automatigically add an ad view container to your view controller's view when it is supposed to.
+
+``` objective-c
+@interface MYBestViewController : TOLAdViewController
+//BOOM - Ads
+@end
+```
+
+##Ad Placement
+In the past, you were only able to add a banner view to the bottom of a view and have it animate in from the bottom.  Now, you are able to not only control whether it resides at the top or bottom of your view, but control how it animates in and out of the screen.
+
+Two new properties are available on `LARSAdController`:
+
+``` objective-c
+@property (nonatomic) LARSAdControllerPresentationType presentationType;
+@property (nonatomic) LARSAdControllerPinLocation pinningLocation;
+```
+
+The properties for `presentationType` are as follows:
+
+``` objective-c
+typedef NS_ENUM(NSInteger, LARSAdControllerPresentationType){
+    LARSAdControllerPresentationTypeBottom = 0,
+    LARSAdControllerPresentationTypeTop,
+    LARSAdControllerPresentationTypeLeft,
+    LARSAdControllerPresentationTypeRight
+};
+```
+
+These options will slide the ad banner in and out from the direction indicated in the enum.
+
+``` objective-c
+typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
+    LARSAdControllerPinLocationBottom =  0,
+    LARSAdControllerPinLocationTop
+};
+```
+
+These options will pin the ad view container to the bottom (default) or top of the view you specify and layout the banner inside the container accordingly.
+
 ##Currently Available Ad Network Adapters
 1. iAd - `LARSAdControlleriAdAdapter`
 2. Google Ads - `LARSAdControllerAdMobAdapter`
@@ -70,6 +111,10 @@ That's it.  Technically, this can be added to any `UIView` that is large enough 
 
 ## Detailed Integration Instructions (UPDATE THIS)
 - Click here a more detailed [iAd integration tutorial](http://theonlylars.com/blog/2012/04/27/integrating-google-ads-with-iad/) blog post using LARSAdController.
+
+##Creating a New Ad Network Adapted
+
+*FILL THIS OUT*
 
 ##License (MIT)
 I would love attribution and a link to this page on GitHub [here](https://github.com/larsacus/LARSAdController), but it is not required.

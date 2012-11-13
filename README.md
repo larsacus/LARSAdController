@@ -19,6 +19,8 @@ Then the only line of code you need in your view controller is to add the contai
 
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
     [[LARSAdController sharedManager] addAdContainerToView:[self view] withViewController:self];
 }
 ```
@@ -27,11 +29,13 @@ or the simpler version:
 
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
     [[LARSAdController sharedManager] addAdContainerToViewInViewController:self];
 }
 ```
 
-Once the current highest-priority ad network has failed to obtain an ad, it will continue to wait for an ad while the next-highest priority ad network is allocated and sends a request.  Once the ad network in priority above this network obtains an ad again, it will hide the lower-priority ad banner and display the higher-priority network banner.
+Once the current highest-priority ad network fails to obtain an ad, it will continue to wait for an ad while the next-highest priority ad network is allocated and sends a request.  Once the ad network in priority above this network obtains an ad again, it will hide the lower-priority ad banner and display the higher-priority network banner.
 
 ##Currently Available Ad Network Adapters
 1. iAd - `LARSAdControlleriAdAdapter`

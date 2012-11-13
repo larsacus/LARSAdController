@@ -447,18 +447,43 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         adapter = [[class alloc] init];
         adapter.adManager = self;
         
-        NSString *publisherId = [self.adapterClassPublisherIds objectForKey:NSStringFromClass(class)];
-        if (publisherId) {
-            [adapter setPublisherId:publisherId];
+        if ([adapter respondsToSelector:@selector(pauseAdRequests)] &&
+            ([adapter respondsToSelector:@selector(startAdRequests)] == NO)) {
+            NSAssert2(NO, @"You should probably implement %@ in addition to %@ to be consistent. Otherwise, the ad controller has no means to restart the ads requests.", NSStringFromSelector(@selector(startAdRequests)), NSStringFromSelector(@selector(pauseAdRequests)));
         }
-        else if([adapter respondsToSelector:@selector(requiresPublisherId)]){
-            if ([adapter requiresPublisherId]) {
+        
+        Method requiresPublisherId = class_getClassMethod(class, @selector(requiresPublisherId));
+
+//Let clang know I know what I'm doing
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        if(requiresPublisherId &&
+           [[class class] performSelector:method_getName(requiresPublisherId)]){
+            NSString *publisherId = [self.adapterClassPublisherIds objectForKey:NSStringFromClass(class)];
+            
+            if (publisherId) {
+                [adapter setPublisherId:publisherId];
+            }
+            else{
                 TOLWLog(@"Ad network adapter %@ requires a publisher ID, but none was specified when instance was initialized! Please set a publisher ID from your ad network vendor and set during adapter registration using %@", NSStringFromClass(class), NSStringFromSelector(@selector(registerAdClass:withPublisherId:)));
                 return NO;
             }
         }
         
-        TOLLog(@"Successfully created \"%@\" instance", NSStringFromClass(class));
+        Method requiresParentViewControllerClassMethod = nil;
+        if ( (requiresParentViewControllerClassMethod = class_getClassMethod(class, @selector(requiresParentViewController))) ) {
+            if ([[class class] performSelector:method_getName(requiresParentViewControllerClassMethod)]) {
+                TOLLog(@"This class requires a parent view controller!");
+                [adapter setParentViewController:self.parentViewController];
+            }
+        }
+#pragma clang diagnostic pop
+        
+        if([adapter respondsToSelector:@selector(startAdRequests)]){
+            [adapter startAdRequests];
+        }
+        
+        TOLLog(@"Successfully created instance of \"%@\"", NSStringFromClass(class));
         
         [self.adapterInstances setObject:adapter forKey:NSStringFromClass(class)];
         
@@ -476,8 +501,17 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         
         [self.clippingContainer addSubview:adapter.bannerView];
     }
+    else if([adapter respondsToSelector:@selector(pauseAdRequests)] &&
+            [adapter respondsToSelector:@selector(startAdRequests)]){
+        //If adapter implements pauseAdRequests, then we'll need to
+        // call startAdRequests here.  If it does not implement it,
+        // then we know that we simply deallocated the instance and
+        // don't need to call this since it was called above when
+        // we created the new instance again.
+        [adapter startAdRequests];
+    }
     
-    if (adapter.adVisible = NO) {
+    if (adapter.adVisible == NO) {
         [self animateBannerForAdapterVisible:adapter withCompletion:nil];
     }
     

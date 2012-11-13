@@ -22,10 +22,11 @@
 @property (nonatomic) BOOL adVisible;
 @property (weak, nonatomic) id <LARSAdControllerDelegate> adManager;
 
-- (BOOL)requiresPublisherId;
 - (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 
 @optional
++ (BOOL)requiresPublisherId;
++ (BOOL)requiresParentViewController;
 - (void)startAdRequests;
 - (void)pauseAdRequests;
 - (BOOL)canDestroyAdBanner;
@@ -33,5 +34,6 @@
 - (NSString *)friendlyNetworkDescription;
 
 @property (copy, nonatomic) NSString *publisherId;
+@property (weak, nonatomic) UIViewController *parentViewController;
 
 @end

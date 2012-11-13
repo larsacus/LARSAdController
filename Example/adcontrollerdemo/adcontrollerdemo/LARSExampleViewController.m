@@ -8,7 +8,6 @@
 
 #import "LARSExampleViewController.h"
 #import "LARSAdController.h"
-#import "LARSAdControlleriAdAdapter.h"
 
 @interface LARSExampleViewController ()
 
@@ -26,15 +25,13 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    TOLLog(@"view did: %@", self.view);
     
-    [[LARSAdController sharedManager] registerAdClass:[LARSAdControlleriAdAdapter class]];
     [[LARSAdController sharedManager] addAdContainerToViewInViewController:self];
 }
 
 //Deprecated
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
-    return YES;
+    return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 //New iOS 6 stuff

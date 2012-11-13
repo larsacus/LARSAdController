@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		465B4295162381FC00CBC997 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 465B4294162381FC00CBC997 /* CoreData.framework */; };
 		465B42971623820900CBC997 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 465B42961623820900CBC997 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4691CC50164E24CF00559F58 /* LARSAdControlleriAdAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4691CC4F164E24CF00559F58 /* LARSAdControlleriAdAdapter.m */; };
+		4691CC6F165202A700559F58 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4691CC6E165202A700559F58 /* StoreKit.framework */; };
 		46B9178F14425C5F007EF823 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9178E14425C5F007EF823 /* UIKit.framework */; };
 		46B9179114425C5F007EF823 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9179014425C5F007EF823 /* Foundation.framework */; };
 		46B9179314425C5F007EF823 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9179214425C5F007EF823 /* CoreGraphics.framework */; };
@@ -29,10 +29,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		465B4294162381FC00CBC997 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		465B42961623820900CBC997 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		4691CC4E164E24CF00559F58 /* LARSAdControlleriAdAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LARSAdControlleriAdAdapter.h; path = ../../LARSAdControlleriAdAdapter.h; sourceTree = "<group>"; };
 		4691CC4F164E24CF00559F58 /* LARSAdControlleriAdAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LARSAdControlleriAdAdapter.m; path = ../../LARSAdControlleriAdAdapter.m; sourceTree = "<group>"; };
+		4691CC6E165202A700559F58 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		46B9178A14425C5F007EF823 /* adcontrollerdemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adcontrollerdemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46B9178E14425C5F007EF823 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		46B9179014425C5F007EF823 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -79,8 +79,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4691CC6F165202A700559F58 /* StoreKit.framework in Frameworks */,
 				465B42971623820900CBC997 /* AdSupport.framework in Frameworks */,
-				465B4295162381FC00CBC997 /* CoreData.framework in Frameworks */,
 				46C1EAFC154C706300EBFEF1 /* MessageUI.framework in Frameworks */,
 				46C1EAFA154C705E00EBFEF1 /* AudioToolbox.framework in Frameworks */,
 				46C1EAF8154C703000EBFEF1 /* SystemConfiguration.framework in Frameworks */,
@@ -131,8 +131,8 @@
 		46B9178D14425C5F007EF823 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4691CC6E165202A700559F58 /* StoreKit.framework */,
 				465B42961623820900CBC997 /* AdSupport.framework */,
-				465B4294162381FC00CBC997 /* CoreData.framework */,
 				46C1EAFB154C706300EBFEF1 /* MessageUI.framework */,
 				46C1EAF9154C705E00EBFEF1 /* AudioToolbox.framework */,
 				46C1EAF7154C703000EBFEF1 /* SystemConfiguration.framework */,

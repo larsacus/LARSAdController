@@ -25,5 +25,6 @@
 @property (nonatomic) BOOL adVisible;
 @property (strong, nonatomic) GADBannerView *bannerView;
 @property (copy, nonatomic) NSString *publisherId;
+@property (weak, nonatomic) UIViewController *parentViewController;
 
 @end

@@ -1,35 +1,60 @@
 ## Description
-`LARSAdController` is a singleton class that manages iAds and Google Ads in a single container view.  All orientations and devices are supported (Pads and Pods).
+`LARSAdController` 3.0 is a singleton ad management class that manages ad classes that conform to the `LARSAdAdapter` protocol. Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.
 
 ## Usage
-###Single Orientation
-For single-orientation support for all devices, simply add the following line in your `UIViewController`:
+`LARSAdController` 2.0 forced you opt-in to rotation-handling.  This is no longer necessary as the ad management class will auto-detect your current orientation given that your current view controller that the ad container lives in is correctly setup.
+
+The first step is to register your ad classes that the ad manager will use. The ad networks take priority in the order they were added in, so the first network registered is the highest priority, the second is below that, and so on:
+
+In app delegate (or somewhere else convenient):
+
+``` objective-c
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+    [[LARSAdController sharedManager] registerAdClass:[LARSAdControlleriAdAdapter class]];
+    [[LARSAdController sharedManager] registerAdClass:[LARSAdControllerAdMobAdapter class] withPublisherId:publisherId];
+}
+```
+
+Then the only line of code you need in your view controller is to add the container to your view using either:
 
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{
     [[LARSAdController sharedManager] addAdContainerToView:[self view] withViewController:self];
-    [[LARSAdController sharedManager] setGoogleAdPublisherId:myPublisherId]; //change publisher id unless you want me to have your monies (only once per singleton, though)
 }
 ```
 
-### Multiple Orientations
-If you would like to enable support for multiple orientations, add the following when you create and add the container to the view:
+or the simpler version:
 
 ``` objective-c
 - (void)viewWillAppear:(BOOL)animated{
-    [[LARSAdController sharedManager] addAdContainerToView:self.view withParentViewController:self];
-    [[LARSAdController sharedManager] setGoogleAdPublisherId:myPublisherId]; //this only needs to be called the first time LARSAdController is called
-    [[LARSAdController sharedManager] setShouldHandleOrientationChanges:YES];
+    [[LARSAdController sharedManager] addAdContainerToViewInViewController:self];
 }
 ```
 
+Once the current highest-priority ad network has failed to obtain an ad, it will continue to wait for an ad while the next-highest priority ad network is allocated and sends a request.  Once the ad network in priority above this network obtains an ad again, it will hide the lower-priority ad banner and display the higher-priority network banner.
+
+##Currently Available Ad Network Adapters
+1. iAd - `LARSAdControlleriAdAdapter`
+2. Google Ads - `LARSAdControllerAdMobAdapter`
+
+###Planned Ad Network Adapters (Not Yet Implemented)
+1. House Ads - Display your own image with an action for a banner
+
 ## Framework Requirements
-In order to compile, you need to include the following Apple frameworks:
+In order to compile, you will need to include the following Apple frameworks:
+
+iAds:
 
   1. `iAd.framework`
+  
+Google Ads:
+
+  1. `StoreKit.framework`
   2. `AudioToolbox.framework`
   3. `MessageUI.framework`
   4. `SystemConfiguration.framework`
+  5. `CoreGraphics.framework`
+  6. `AdSupport.framework` (weak-link for iOS 6)
 
 You will also need the `Google AdMob SDK` available from [Google](https://developers.google.com/mobile-ads-sdk/download#downloadios).
 
@@ -55,8 +80,16 @@ The above copyright notice and this permission notice shall be included in all c
 
 *THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*
 
-## Changelog
+##Changelog
+###3.0
+-----
+- Refactored to add support for modular networks
+- Added modular network protocol for network adapters to conform to
+- Added modular ad network handling
+- Removed option to opt-in to orientation-handling. Now automatically queries view controller's orientation.
+
 ###2.1
+-----
 - Added orientation auto-listening without use of view controller delegate callbacks
 - Added ability for ads to try and fit themselves into any view they are placed in.  Sizing is now done based on superview size vs just the orientation
 - Fixed Issue 3 - "Container frame is incorrect when returning from clicked ad"

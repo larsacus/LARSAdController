@@ -14,30 +14,22 @@
 
 #import "LARSAdControllerAdMobAdapter.h"
 #import "GADBannerView.h"
+#import <AdSupport/AdSupport.h>
 
 @implementation LARSAdControllerAdMobAdapter
 
 #pragma mark - Required Adapted Implementation
-- (BOOL)requiresPublisherId{
-    return YES;
-}
-
-- (void)setParentViewController:(UIViewController *)viewController{
-    self.bannerView.rootViewController = viewController;
-}
-
 - (GADBannerView *)bannerView{
     if (_bannerView == nil && _publisherId) {
         
         //start in portrait
-        _bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
+        _bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
         
         self.bannerView.adUnitID = self.publisherId;
         self.bannerView.delegate = self;
-        [self.bannerView loadRequest:[GADRequest request]];
     }
     else if(!_publisherId){
-        TOLWLog(@"%@ WARNING: Google Ad Publisher ID not set. No ads will be served until you set one using setPublisherId:forClass: on %@!", NSStringFromClass(self.class), @"LARSAdController");
+        TOLWLog(@"Google Ad Publisher ID not set. No ads will be served until you set one using setPublisherId:forClass: on %@!", @"LARSAdController");
     }
     
     return _bannerView;
@@ -50,6 +42,8 @@
     else{
         self.bannerView.adSize = kGADAdSizeSmartBannerPortrait;
     }
+    
+    [self.bannerView setNeedsLayout];
 }
 
 - (void)dealloc{
@@ -58,9 +52,26 @@
     
     self.adManager = nil;
     self.publisherId = nil;
+    
+    TOLLog(@"Dealloc");
 }
 
 #pragma mark - Optional Adapter Implementation
++ (BOOL)requiresPublisherId{
+    return YES;
+}
+
++ (BOOL)requiresParentViewController{
+    return YES;
+}
+
+- (void)setParentViewController:(UIViewController *)viewController{
+    _parentViewController = viewController;
+    
+    self.bannerView.rootViewController = viewController;
+    
+    [self layoutBannerForInterfaceOrientation:viewController.interfaceOrientation];
+}
 
 - (void)setPublisherId:(NSString *)publisherId{
     _publisherId = [publisherId copy];
@@ -74,6 +85,16 @@
     return @"Google Ads";
 }
 
+- (void)startAdRequests{
+    GADRequest *request = [GADRequest request];
+    
+#if DEBUG
+    request.testing = YES;
+#endif
+    
+    [self.bannerView loadRequest:request];
+}
+
 #pragma mark - AdMob Delegate Methods
 - (void)adViewDidReceiveAd:(GADBannerView *)bannerView{
     
@@ -81,16 +102,16 @@
         [self.adManager adSucceededForNetworkAdapterClass:[self class]];
     }
     
-    TOLLog(@"%@: Google ad did receive ad", NSStringFromClass([self class]));
+    TOLLog(@"Google ad did receive ad");
 }
-//
+
 - (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
     
     if ([self.adManager respondsToSelector:@selector(adFailedForNetworkAdapterClass:)]) {
         [self.adManager adFailedForNetworkAdapterClass:[self class]];
     }
     
-    TOLLog(@"%@: Google ad did fail to receive ad", NSStringFromClass([self class]));
+    TOLLog(@"Google ad did fail to receive ad");
 }
 
 // Unused Google Ad Delegate Methods

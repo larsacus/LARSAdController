@@ -13,7 +13,6 @@
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import "LARSAdControllerAdMobAdapter.h"
-#import "GADBannerView.h"
 #import <AdSupport/AdSupport.h>
 
 @implementation LARSAdControllerAdMobAdapter
@@ -24,9 +23,9 @@
         
         //start in portrait
         _bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
-        
-        self.bannerView.adUnitID = self.publisherId;
-        self.bannerView.delegate = self;
+
+        _bannerView.adUnitID = self.publisherId;
+        _bannerView.delegate = self;
     }
     else if(!_publisherId){
         TOLWLog(@"Google Ad Publisher ID not set. No ads will be served until you set one using setPublisherId:forClass: on %@!", @"LARSAdController");

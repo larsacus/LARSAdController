@@ -24,7 +24,7 @@
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     
-    [self.view bringSubviewToFront:[LARSAdController sharedManager].containerView];
+    [self.view bringSubviewToFront:[[LARSAdController sharedManager] containerView]];
 }
 
 @end

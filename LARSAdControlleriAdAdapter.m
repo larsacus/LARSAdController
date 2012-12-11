@@ -18,7 +18,7 @@
 
 - (void)dealloc{
     self.bannerView.delegate = nil;
-    _bannerView = nil;
+    self.bannerView = nil;
     
     self.adManager = nil;
     

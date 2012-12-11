@@ -572,12 +572,24 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 - (void)handleOrientationNotification:(NSNotification *)orientationNotification{
     TOLLog(@"Handling orientation change");
     
-    double delayInSeconds = 0.01f;
+    double delayInSeconds = 0.f;
     
     //interface orientation wasn't always guaranteed without dispatch_after
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self layoutBannerViewsForCurrentOrientation:self.parentViewController.interfaceOrientation];
+        UIViewAnimationOptions options =
+        UIViewAnimationOptionBeginFromCurrentState |
+        UIViewAnimationOptionAllowAnimatedContent |
+        UIViewAnimationOptionCurveEaseInOut;
+        
+        [UIView
+         animateWithDuration:0.3f
+         delay:0.f
+         options:options
+         animations:^{
+             [self layoutBannerViewsForCurrentOrientation:self.parentViewController.interfaceOrientation];
+         }
+         completion:nil];
     });
 }
 

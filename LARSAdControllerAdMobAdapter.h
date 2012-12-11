@@ -16,8 +16,7 @@
 #import "LARSAdAdapter.h"
 #import "GADBannerViewDelegate.h"
 #import "LARSAdController.h"
-
-@class GADBannerView;
+#import "GADBannerView.h"
 
 @interface LARSAdControllerAdMobAdapter : NSObject <LARSAdAdapter, GADBannerViewDelegate>
 

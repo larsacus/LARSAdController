@@ -44,6 +44,7 @@
 @property (nonatomic,
            getter = isRegisteredForOrientationChanges) BOOL registeredForOrientationChanges;
 @property (nonatomic, strong) NSMutableSet *instancesToCleanUp;
+@property (nonatomic, readwrite) BOOL adVisible;
 
 /*
  Contains the ads so they will clip since the outer container does not clip subviews to retain shadows
@@ -135,7 +136,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 - (LARSAdContainer *)containerView{
     if (!_containerView) {
         _containerView = [[LARSAdContainer alloc] init];
-        _containerView.backgroundColor  = [UIColor blueColor];
+        _containerView.backgroundColor = [UIColor clearColor];
         _containerView.clipsToBounds = NO;
         
         _containerView.layer.shadowRadius = 10.f;
@@ -147,7 +148,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         
         _clippingContainer = [[LARSAdContainer alloc] initWithFrame:_containerView.bounds];
         self.clippingContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        self.clippingContainer.backgroundColor = [UIColor greenColor];
+        self.clippingContainer.backgroundColor = [UIColor clearColor];
         self.clippingContainer.clipsToBounds = YES;
         
         [_containerView addSubview:self.clippingContainer];
@@ -158,7 +159,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 - (CGRect)containerFrameForInterfaceOrientation:(UIInterfaceOrientation)orientation withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
     //TODO: Modify height so that the container does not contain any whitespace above ad. This will enable others to add a background to the container.
     CGFloat width;
-    CGFloat yOrigin;
+    CGFloat yOrigin = 0.f;
     
     if (UIInterfaceOrientationIsLandscape(orientation)) {
         TOLLog(@"View is landscape");
@@ -248,8 +249,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     }
 }
 
-#pragma mark - Property Overrides
-- (BOOL)isAdVisible{
+#pragma mark - Ads Visible
+- (BOOL)areAnyAdsVisible{
     NSArray *instances = [self.adapterInstances allValues];
     
     for (id <LARSAdAdapter> adapter in instances) {
@@ -331,6 +332,11 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                     withCompletion:^(BOOL finished) {
                         adapter.adVisible = YES;
                         
+                        BOOL anyAdsVisible = [self areAnyAdsVisible];
+                        if (self.isAdVisible != anyAdsVisible) {
+                            self.adVisible = anyAdsVisible;
+                        }
+                        
                         if (completion) {
                             completion();
                         }
@@ -345,6 +351,11 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                            toFrame:finalFrame
                     withCompletion:^(BOOL finished) {
                         adapter.adVisible = NO;
+                        
+                        BOOL anyAdsVisible = [self areAnyAdsVisible];
+                        if (self.isAdVisible != anyAdsVisible) {
+                            self.adVisible = anyAdsVisible;
+                        }
                         
                         if (completion) {
                             completion();

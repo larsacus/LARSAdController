@@ -87,7 +87,7 @@
 - (void)startAdRequests{
     GADRequest *request = [GADRequest request];
     
-#if DEBUG
+#ifdef DEBUG
     request.testing = YES;
 #endif
     

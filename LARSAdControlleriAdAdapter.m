@@ -13,6 +13,11 @@
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import "LARSAdControlleriAdAdapter.h"
+@interface LARSAdControlleriAdAdapter()
+
+@property (nonatomic, readwrite) BOOL adLoaded;
+
+@end
 
 @implementation LARSAdControlleriAdAdapter
 
@@ -21,6 +26,8 @@
     self.bannerView = nil;
     
     self.adManager = nil;
+    
+    [self.bannerView removeObserver:self forKeyPath:@"bannerLoaded"];
     
     TOLLog(@"Dealloc");
 }
@@ -39,6 +46,11 @@
             _bannerView = [[ADBannerView alloc] init];
         }
         
+        [_bannerView addObserver:self
+                      forKeyPath:@"bannerLoaded"
+                         options:NSKeyValueObservingOptionNew
+                         context:nil];
+        
 #if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -56,6 +68,24 @@
         _bannerView.delegate = self;
     }
     return _bannerView;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    if ([keyPath isEqual:@"bannerLoaded"]) {
+        self.adLoaded = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+    }
+    /*
+     Be sure to call the superclass's implementation *if it implements it*.
+     NSObject does not implement the method.
+     */
+    /*[super observeValueForKeyPath:keyPath
+     ofObject:object
+     change:change
+     context:context];*/
 }
 
 #pragma mark - Optional Adapter Implementation

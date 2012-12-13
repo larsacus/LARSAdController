@@ -214,6 +214,10 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         }
     }
     
+    if (!adapter) {
+        return;
+    }
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (CGRectGetWidth(self.containerView.frame) < 1024.f) {
             [adapter layoutBannerForInterfaceOrientation:UIInterfaceOrientationPortrait];
@@ -382,31 +386,44 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     
     CGRect beginFrame;
     CGSize bannerViewSize = adapter.bannerView.frame.size;
-    CGRect finalBannerFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
     
     switch (presentationType) {
         case LARSAdControllerPresentationTypeBottom:
             beginFrame.origin = CGPointMake((CGRectGetWidth(self.clippingContainer.frame) - bannerViewSize.width)/2,
                                             CGRectGetHeight(self.clippingContainer.frame));
             break;
-        case LARSAdControllerPresentationTypeLeft:
+        case LARSAdControllerPresentationTypeLeft:{
+            CGRect finalBannerFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
             beginFrame.origin = CGPointMake(-bannerViewSize.width,
                                             finalBannerFrame.origin.y);
-
+        }
             break;
-        case LARSAdControllerPresentationTypeRight:
+        case LARSAdControllerPresentationTypeRight:{
+            CGRect finalBannerFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+            
             beginFrame.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame),
                                             finalBannerFrame.origin.y);
+        }
             break;
-        case LARSAdControllerPresentationTypeTop:
+case LARSAdControllerPresentationTypeTop:{
+    CGRect finalBannerFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+
             beginFrame.origin = CGPointMake(finalBannerFrame.origin.x,
                                             -bannerViewSize.height);
+}
             break;
     }
     
     beginFrame.size = bannerViewSize;
     
-    TOLLog(@"Initial banner frame: %@", NSStringFromCGRect(beginFrame));
+    NSString *adapterName = NSStringFromClass(adapter.class);
+    if ([adapter respondsToSelector:@selector(friendlyNetworkDescription)]) {
+        if ([adapter friendlyNetworkDescription] != nil) {
+            adapterName = [adapter friendlyNetworkDescription];
+        }
+    }
+    
+    TOLLog(@"Initial banner frame <%@>: %@", adapterName, NSStringFromCGRect(beginFrame));
     
     return beginFrame;
 }
@@ -429,7 +446,14 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     
     finalFrame.size = bannerViewSize;
     
-    TOLLog(@"Final banner frame: %@", NSStringFromCGRect(finalFrame));
+    NSString *adapterName = NSStringFromClass(adapter.class);
+    if ([adapter respondsToSelector:@selector(friendlyNetworkDescription)]) {
+        if ([adapter friendlyNetworkDescription] != nil) {
+            adapterName = [adapter friendlyNetworkDescription];
+        }
+    }
+    
+    TOLLog(@"Final banner frame <%@>: %@", adapterName, NSStringFromCGRect(finalFrame));
     
     return finalFrame;
 }
@@ -450,7 +474,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 - (BOOL)startAdNetworkAdapterClass:(Class)class{
-    id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    NSObject <LARSAdAdapter> *adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
     
     if (!adapter) {
         TOLLog(@"Creating new instance of adapter class \"%@\"", NSStringFromClass(class));
@@ -498,7 +522,12 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         
         [self.adapterInstances setObject:adapter forKey:NSStringFromClass(class)];
         
-        adapter.bannerView.frame = [self initialBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+        if (adapter.adVisible) {
+            adapter.bannerView.frame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+        }
+        else{
+            adapter.bannerView.frame = [self initialBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+        }
         adapter.bannerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         
         switch (self.pinningLocation) {
@@ -522,11 +551,44 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         [adapter startAdRequests];
     }
     
-    if (adapter.adVisible == NO) {
+    //Since we just allocated an instance of this class, the ad banner might
+    //  not actually have an ad loaded to display. check if ad
+    //  is loaded before actually displaying it if the ad adapter
+    //  supports it. makes for a much cleaner visual experience
+    if ([adapter respondsToSelector:@selector(adLoaded)]) {
+        if (adapter.adLoaded) {
+            [self animateBannerForAdapterVisible:adapter withCompletion:nil];
+        }
+        else{
+            [adapter addObserver:self forKeyPath:@"adLoaded" options:NSKeyValueObservingOptionNew context:nil];
+        }
+    }
+    else if (adapter.adVisible == NO) {
         [self animateBannerForAdapterVisible:adapter withCompletion:nil];
     }
     
     return YES;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if ([keyPath isEqualToString:@"adLoaded"]) {
+        
+        BOOL newAdLoadedValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+        if (newAdLoadedValue) {
+            TOLLog(@"ad loaded for %@!", NSStringFromClass([object class]));
+            if ([object adVisible] == NO) {
+                [self animateBannerForAdapterVisible:object withCompletion:nil];
+            }
+            
+            [object removeObserver:self forKeyPath:@"adLoaded"];
+        }
+        else{
+            TOLLog(@"ad not loaded for %@!", NSStringFromClass([object class]));
+            if ([object adVisible]) {
+                [self animateBannerForAdapterHidden:object withCompletion:nil];
+            }
+        }
+    }
 }
 
 - (void)haltAdNetworkAdapterClass:(Class)class{

@@ -35,5 +35,6 @@
 
 @property (copy, nonatomic) NSString *publisherId;
 @property (weak, nonatomic) UIViewController *parentViewController;
+@property (nonatomic, readonly) BOOL adLoaded;
 
 @end

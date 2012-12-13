@@ -6,10 +6,10 @@ Back in the days of yore, `LARSAdController` 2.0 forced you opt-in to rotation-h
 
 The first step is to register your ad classes that the ad manager will use. The ad networks take priority in the order they were added in, so the first network registered is the highest priority, the second is below that, and so on:
 
-In app delegate (or somewhere else convenient):
+In app delegate or somewhere else convenient before first banner is needed to display:
 
 ``` objective-c
-- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     [[LARSAdController sharedManager] registerAdClass:[LARSAdControlleriAdAdapter class]];
     [[LARSAdController sharedManager] registerAdClass:[LARSAdControllerAdMobAdapter class] withPublisherId:publisherId];
 }
@@ -38,7 +38,7 @@ or the simpler version:
 Once the current highest-priority ad network fails to obtain an ad, it will continue to wait for an ad while the next-highest priority ad network is allocated and sends a request.  Once the ad network in priority above this network obtains an ad again, it will hide the lower-priority ad banner and display the higher-priority network banner.
 
 ###Ultra-Lazy Implementation
-To make your life even _easier_, all you need to do is have each of your view controllers that you would like to have an ad pinned to the top or bottom of your view controller's view is to have your view controller subclasses inherit from `TOLAdViewController`. This will automatigically add an ad view container to your view controller's view when it is supposed to.
+To make your life even _easier_, all you need to do is have each of your view controllers that you would like to have an ad pinned to the top or bottom of your view controller's view is to have your view controller subclasses inherit from `TOLAdViewController`. This will automatigically add an ad view container to your view controller's view when it is supposed to. The only downside is less flexibility on ad placement in your view hierarchy.
 
 ``` objective-c
 @interface MYBestViewController : TOLAdViewController
@@ -47,7 +47,13 @@ To make your life even _easier_, all you need to do is have each of your view co
 ```
 
 ####Conditionally Displaying Ads
-If you'd only like the ads to be displayed under certain conditions (like when a user has purchased a certain in-app upgrade), then simply override `-shouldDisplayAds` in your `TOLAdViewController` subclass. Ads will not be loaded on `viewWillAppear:` if `shouldDisplayAds` returns `NO`.
+If you'd only like the ads to be displayed under certain conditions (like when a user has purchased a certain in-app upgrade), then simply override `-shouldDisplayAds` in your `TOLAdViewController` subclass. Ads will not be loaded on `viewWillAppear:` if `shouldDisplayAds` returns `NO`:
+
+``` objective-c
+- (BOOL)shouldDisplayAds{
+  return ([self.purchaseTracker hasPurchasedUpgrade] == NO);
+}
+```
 
 ##Ad Placement
 In the past, you were only able to add a banner view to the bottom of a view and have it animate in from the bottom.  Now, you are able to not only control whether it resides at the top or bottom of your view, but control how it animates in and out of the screen.
@@ -89,11 +95,11 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 ## Framework Requirements
 In order to compile, you will need to include the following Apple frameworks:
 
-iAds:
+###iAds
 
   1. `iAd.framework`
   
-Google Ads:
+###Google Ads
 
   1. `StoreKit.framework`
   2. `AudioToolbox.framework`
@@ -110,12 +116,20 @@ That's it.  Technically, this can be added to any `UIView` that is large enough 
 1. iOS 5.0+
 2. Xcode 4.3+ - LLVM 4.0 support. Objective-C container literals are used.
 
+#UPDATE THIS
 ## Detailed Integration Instructions (UPDATE THIS)
 - Click here a more detailed [iAd integration tutorial](http://theonlylars.com/blog/2012/04/27/integrating-google-ads-with-iad/) blog post using LARSAdController.
 
 ##Creating a New Ad Network Adapter
+In order to create a new ad adapter for an ad vendor not already created, simply create a new `NSObject` subclass that conforms to the `LARSAdAdapter` protocol. There are a few required methods and properties that must be present in order for the adapter to function, as well as some optional ones that give some additional control/functionality of an ad banner. More detailed documentation can be found in the header file for `LARSAdAdapter.h`.
 
-*FILL THIS OUT*
+A good start would be to simply conform to the `LARSAdAdapter` protocol, compile, and let all of the warnings, errors, and runtime asserts help you complete the implementation:
+
+``` objective-c
+@interface LARSAdControllerHouseAdsAdapter : NSObject <LARSAdAdapter>
+  //fill out the meaty part  
+@end
+```
 
 ##License (MIT)
 I would love attribution and a link to this page on GitHub [here](https://github.com/larsacus/LARSAdController), but it is not required.

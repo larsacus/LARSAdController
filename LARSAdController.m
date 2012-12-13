@@ -19,6 +19,8 @@
 #import "GADBannerView.h"
 #import "LARSAdAdapter.h"
 
+const NSString * const kLARSAdObserverKeyPathAdLoaded = @"adLoaded";
+
 @implementation LARSAdContainer
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
@@ -235,7 +237,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         }
     }
     
-    adapter.bannerView.frame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+    adapter.bannerView.frame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
 }
 
 - (void)layoutContainerView{
@@ -326,10 +328,10 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     
     if ([self.clippingContainer.subviews containsObject:adapter.bannerView] == NO) {
         //configure initial state for banner view off-screen
-        adapter.bannerView.frame = [self initialBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+        adapter.bannerView.frame = [self offScreenBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
     }
     
-    CGRect finalFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+    CGRect finalFrame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
     
     [self animateAdapterBannerView:adapter
                            toFrame:finalFrame
@@ -349,7 +351,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 
 - (void)animateBannerForAdapterHidden:(id <LARSAdAdapter>)adapter withCompletion:(void(^)(void))completion{
     
-    CGRect finalFrame = [self initialBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+    CGRect finalFrame = [self offScreenBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
     
     [self animateAdapterBannerView:adapter
                            toFrame:finalFrame
@@ -382,7 +384,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                      completion:completion];
 }
 
-- (CGRect)initialBannerFrameForAdapter:(id<LARSAdAdapter>)adapter presentationAnimationType:(LARSAdControllerPresentationType)presentationType{
+- (CGRect)offScreenBannerFrameForAdapter:(id<LARSAdAdapter>)adapter presentationAnimationType:(LARSAdControllerPresentationType)presentationType{
     
     CGRect beginFrame;
     CGSize bannerViewSize = adapter.bannerView.frame.size;
@@ -393,20 +395,20 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                                             CGRectGetHeight(self.clippingContainer.frame));
             break;
         case LARSAdControllerPresentationTypeLeft:{
-            CGRect finalBannerFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+            CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
             beginFrame.origin = CGPointMake(-bannerViewSize.width,
                                             finalBannerFrame.origin.y);
         }
             break;
         case LARSAdControllerPresentationTypeRight:{
-            CGRect finalBannerFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+            CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
             
             beginFrame.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame),
                                             finalBannerFrame.origin.y);
         }
             break;
 case LARSAdControllerPresentationTypeTop:{
-    CGRect finalBannerFrame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+    CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
 
             beginFrame.origin = CGPointMake(finalBannerFrame.origin.x,
                                             -bannerViewSize.height);
@@ -428,7 +430,7 @@ case LARSAdControllerPresentationTypeTop:{
     return beginFrame;
 }
 
-- (CGRect)finalBannerFrameForAdapter:(id<LARSAdAdapter>)adapter withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
+- (CGRect)onScreenBannerFrameForAdapter:(id<LARSAdAdapter>)adapter withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
 
     CGRect finalFrame;
     CGSize bannerViewSize = adapter.bannerView.frame.size;
@@ -523,10 +525,10 @@ case LARSAdControllerPresentationTypeTop:{
         [self.adapterInstances setObject:adapter forKey:NSStringFromClass(class)];
         
         if (adapter.adVisible) {
-            adapter.bannerView.frame = [self finalBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+            adapter.bannerView.frame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
         }
         else{
-            adapter.bannerView.frame = [self initialBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+            adapter.bannerView.frame = [self offScreenBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
         }
         adapter.bannerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         
@@ -560,7 +562,7 @@ case LARSAdControllerPresentationTypeTop:{
             [self animateBannerForAdapterVisible:adapter withCompletion:nil];
         }
         else{
-            [adapter addObserver:self forKeyPath:@"adLoaded" options:NSKeyValueObservingOptionNew context:nil];
+            [adapter addObserver:self forKeyPath:(NSString *)kLARSAdObserverKeyPathAdLoaded options:NSKeyValueObservingOptionNew context:nil];
         }
     }
     else if (adapter.adVisible == NO) {
@@ -571,7 +573,7 @@ case LARSAdControllerPresentationTypeTop:{
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    if ([keyPath isEqualToString:@"adLoaded"]) {
+    if ([keyPath isEqualToString:(NSString *)kLARSAdObserverKeyPathAdLoaded]) {
         
         BOOL newAdLoadedValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
         if (newAdLoadedValue) {
@@ -580,7 +582,7 @@ case LARSAdControllerPresentationTypeTop:{
                 [self animateBannerForAdapterVisible:object withCompletion:nil];
             }
             
-            [object removeObserver:self forKeyPath:@"adLoaded"];
+            [object removeObserver:self forKeyPath:(NSString *)kLARSAdObserverKeyPathAdLoaded];
         }
         else{
             TOLLog(@"ad not loaded for %@!", NSStringFromClass([object class]));

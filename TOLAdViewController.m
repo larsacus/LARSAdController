@@ -18,13 +18,19 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [[LARSAdController sharedManager] addAdContainerToViewInViewController:self];
+    if ([self shouldDisplayAds]) {
+        [[LARSAdController sharedManager] addAdContainerToViewInViewController:self];
+    }
 }
 
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     
     [self.view bringSubviewToFront:[[LARSAdController sharedManager] containerView]];
+}
+
+- (BOOL)shouldDisplayAds{
+    return YES;
 }
 
 @end

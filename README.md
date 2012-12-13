@@ -46,6 +46,9 @@ To make your life even _easier_, all you need to do is have each of your view co
 @end
 ```
 
+####Conditionally Displaying Ads
+If you'd only like the ads to be displayed under certain conditions (like when a user has purchased a certain in-app upgrade), then simply override `-shouldDisplayAds` in your `TOLAdViewController` subclass. Ads will not be loaded on `viewWillAppear:` if `shouldDisplayAds` returns `NO`.
+
 ##Ad Placement
 In the past, you were only able to add a banner view to the bottom of a view and have it animate in from the bottom.  Now, you are able to not only control whether it resides at the top or bottom of your view, but control how it animates in and out of the screen.
 

@@ -1,3 +1,5 @@
+_*Note: This branch is currently in-development. Please feel free to integrate this code into your project and file any issues you see or anything you feel you are experiencing that you don't expect. I hope to merge this branch back into master sometime at the end of December. Thanks!*_
+
 ## Description
 `LARSAdController` 3.0 is a singleton ad management class that manages ad classes that conform to the `LARSAdAdapter` protocol. Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.
 

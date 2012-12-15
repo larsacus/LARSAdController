@@ -16,7 +16,6 @@
 #import "objc/runtime.h"
 
 #import "LARSAdController.h"
-#import "GADBannerView.h"
 #import "TOLAdAdapter.h"
 
 const NSString * const kLARSAdObserverKeyPathAdLoaded = @"adLoaded";
@@ -159,7 +158,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 - (CGRect)containerFrameForInterfaceOrientation:(UIInterfaceOrientation)orientation withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
-    //TODO: Modify height so that the container does not contain any whitespace above ad. This will enable others to add a background to the container.
+    //TODO: Modify height so that the container does not contain any whitespace above ad. This will enable others to add a background to the container (a la weather channel app).
     CGFloat width;
     CGFloat yOrigin = 0.f;
     

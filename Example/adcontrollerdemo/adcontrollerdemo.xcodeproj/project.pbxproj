@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4642C0A7167CFB040039EE16 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4642C0A6167CFB040039EE16 /* Default-568h@2x.png */; };
 		465B42971623820900CBC997 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 465B42961623820900CBC997 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4691CC50164E24CF00559F58 /* TOLAdAdapteriAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4691CC4F164E24CF00559F58 /* TOLAdAdapteriAds.m */; };
 		4691CC6F165202A700559F58 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4691CC6E165202A700559F58 /* StoreKit.framework */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4642C0A6167CFB040039EE16 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		465B42961623820900CBC997 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		4691CC4E164E24CF00559F58 /* TOLAdAdapteriAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TOLAdAdapteriAds.h; path = ../../TOLAdAdapteriAds.h; sourceTree = "<group>"; };
 		4691CC4F164E24CF00559F58 /* TOLAdAdapteriAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TOLAdAdapteriAds.m; path = ../../TOLAdAdapteriAds.m; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 		46B9177F14425C5F007EF823 = {
 			isa = PBXGroup;
 			children = (
+				4642C0A6167CFB040039EE16 /* Default-568h@2x.png */,
 				4691CC67164EC1BA00559F58 /* LARSAdController */,
 				46F29272164CBDE500AB7775 /* GoogleAds */,
 				46B9179414425C5F007EF823 /* adcontrollerdemo */,
@@ -262,6 +265,7 @@
 				46B9179914425C60007EF823 /* InfoPlist.strings in Resources */,
 				46F29287164CBDE500AB7775 /* .gitignore in Resources */,
 				46F29288164CBDE500AB7775 /* GoogleAds.podspec in Resources */,
+				4642C0A7167CFB040039EE16 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

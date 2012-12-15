@@ -1,5 +1,5 @@
 //
-//  LARSAdControlleriAdAdapter.m
+//  TOLAdAdapteriAds.m
 //  adcontrollerdemo
 //
 //  Created by Lars Anderson on 11/9/12.
@@ -12,14 +12,17 @@
 //
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import "LARSAdControlleriAdAdapter.h"
-@interface LARSAdControlleriAdAdapter()
+#import "TOLAdAdapteriAds.h"
+
+NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
+
+@interface TOLAdAdapteriAds()
 
 @property (nonatomic, readwrite) BOOL adLoaded;
 
 @end
 
-@implementation LARSAdControlleriAdAdapter
+@implementation TOLAdAdapteriAds
 
 - (void)dealloc{
     self.bannerView.delegate = nil;
@@ -27,7 +30,7 @@
     
     self.adManager = nil;
     
-    [self.bannerView removeObserver:self forKeyPath:@"bannerLoaded"];
+    [self.bannerView removeObserver:self forKeyPath:kTOLAdAdapterBannerLoadedObserverKeyPath];
     
     TOLLog(@"Dealloc");
 }
@@ -47,7 +50,7 @@
         }
         
         [_bannerView addObserver:self
-                      forKeyPath:@"bannerLoaded"
+                      forKeyPath:kTOLAdAdapterBannerLoadedObserverKeyPath
                          options:NSKeyValueObservingOptionNew
                          context:nil];
         
@@ -75,7 +78,7 @@
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    if ([keyPath isEqual:@"bannerLoaded"]) {
+    if ([keyPath isEqual:kTOLAdAdapterBannerLoadedObserverKeyPath]) {
         self.adLoaded = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
     }
     /*

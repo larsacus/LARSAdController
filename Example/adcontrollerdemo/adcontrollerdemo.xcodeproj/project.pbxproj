@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		465B42971623820900CBC997 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 465B42961623820900CBC997 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		4691CC50164E24CF00559F58 /* LARSAdControlleriAdAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4691CC4F164E24CF00559F58 /* LARSAdControlleriAdAdapter.m */; };
+		4691CC50164E24CF00559F58 /* TOLAdAdapteriAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4691CC4F164E24CF00559F58 /* TOLAdAdapteriAds.m */; };
 		4691CC6F165202A700559F58 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4691CC6E165202A700559F58 /* StoreKit.framework */; };
 		4691CC90165210C600559F58 /* TOLAdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4691CC8F165210C600559F58 /* TOLAdViewController.m */; };
 		46B9178F14425C5F007EF823 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9178E14425C5F007EF823 /* UIKit.framework */; };
@@ -26,13 +26,13 @@
 		46F29287164CBDE500AB7775 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 46F29273164CBDE500AB7775 /* .gitignore */; };
 		46F29288164CBDE500AB7775 /* GoogleAds.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 46F2927D164CBDE500AB7775 /* GoogleAds.podspec */; };
 		46F29289164CBDE500AB7775 /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46F2927E164CBDE500AB7775 /* libGoogleAdMobAds.a */; };
-		46F29290164CC27900AB7775 /* LARSAdControllerAdMobAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F2928F164CC27900AB7775 /* LARSAdControllerAdMobAdapter.m */; };
+		46F29290164CC27900AB7775 /* TOLAdAdapterAdMobAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F2928F164CC27900AB7775 /* TOLAdAdapterAdMobAds.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		465B42961623820900CBC997 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
-		4691CC4E164E24CF00559F58 /* LARSAdControlleriAdAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LARSAdControlleriAdAdapter.h; path = ../../LARSAdControlleriAdAdapter.h; sourceTree = "<group>"; };
-		4691CC4F164E24CF00559F58 /* LARSAdControlleriAdAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LARSAdControlleriAdAdapter.m; path = ../../LARSAdControlleriAdAdapter.m; sourceTree = "<group>"; };
+		4691CC4E164E24CF00559F58 /* TOLAdAdapteriAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TOLAdAdapteriAds.h; path = ../../TOLAdAdapteriAds.h; sourceTree = "<group>"; };
+		4691CC4F164E24CF00559F58 /* TOLAdAdapteriAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TOLAdAdapteriAds.m; path = ../../TOLAdAdapteriAds.m; sourceTree = "<group>"; };
 		4691CC6E165202A700559F58 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4691CC8E165210C600559F58 /* TOLAdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TOLAdViewController.h; path = ../../TOLAdViewController.h; sourceTree = "<group>"; };
 		4691CC8F165210C600559F58 /* TOLAdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TOLAdViewController.m; path = ../../TOLAdViewController.m; sourceTree = "<group>"; };
@@ -72,9 +72,9 @@
 		46F29283164CBDE500AB7775 /* GADCustomEventInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADCustomEventInterstitial.h; sourceTree = "<group>"; };
 		46F29284164CBDE500AB7775 /* GADCustomEventInterstitialDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADCustomEventInterstitialDelegate.h; sourceTree = "<group>"; };
 		46F29285164CBDE500AB7775 /* GADCustomEventRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADCustomEventRequest.h; sourceTree = "<group>"; };
-		46F2928B164CBE1F00AB7775 /* LARSAdAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LARSAdAdapter.h; path = ../../LARSAdAdapter.h; sourceTree = "<group>"; };
-		46F2928E164CC27900AB7775 /* LARSAdControllerAdMobAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LARSAdControllerAdMobAdapter.h; path = ../../LARSAdControllerAdMobAdapter.h; sourceTree = "<group>"; };
-		46F2928F164CC27900AB7775 /* LARSAdControllerAdMobAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LARSAdControllerAdMobAdapter.m; path = ../../LARSAdControllerAdMobAdapter.m; sourceTree = "<group>"; };
+		46F2928B164CBE1F00AB7775 /* TOLAdAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TOLAdAdapter.h; path = ../../TOLAdAdapter.h; sourceTree = "<group>"; };
+		46F2928E164CC27900AB7775 /* TOLAdAdapterAdMobAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TOLAdAdapterAdMobAds.h; path = ../../TOLAdAdapterAdMobAds.h; sourceTree = "<group>"; };
+		46F2928F164CC27900AB7775 /* TOLAdAdapterAdMobAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TOLAdAdapterAdMobAds.m; path = ../../TOLAdAdapterAdMobAds.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,11 +103,11 @@
 			children = (
 				46C1EAE3154C6F3E00EBFEF1 /* LARSAdController.h */,
 				46C1EAE2154C6F3E00EBFEF1 /* LARSAdController.m */,
-				46F2928B164CBE1F00AB7775 /* LARSAdAdapter.h */,
-				46F2928E164CC27900AB7775 /* LARSAdControllerAdMobAdapter.h */,
-				46F2928F164CC27900AB7775 /* LARSAdControllerAdMobAdapter.m */,
-				4691CC4E164E24CF00559F58 /* LARSAdControlleriAdAdapter.h */,
-				4691CC4F164E24CF00559F58 /* LARSAdControlleriAdAdapter.m */,
+				46F2928B164CBE1F00AB7775 /* TOLAdAdapter.h */,
+				46F2928E164CC27900AB7775 /* TOLAdAdapterAdMobAds.h */,
+				46F2928F164CC27900AB7775 /* TOLAdAdapterAdMobAds.m */,
+				4691CC4E164E24CF00559F58 /* TOLAdAdapteriAds.h */,
+				4691CC4F164E24CF00559F58 /* TOLAdAdapteriAds.m */,
 				4691CC8E165210C600559F58 /* TOLAdViewController.h */,
 				4691CC8F165210C600559F58 /* TOLAdViewController.m */,
 			);
@@ -292,8 +292,8 @@
 				46B9179F14425C60007EF823 /* LARSAppDelegate.m in Sources */,
 				46C1EAE4154C6F3E00EBFEF1 /* LARSAdController.m in Sources */,
 				46C1EAFF154C868500EBFEF1 /* LARSExampleViewController.m in Sources */,
-				46F29290164CC27900AB7775 /* LARSAdControllerAdMobAdapter.m in Sources */,
-				4691CC50164E24CF00559F58 /* LARSAdControlleriAdAdapter.m in Sources */,
+				46F29290164CC27900AB7775 /* TOLAdAdapterAdMobAds.m in Sources */,
+				4691CC50164E24CF00559F58 /* TOLAdAdapteriAds.m in Sources */,
 				4691CC90165210C600559F58 /* TOLAdViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

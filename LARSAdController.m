@@ -17,7 +17,7 @@
 
 #import "LARSAdController.h"
 #import "GADBannerView.h"
-#import "LARSAdAdapter.h"
+#import "TOLAdAdapter.h"
 
 const NSString * const kLARSAdObserverKeyPathAdLoaded = @"adLoaded";
 
@@ -205,11 +205,11 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     self.currentOrientation = orientation;
     [self layoutContainerView];
     
-    id <LARSAdAdapter> adapter = nil;
+    id <TOLAdAdapter> adapter = nil;
     
     NSArray *instances = [self.adapterInstances allValues];
     
-    for (id <LARSAdAdapter> possibleInstance in instances) {
+    for (id <TOLAdAdapter> possibleInstance in instances) {
         if (possibleInstance.adVisible) {
             adapter = possibleInstance;
             break;
@@ -259,7 +259,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 - (BOOL)areAnyAdsVisible{
     NSArray *instances = [self.adapterInstances allValues];
     
-    for (id <LARSAdAdapter> adapter in instances) {
+    for (id <TOLAdAdapter> adapter in instances) {
         if (adapter.adVisible) {
             return YES;
         }
@@ -276,7 +276,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 
 - (void)registerAdClass:(Class)class{
     
-    NSAssert1(class_conformsToProtocol(class, @protocol(LARSAdAdapter)), @"Registered class does not conform to %@ protocol", NSStringFromProtocol(@protocol(LARSAdAdapter)));
+    NSAssert1(class_conformsToProtocol(class, @protocol(TOLAdAdapter)), @"Registered class does not conform to %@ protocol", NSStringFromProtocol(@protocol(TOLAdAdapter)));
     
     [self.registeredClasses addObject:class];
 }
@@ -285,7 +285,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 - (void)adFailedForNetworkAdapterClass:(Class)class{
     //get index of adapter class
     NSInteger failedNetworkIndex = [self.registeredClasses indexOfObject:class];
-    id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
     
     [self animateBannerForAdapterHidden:adapter withCompletion:nil];
     
@@ -304,14 +304,14 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         [self haltAdNetworkAdapterClass:self.registeredClasses[i]];
     }
     
-    id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
     
     if (adapter.adVisible == NO) {
         [self animateBannerForAdapterVisible:adapter withCompletion:nil];
     }
 }
 
-- (void)adInstanceNowAvailableForDeallocation:(id <LARSAdAdapter>)adapter{
+- (void)adInstanceNowAvailableForDeallocation:(id <TOLAdAdapter>)adapter{
     if ([self.instancesToCleanUp containsObject:adapter]) {
         [self animateBannerForAdapterHidden:adapter withCompletion:^{
             [adapter.bannerView removeFromSuperview];
@@ -322,7 +322,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 #pragma mark - Banner Frames
-- (void)animateBannerForAdapterVisible:(id <LARSAdAdapter>)adapter withCompletion:(void(^)(void))completion{
+- (void)animateBannerForAdapterVisible:(id <TOLAdAdapter>)adapter withCompletion:(void(^)(void))completion{
     
     [adapter layoutBannerForInterfaceOrientation:self.currentOrientation];
     
@@ -333,43 +333,47 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     
     CGRect finalFrame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
     
+    adapter.adVisible = YES;
+    
     [self animateAdapterBannerView:adapter
                            toFrame:finalFrame
                     withCompletion:^(BOOL finished) {
-                        adapter.adVisible = YES;
-                        
-                        BOOL anyAdsVisible = [self areAnyAdsVisible];
-                        if (self.isAdVisible != anyAdsVisible) {
-                            self.adVisible = anyAdsVisible;
-                        }
-                        
-                        if (completion) {
-                            completion();
+                        if (finished) {
+                            BOOL anyAdsVisible = [self areAnyAdsVisible];
+                            if (self.isAdVisible != anyAdsVisible) {
+                                self.adVisible = anyAdsVisible;
+                            }
+                            
+                            if (completion) {
+                                completion();
+                            }
                         }
                     }];
 }
 
-- (void)animateBannerForAdapterHidden:(id <LARSAdAdapter>)adapter withCompletion:(void(^)(void))completion{
+- (void)animateBannerForAdapterHidden:(id <TOLAdAdapter>)adapter withCompletion:(void(^)(void))completion{
     
     CGRect finalFrame = [self offScreenBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
     
+    adapter.adVisible = NO;
+    
     [self animateAdapterBannerView:adapter
                            toFrame:finalFrame
                     withCompletion:^(BOOL finished) {
-                        adapter.adVisible = NO;
-                        
-                        BOOL anyAdsVisible = [self areAnyAdsVisible];
-                        if (self.isAdVisible != anyAdsVisible) {
-                            self.adVisible = anyAdsVisible;
-                        }
-                        
-                        if (completion) {
-                            completion();
+                        if (finished) {
+                            BOOL anyAdsVisible = [self areAnyAdsVisible];
+                            if (self.isAdVisible != anyAdsVisible) {
+                                self.adVisible = anyAdsVisible;
+                            }
+                            
+                            if (completion) {
+                                completion();
+                            }
                         }
                     }];
 }
 
-- (void)animateAdapterBannerView:(id <LARSAdAdapter>)adapter toFrame:(CGRect)newFrame withCompletion:(void(^)(BOOL finished))completion{
+- (void)animateAdapterBannerView:(id <TOLAdAdapter>)adapter toFrame:(CGRect)newFrame withCompletion:(void(^)(BOOL finished))completion{
     UIViewAnimationOptions options =
     UIViewAnimationOptionAllowAnimatedContent |
     UIViewAnimationOptionBeginFromCurrentState |
@@ -384,7 +388,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                      completion:completion];
 }
 
-- (CGRect)offScreenBannerFrameForAdapter:(id<LARSAdAdapter>)adapter presentationAnimationType:(LARSAdControllerPresentationType)presentationType{
+- (CGRect)offScreenBannerFrameForAdapter:(id<TOLAdAdapter>)adapter presentationAnimationType:(LARSAdControllerPresentationType)presentationType{
     
     CGRect beginFrame;
     CGSize bannerViewSize = adapter.bannerView.frame.size;
@@ -418,19 +422,14 @@ case LARSAdControllerPresentationTypeTop:{
     
     beginFrame.size = bannerViewSize;
     
-    NSString *adapterName = NSStringFromClass(adapter.class);
-    if ([adapter respondsToSelector:@selector(friendlyNetworkDescription)]) {
-        if ([adapter friendlyNetworkDescription] != nil) {
-            adapterName = [adapter friendlyNetworkDescription];
-        }
-    }
+    NSString *adapterName = [self friendlyNameForAdAdapter:adapter];
     
     TOLLog(@"Initial banner frame <%@>: %@", adapterName, NSStringFromCGRect(beginFrame));
     
     return beginFrame;
 }
 
-- (CGRect)onScreenBannerFrameForAdapter:(id<LARSAdAdapter>)adapter withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
+- (CGRect)onScreenBannerFrameForAdapter:(id<TOLAdAdapter>)adapter withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
 
     CGRect finalFrame;
     CGSize bannerViewSize = adapter.bannerView.frame.size;
@@ -448,12 +447,7 @@ case LARSAdControllerPresentationTypeTop:{
     
     finalFrame.size = bannerViewSize;
     
-    NSString *adapterName = NSStringFromClass(adapter.class);
-    if ([adapter respondsToSelector:@selector(friendlyNetworkDescription)]) {
-        if ([adapter friendlyNetworkDescription] != nil) {
-            adapterName = [adapter friendlyNetworkDescription];
-        }
-    }
+    NSString *adapterName = [self friendlyNameForAdAdapter:adapter];
     
     TOLLog(@"Final banner frame <%@>: %@", adapterName, NSStringFromCGRect(finalFrame));
     
@@ -476,7 +470,7 @@ case LARSAdControllerPresentationTypeTop:{
 }
 
 - (BOOL)startAdNetworkAdapterClass:(Class)class{
-    NSObject <LARSAdAdapter> *adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    NSObject <TOLAdAdapter> *adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
     
     if (!adapter) {
         TOLLog(@"Creating new instance of adapter class \"%@\"", NSStringFromClass(class));
@@ -576,8 +570,10 @@ case LARSAdControllerPresentationTypeTop:{
     if ([keyPath isEqualToString:(NSString *)kLARSAdObserverKeyPathAdLoaded]) {
         
         BOOL newAdLoadedValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+        NSString *friendlyNetworkDescription = [self friendlyNameForAdAdapter:object];
+        
         if (newAdLoadedValue) {
-            TOLLog(@"ad loaded for %@!", NSStringFromClass([object class]));
+            TOLLog(@"Ad loaded for %@!", friendlyNetworkDescription);
             if ([object adVisible] == NO) {
                 [self animateBannerForAdapterVisible:object withCompletion:nil];
             }
@@ -585,7 +581,7 @@ case LARSAdControllerPresentationTypeTop:{
             [object removeObserver:self forKeyPath:(NSString *)kLARSAdObserverKeyPathAdLoaded];
         }
         else{
-            TOLLog(@"ad not loaded for %@!", NSStringFromClass([object class]));
+            TOLLog(@"Ad not loaded for %@!", friendlyNetworkDescription);
             if ([object adVisible]) {
                 [self animateBannerForAdapterHidden:object withCompletion:nil];
             }
@@ -594,9 +590,21 @@ case LARSAdControllerPresentationTypeTop:{
 }
 
 - (void)haltAdNetworkAdapterClass:(Class)class{
-    id <LARSAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    
+    
+    id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    
+    if (adapter == nil) {
+        return;
+    }
+    
+    NSString *friendlyNetworkDescription = [self friendlyNameForAdAdapter:adapter];
+    
+    TOLLog(@"Attempting to halt %@ ad network", friendlyNetworkDescription);
     
     if (adapter.adVisible) {
+        TOLLog(@"Hiding %@ ad network", friendlyNetworkDescription);
+        
         [self animateBannerForAdapterHidden:adapter withCompletion:^{
             if ([adapter respondsToSelector:@selector(pauseAdRequests)]) {
                 [adapter pauseAdRequests];
@@ -606,11 +614,20 @@ case LARSAdControllerPresentationTypeTop:{
                 
                 if ([adapter respondsToSelector:@selector(canDestroyAdBanner)]) {
                     if ([adapter canDestroyAdBanner]) {
+                        TOLLog(@"Destroying %@ ad network instance", friendlyNetworkDescription);
                         [adapter.bannerView removeFromSuperview];
                         [self.adapterInstances removeObjectForKey:NSStringFromClass(class)];
                         
                         destroyed = YES;
                     }
+                }
+                else{
+                    //assume yes
+                    TOLLog(@"Destroying %@ ad network instance", friendlyNetworkDescription);
+                    [adapter.bannerView removeFromSuperview];
+                    [self.adapterInstances removeObjectForKey:NSStringFromClass(class)];
+                    
+                    destroyed = YES;
                 }
                 
                 if (destroyed == NO) {
@@ -618,6 +635,12 @@ case LARSAdControllerPresentationTypeTop:{
                 }
             }
         }];
+    }
+    else if(adapter != nil){
+        TOLLog(@"%@ ad network allocated, but not visible (no ad loaded)", friendlyNetworkDescription);
+    }
+    else if(adapter == nil){
+        TOLLog(@"%@ ad network not yet allocated, no need to destroy...", friendlyNetworkDescription);
     }
 }
 
@@ -647,7 +670,7 @@ case LARSAdControllerPresentationTypeTop:{
 - (void)handleOrientationNotification:(NSNotification *)orientationNotification{
     TOLLog(@"Handling orientation change");
     
-    double delayInSeconds = 0.f;
+    double delayInSeconds = 0.001f;
     
     //interface orientation wasn't always guaranteed without dispatch_after
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
@@ -680,7 +703,7 @@ case LARSAdControllerPresentationTypeTop:{
 - (void)destroyAllAdBanners{
     NSArray *instances = [self.adapterInstances allValues];
     
-    for (id <LARSAdAdapter> adapterInstance in instances) {
+    for (id <TOLAdAdapter> adapterInstance in instances) {
         if (adapterInstance.adVisible) {
             [self animateBannerForAdapterHidden:adapterInstance withCompletion:^{
                 [adapterInstance.bannerView removeFromSuperview];
@@ -689,6 +712,18 @@ case LARSAdControllerPresentationTypeTop:{
     }
     
     [self.adapterInstances removeAllObjects];
+}
+
+#pragma mark - Misc Helpers
+- (NSString *)friendlyNameForAdAdapter:(NSObject <TOLAdAdapter>*)adapter{
+    if ([adapter respondsToSelector:@selector(friendlyNetworkDescription)]) {
+        NSString *friendlyDescription = [adapter friendlyNetworkDescription];
+        if (friendlyDescription != nil) {
+            return friendlyDescription;
+        }
+    }
+    
+    return NSStringFromClass(adapter.class);
 }
 
 

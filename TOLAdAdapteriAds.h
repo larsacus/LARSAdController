@@ -1,5 +1,5 @@
 //
-//  LARSAdControlleriAdAdapter.h
+//  TOLAdAdapteriAds.h
 //  adcontrollerdemo
 //
 //  Created by Lars Anderson on 11/9/12.
@@ -14,10 +14,11 @@
 
 #import <Foundation/Foundation.h>
 #import <iAd/iAd.h>
-#import "LARSAdAdapter.h"
+
+#import "TOLAdAdapter.h"
 #import "LARSAdController.h"
 
-@interface LARSAdControlleriAdAdapter : NSObject <LARSAdAdapter, ADBannerViewDelegate>
+@interface TOLAdAdapteriAds : NSObject <TOLAdAdapter, ADBannerViewDelegate>
 
 @property (strong, nonatomic) ADBannerView *bannerView;
 @property (nonatomic) BOOL adVisible;

@@ -17,10 +17,9 @@
 
 #import "GADBannerViewDelegate.h"
 
-
 //Debug logging
 #ifdef LARSADCONTROLLER_DEBUG
-#define TOLLog(fmt, ...) NSLog((@"%@: " fmt), NSStringFromClass(self.class), ##__VA_ARGS__)
+#define TOLLog(fmt, ...) NSLog((@"%@ [line %u]: " fmt), NSStringFromClass(self.class), __LINE__, ##__VA_ARGS__)
 #else
 #define TOLLog(...) /* */
 #endif
@@ -41,7 +40,7 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 
 @class GADBannerView;
 @class ADBannerView;
-@protocol LARSAdAdapter;
+@protocol TOLAdAdapter;
 
 @interface LARSAdContainer : UIView
 
@@ -52,7 +51,7 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 @required
 - (void)adFailedForNetworkAdapterClass:(Class)class;
 - (void)adSucceededForNetworkAdapterClass:(Class)class;
-- (void)adInstanceNowAvailableForDeallocation:(id <LARSAdAdapter>)adInstance;
+- (void)adInstanceNowAvailableForDeallocation:(id <TOLAdAdapter>)adInstance;
 
 @end
 
@@ -68,23 +67,27 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 @property (nonatomic) LARSAdControllerPinLocation pinningLocation;
 
 
-/** The parent view that the shared instance is currently hosted in. */
+/** The parent view that the shared instance is currently hosted in.
+ */
 @property (nonatomic, readonly, weak) UIView *parentView;
 
-/** The parent view controller that the shared instance is currently hosted in. Typically, this is the same view controller that is managing parentView. */
+/** The parent view controller that the shared instance is currently hosted in. Typically, this is the same view controller that is managing parentView.
+ */
 @property (nonatomic, readonly, weak) UIViewController *parentViewController;
 
-/** A boolean flag that indicates if _any_ ads are currently being displayed. */
+/** A boolean flag that indicates if _any_ ads are currently being displayed.
+ */
 @property (nonatomic,
            getter = isAdVisible, readonly) BOOL adVisible;
 
-/** The container view that the ads are contained in. Exposed so you can do anything you would want with it. */
-@property (nonatomic, strong, readonly) LARSAdContainer *containerView;
+/** The container view that the ads are contained in. Exposed so you can do anything you would want with it.
+ */
+@property (nonatomic, readonly, strong) LARSAdContainer *containerView;
 
 /** Class method that gives access to the shared instance. */
 + (LARSAdController *)sharedManager;
 
-/** The primary method of adding your ads to a view and view controller. For some, this will be the only method that is ever called besides setting googleAdPublisherId. Call this method in every view controller's viewWillAppear method in order to add the shared ad instance to your view heirarchy.
+/** The simplified primary method of adding your ads to a view and view controller. For most, this will be the only method that is ever called besides registering your ad networks. Call this method in every view controller's viewWillAppear: method in order to add the shared ad instance to your view heirarchy.
  
  This method will call addAdContainerToView:withParentViewController: with viewController.view as the view parameter.
  
@@ -92,7 +95,7 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
  */
 - (void)addAdContainerToViewInViewController:(UIViewController *)viewController;
 
-/** The primary method of adding your ads to a view and view controller. For some, this will be the only method that is ever called besides setting googleAdPublisherId. Call this method in every view controller's viewWillAppear method in order to add the shared ad instance to your view heirarchy.
+/** The primary method of adding your ads to a view and view controller. For most, this will be the only method that is ever called besides registering your ad networks. Call this method in every view controller's viewWillAppear method in order to add the shared ad instance to your view heirarchy.
  
  @param view The view you would like the ad container added to.
  @param viewController The view controller that will be managing the ad.

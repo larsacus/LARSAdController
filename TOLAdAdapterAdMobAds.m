@@ -1,5 +1,5 @@
 //
-//  LARSAdControllerAdMobAdapter.m
+//  TOLAdAdapterAdMobAds.m
 //  adcontrollerdemo
 //
 //  Created by Lars Anderson on 11/8/12.
@@ -12,10 +12,10 @@
 //
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import "LARSAdControllerAdMobAdapter.h"
+#import "TOLAdAdapterAdMobAds.h"
 #import <AdSupport/AdSupport.h>
 
-@implementation LARSAdControllerAdMobAdapter
+@implementation TOLAdAdapterAdMobAds
 
 #pragma mark - Required Adapted Implementation
 - (GADBannerView *)bannerView{
@@ -36,10 +36,12 @@
 
 - (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
     if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
-        self.bannerView.adSize = kGADAdSizeSmartBannerLandscape;
+        if (GADAdSizeEqualToSize(self.bannerView.adSize, kGADAdSizeSmartBannerLandscape) == NO) {
+            self.bannerView.adSize = kGADAdSizeSmartBannerLandscape;
+        }
     }
-    else{
-        self.bannerView.adSize = kGADAdSizeSmartBannerPortrait;
+    else if (GADAdSizeEqualToSize(self.bannerView.adSize,kGADAdSizeSmartBannerPortrait) == NO){
+            self.bannerView.adSize = kGADAdSizeSmartBannerPortrait;
     }
     
     [self.bannerView setNeedsLayout];

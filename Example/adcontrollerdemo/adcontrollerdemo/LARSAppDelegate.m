@@ -9,8 +9,8 @@
 #import "LARSAppDelegate.h"
 #import "LARSExampleViewController.h"
 #import "LARSAdController.h"
-#import "LARSAdControllerAdMobAdapter.h"
-#import "LARSAdControlleriAdAdapter.h"
+#import "TOLAdAdapterAdMobAds.h"
+#import "TOLAdAdapteriAds.h"
 
 @implementation LARSAppDelegate
 
@@ -35,18 +35,23 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        // Override point for customization after application launch.
         
-        [[LARSAdController sharedManager] registerAdClass:[LARSAdControlleriAdAdapter class]];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notified:) name:nil object:nil];
+        
+        [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapteriAds class]];
         
         //This publisher id is a test account setup to test google ads since there is no good way to only send test ads without one - ad request will simply fail
-        [[LARSAdController sharedManager] registerAdClass:[LARSAdControllerAdMobAdapter class] withPublisherId:@"a14e55c99c24b43"];
+        [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapterAdMobAds class] withPublisherId:@"a14e55c99c24b43"];
         
         LARSExampleViewController *root = [[LARSExampleViewController alloc] init];
         [self.window setRootViewController:root];
         
         [self.window makeKeyAndVisible];
     });
+}
+
+- (void)notified:(NSNotification *)note{
+    NSLog(@"Note: %@", note);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

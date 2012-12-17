@@ -23,7 +23,7 @@
  */
 @property (strong, nonatomic) UIView *bannerView;
 
-/** A boolean flag that is set whenever an ad for this adapter is visible on screen.
+/** A boolean flag that is set whenever an ad for this adapter is visible on screen. The contents of this is managed by the ad controller.
  */
 @property (nonatomic) BOOL adVisible;
 

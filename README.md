@@ -6,12 +6,29 @@ LARSAdController 3.0 is a singleton ad management class that manages ad classes 
 ##Linking
 In order to use `LARSAdController`, you will need to clone this repo and add the `Source/` directory to your project.
 
+###Git Submodule
+You can do this the old way by simply cloning the repository and adding the files to your project as a git submodule as shown below:
+
 `git add submodule <third_party_folder> https://github.com/larsacus/LARSAdController.git --init --recursive`
 
 Where `<third_party_folder>` is the folder where all of your third party code lives.
 
 ###Cocoapods
 Alternatively, you can use [cocoapods](http://cocoapods.org/?q=LARSAdController) to include the source in your project, which is super easy.
+
+To use cocoapods with `LARSAdController`, simply create your new podfile and include the following dependency:
+
+`pod 'LARSAdController', '~> 3.0'`
+
+This will tell cocoapods to use LARSAdController of any version in v3.x. You will get the latest revision that cocoapods has in it's repository whose major revision is 3.x.
+
+####Subspecs
+If you are only interested in iAds _or_ GoogleAds, but not both, you can specify that you would only like to have one or the other using the following:
+
+`pod 'LARSAdController/iAds', '~> 3.0'`  
+`pod 'LARSAdController/GoogleAds', '~>3.0'`
+
+The appropriate files and frameworks will be included in your project depending on which component you would like.
 
 ## Usage
 Back in the days of yore, `LARSAdController` 2.0 forced you opt-in to rotation-handling.  This is no longer necessary as the ad management class will auto-detect your current orientation given that the current view controller that the ad container lives in is correctly setup.

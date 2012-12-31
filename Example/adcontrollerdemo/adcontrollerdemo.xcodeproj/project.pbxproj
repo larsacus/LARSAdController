@@ -12,6 +12,7 @@
 		4641EBB8167EA96B00A4E590 /* TOLAdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4641EBB4167EA96B00A4E590 /* TOLAdViewController.m */; };
 		4642C0A7167CFB040039EE16 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4642C0A6167CFB040039EE16 /* Default-568h@2x.png */; };
 		465B42971623820900CBC997 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 465B42961623820900CBC997 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		467C4BE31692020900FC0DD5 /* TOLAdAdapterHouseAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 467C4BE21692020900FC0DD5 /* TOLAdAdapterHouseAds.m */; };
 		4691CC6F165202A700559F58 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4691CC6E165202A700559F58 /* StoreKit.framework */; };
 		46B9178F14425C5F007EF823 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9178E14425C5F007EF823 /* UIKit.framework */; };
 		46B9179114425C5F007EF823 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9179014425C5F007EF823 /* Foundation.framework */; };
@@ -41,6 +42,8 @@
 		4641EBB4167EA96B00A4E590 /* TOLAdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdViewController.m; sourceTree = "<group>"; };
 		4642C0A6167CFB040039EE16 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		465B42961623820900CBC997 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		467C4BE11692020900FC0DD5 /* TOLAdAdapterHouseAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapterHouseAds.h; sourceTree = "<group>"; };
+		467C4BE21692020900FC0DD5 /* TOLAdAdapterHouseAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapterHouseAds.m; sourceTree = "<group>"; };
 		4691CC6E165202A700559F58 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		46B9178A14425C5F007EF823 /* adcontrollerdemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adcontrollerdemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46B9178E14425C5F007EF823 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -117,6 +120,8 @@
 		4641EBB9167EAA0E00A4E590 /* Ad Network Adapters */ = {
 			isa = PBXGroup;
 			children = (
+				467C4BE11692020900FC0DD5 /* TOLAdAdapterHouseAds.h */,
+				467C4BE21692020900FC0DD5 /* TOLAdAdapterHouseAds.m */,
 				4641EBAF167EA96B00A4E590 /* TOLAdAdapterGoogleAds.h */,
 				46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */,
 				4641EBB1167EA96B00A4E590 /* TOLAdAdapteriAds.h */,
@@ -308,6 +313,7 @@
 				4641EBB7167EA96B00A4E590 /* TOLAdAdapteriAds.m in Sources */,
 				4641EBB8167EA96B00A4E590 /* TOLAdViewController.m in Sources */,
 				46F8742016915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m in Sources */,
+				467C4BE31692020900FC0DD5 /* TOLAdAdapterHouseAds.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -4,7 +4,7 @@ _*Note: This branch is currently in-development. Please feel free to integrate t
 LARSAdController 3.0 is a singleton ad management class that manages ad classes that conform to the `LARSAdAdapter` protocol. Ads are managed in a way that most closely adheres to best practices for ad networks using a single instance for each ad network in order to provide the best publishing platform for advertisers to maximize ad inventory based on your particular needs.  Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.
 
 ##Linking
-In order to use `LARSAdController`, you will need to clone this repo and add the `Source/` directory to your project.
+In order to use `LARSAdController`, you will need to clone this repo and add the `Source/` directory to your project, as well as add the required frameworks.
 
 ###Git Submodule
 You can do this the old way by simply cloning the repository and adding the files to your project as a git submodule as shown below:
@@ -12,6 +12,31 @@ You can do this the old way by simply cloning the repository and adding the file
 `git add submodule <third_party_folder> https://github.com/larsacus/LARSAdController.git --init --recursive`
 
 Where `<third_party_folder>` is the folder where all of your third party code lives.
+
+### Framework Requirements
+In order to compile, you will need to include the following Apple frameworks:
+
+####iAds
+
+  1. `iAd.framework`
+  2. `AdSupport.framework` (weak-link for iOS 6)
+  
+####Google Ads
+
+  1. `StoreKit.framework`
+  2. `AudioToolbox.framework`
+  3. `MessageUI.framework`
+  4. `SystemConfiguration.framework`
+  5. `CoreGraphics.framework`
+  6. `AdSupport.framework` (weak-link for iOS 6)
+
+You will also need the `Google AdMob SDK` available from [Google](https://developers.google.com/mobile-ads-sdk/download#downloadios).
+
+That's it.  Technically, this can be added to any `UIView` that is large enough and managed by a view controller.
+
+###Other Requirements
+1. iOS 5.0+
+2. Xcode 4.3+ - LLVM 4.0 support. Objective-C container literals are used.
 
 ###Cocoapods
 Alternatively, you can use [cocoapods](http://cocoapods.org/?q=LARSAdController) to include the source in your project, which is super easy.
@@ -121,31 +146,6 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 ###Planned Ad Network Adapters (Not Yet Implemented)
 1. House Ads - Display your own image with an action for a banner
 
-## Framework Requirements
-In order to compile, you will need to include the following Apple frameworks:
-
-###iAds
-
-  1. `iAd.framework`
-  2. `AdSupport.framework` (weak-link for iOS 6)
-  
-###Google Ads
-
-  1. `StoreKit.framework`
-  2. `AudioToolbox.framework`
-  3. `MessageUI.framework`
-  4. `SystemConfiguration.framework`
-  5. `CoreGraphics.framework`
-  6. `AdSupport.framework` (weak-link for iOS 6)
-
-You will also need the `Google AdMob SDK` available from [Google](https://developers.google.com/mobile-ads-sdk/download#downloadios).
-
-That's it.  Technically, this can be added to any `UIView` that is large enough and managed by a view controller.
-
-##Other Requirements
-1. iOS 5.0+
-2. Xcode 4.3+ - LLVM 4.0 support. Objective-C container literals are used.
-
 ##Creating a New Ad Network Adapter
 In order to create a new ad adapter for an ad vendor not already created, simply create a new `NSObject` subclass that conforms to the `LARSAdAdapter` protocol. There are a few required methods and properties that must be present in order for the adapter to function, as well as some optional ones that give some additional control/functionality of an ad banner. More detailed documentation can be found in the header file for `LARSAdAdapter.h`.
 
@@ -164,7 +164,7 @@ LARSAdController 3.0's headers are fully documented using appledoc. In order to 
 
 In the above example, you will need to create the `Docs` directory in your home directory before running this. You can just as easily change that path to any path you find convenient. Appledoc will install the docset in Xcode on completion.
 
----
+_Note: If you are using cocoapods, the documentation will be installed automatically._
 
 ##License (MIT)
 I would love attribution and a link to this page on GitHub [here](https://github.com/larsacus/LARSAdController), but it is not required.
@@ -204,3 +204,8 @@ The above copyright notice and this permission notice shall be included in all c
 ###1.x
 - Only pods are supported
 - Only portrait orientation is supported
+
+##Apps Using LARSAdController
+If your app is using LARSAdController, and you'd like to be included in this list, please let me know either on twitter or by submitting a pull request with your app added.
+
+- Droid Light

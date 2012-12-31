@@ -25,12 +25,13 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
 @implementation TOLAdAdapteriAds
 
 - (void)dealloc{
-    self.bannerView.delegate = nil;
-    self.bannerView = nil;
+    _bannerView.delegate = nil;
+    _bannerView = nil;
     
     self.adManager = nil;
     
-    [self.bannerView removeObserver:self forKeyPath:kTOLAdAdapterBannerLoadedObserverKeyPath];
+    [self.bannerView removeObserver:self
+                         forKeyPath:kTOLAdAdapterBannerLoadedObserverKeyPath];
     
     TOLLog(@"Dealloc");
 }
@@ -127,7 +128,7 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
 }
 
 - (BOOL)canDestroyAdBanner{
-    return !self.bannerView.isBannerViewActionInProgress;
+    return (self.bannerView.isBannerViewActionInProgress == NO);
 }
 
 - (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{

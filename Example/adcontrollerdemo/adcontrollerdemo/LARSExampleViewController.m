@@ -23,9 +23,7 @@
     self.view = view;
 }
 
-/** If this view controller did not inherit from TOLAdViewController, then you would
-      need to uncomment the below method and implement adding the ad container to
-      the view yourself. You will also need to uncomment line 10 to import the class.
+/* If this view controller did not inherit from TOLAdViewController, then you would need to uncomment the below method and implement adding the ad container to the view yourself. You will also need to uncomment line 10 to import the class. 
  */
 /*
 - (void)viewWillAppear:(BOOL)animated{

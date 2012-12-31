@@ -35,7 +35,7 @@ const NSString * const kLARSAdObserverKeyPathAdLoaded = @"adLoaded";
 
 @end
 
-@interface LARSAdController()
+@interface LARSAdController() <LARSAdControllerDelegate>
 
 @property (nonatomic) BOOL lastOrientationWasPortrait;
 @property (nonatomic) UIInterfaceOrientation currentOrientation;
@@ -47,8 +47,7 @@ const NSString * const kLARSAdObserverKeyPathAdLoaded = @"adLoaded";
 @property (nonatomic, strong) NSMutableSet *instancesToCleanUp;
 @property (nonatomic, readwrite) BOOL adVisible;
 
-/*
- Contains the ads so they will clip since the outer container does not clip subviews to retain shadows
+/* Contains the ads so they will clip since the outer container does not clip subviews to retain shadows
  */
 @property (strong, nonatomic) LARSAdContainer *clippingContainer;
 
@@ -60,6 +59,14 @@ const NSString * const kLARSAdObserverKeyPathAdLoaded = @"adLoaded";
 - (void)registerForDeviceRotationNotifications;
 - (void)unRegisterFromDeviceRotationNotifications;
 - (void)handleOrientationNotification:(NSNotification *)orientationNotification;
+@end
+
+@interface LARSAdController ()
+
+@property (strong, nonatomic, readwrite) NSMutableArray *registeredClasses;
+@property (strong, nonatomic, readwrite) NSMutableDictionary *adapterClassPublisherIds;
+@property (strong, nonatomic, readwrite) NSMutableDictionary *adapterInstances;
+
 @end
 
 @implementation LARSAdController
@@ -269,6 +276,12 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 
 #pragma mark - Ad Network Management
 - (void)registerAdClass:(Class)class withPublisherId:(NSString *)publisherId{
+    
+    if ([self.registeredClasses containsObject:class]) {
+        //If you need this functionality, open an issue on GitHub
+        TOLWLog(@"Registered adapter classes already contains \"%@\" class. Registering the same adapter with multiple publisher IDs is currently unsupported.", NSStringFromClass(class));
+    }
+    
     [self registerAdClass:class];
     [self.adapterClassPublisherIds setObject:publisherId forKey:NSStringFromClass(class)];
 }
@@ -327,10 +340,12 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     
     if ([self.clippingContainer.subviews containsObject:adapter.bannerView] == NO) {
         //configure initial state for banner view off-screen
-        adapter.bannerView.frame = [self offScreenBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+        adapter.bannerView.frame = [self offScreenBannerFrameForAdapter:adapter
+                                              presentationAnimationType:self.presentationType];
     }
     
-    CGRect finalFrame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+    CGRect finalFrame = [self onScreenBannerFrameForAdapter:adapter
+                                        withPinningLocation:self.pinningLocation];
     
     adapter.adVisible = YES;
     
@@ -352,7 +367,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 
 - (void)animateBannerForAdapterHidden:(id <TOLAdAdapter>)adapter withCompletion:(void(^)(void))completion{
     
-    CGRect finalFrame = [self offScreenBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+    CGRect finalFrame = [self offScreenBannerFrameForAdapter:adapter
+                                   presentationAnimationType:self.presentationType];
     
     adapter.adVisible = NO;
     
@@ -398,20 +414,23 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                                             CGRectGetHeight(self.clippingContainer.frame));
             break;
         case LARSAdControllerPresentationTypeLeft:{
-            CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+            CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter
+                                                      withPinningLocation:self.pinningLocation];
             beginFrame.origin = CGPointMake(-bannerViewSize.width,
                                             finalBannerFrame.origin.y);
         }
             break;
         case LARSAdControllerPresentationTypeRight:{
-            CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+            CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter
+                                                      withPinningLocation:self.pinningLocation];
             
             beginFrame.origin = CGPointMake(CGRectGetWidth(self.clippingContainer.frame),
                                             finalBannerFrame.origin.y);
         }
             break;
 case LARSAdControllerPresentationTypeTop:{
-    CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+    CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter
+                                              withPinningLocation:self.pinningLocation];
 
             beginFrame.origin = CGPointMake(finalBannerFrame.origin.x,
                                             -bannerViewSize.height);
@@ -503,7 +522,6 @@ case LARSAdControllerPresentationTypeTop:{
         Method requiresParentViewControllerClassMethod = nil;
         if ( (requiresParentViewControllerClassMethod = class_getClassMethod(class, @selector(requiresParentViewController))) ) {
             if ([[class class] performSelector:method_getName(requiresParentViewControllerClassMethod)]) {
-                TOLLog(@"This class requires a parent view controller!");
                 [adapter setParentViewController:self.parentViewController];
             }
         }

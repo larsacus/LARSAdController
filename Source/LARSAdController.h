@@ -13,9 +13,6 @@
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import <iAd/iAd.h>
-
-#import "GADBannerViewDelegate.h"
 
 //Debug logging
 #ifdef LARSADCONTROLLER_DEBUG
@@ -24,7 +21,7 @@
 #define TOLLog(...) /* */
 #endif
 
-#define TOLWLog(fmt, ...) NSLog((@"%@ WARNING: " fmt), NSStringFromClass(self.class), ##__VA_ARGS__)
+#define TOLWLog(fmt, ...) NSLog((@"%@ WARNING [line %u]: " fmt), NSStringFromClass(self.class), __LINE__, ##__VA_ARGS__)
 
 typedef NS_ENUM(NSInteger, LARSAdControllerPresentationType){
     LARSAdControllerPresentationTypeBottom = 0,
@@ -38,8 +35,6 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
     LARSAdControllerPinLocationTop
 };
 
-@class GADBannerView;
-@class ADBannerView;
 @protocol TOLAdAdapter;
 
 @interface LARSAdContainer : UIView
@@ -55,15 +50,43 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 
 @end
 
-@interface LARSAdController : NSObject <GADBannerViewDelegate, ADBannerViewDelegate, LARSAdControllerDelegate>
+@interface LARSAdController : NSObject
 
+/** A secondary method to register an ad adapter class for network requests that accepts or requires a publisher ID.
+ 
+ @discussion Ad network priority is assigned based on the order in which each ad network was added using this method or registerAdClass:.
+ 
+ @param class An ad network adapter class that will be used to present an ad banner for a particular ad network
+ @param publisherId A string that identifies you as a publisher to your ad network provider to server you ad inventory
+ */
 - (void)registerAdClass:(Class)class withPublisherId:(NSString *)publisherId;
+
+/** The primary method to register an ad adapter class for network requests.
+ 
+ @discussion Ad network priority is assigned based on the order in which each ad network was added using this method or registerAdClass:withPublisherId:.
+ 
+ @param class An ad network adapter class that will be used to present an ad banner for a particular ad network
+ */
 - (void)registerAdClass:(Class)class;
 
-@property (strong, nonatomic) NSMutableArray *registeredClasses;
-@property (strong, nonatomic) NSMutableDictionary *adapterClassPublisherIds;
-@property (strong, nonatomic) NSMutableDictionary *adapterInstances;
+/** The registered ad adapters that will be executed in order to request ads.
+ */
+@property (strong, nonatomic, readonly) NSMutableArray *registeredClasses;
+
+/** The publisher IDs for each adapter class that requires a publisher id.
+ */
+@property (strong, nonatomic, readonly) NSMutableDictionary *adapterClassPublisherIds;
+
+/** The instances for each ad adapter that are currently instantiated. Not all registered ad adapters will be instantiated at any given time. Only the active ad adapters currently waiting on ad network requests will be included in this dictionary.
+ */
+@property (strong, nonatomic, readonly) NSMutableDictionary *adapterInstances;
+
+/** The presentation type for the ad banner to use when it presents and hides itself. You can think of this as the location that ad banner will be at before it animates on screen.
+ */
 @property (nonatomic) LARSAdControllerPresentationType presentationType;
+
+/** The location that the ad banner container will pin itself to.
+ */
 @property (nonatomic) LARSAdControllerPinLocation pinningLocation;
 
 
@@ -84,12 +107,13 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
  */
 @property (nonatomic, readonly, strong) LARSAdContainer *containerView;
 
-/** Class method that gives access to the shared instance. */
+/** Class method that gives access to the shared instance.
+ */
 + (LARSAdController *)sharedManager;
 
 /** The simplified primary method of adding your ads to a view and view controller. For most, this will be the only method that is ever called besides registering your ad networks. Call this method in every view controller's viewWillAppear: method in order to add the shared ad instance to your view heirarchy.
  
- This method will call addAdContainerToView:withParentViewController: with viewController.view as the view parameter.
+ @discussion This method will call addAdContainerToView:withParentViewController: with viewController.view as the view parameter.
  
  @param viewController The view controller that will be managing the ad.
  */
@@ -104,7 +128,7 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 
 /** Destroys all ad banners that are currently requesting ads from their ad network.
  
- Call this when a user has purchased an in-app purchase to remove ads.  This will go through each ad network class you have registered, remove it from the view heirarchy, then clean it up appropriately.
+ @discussion Call this when a user has purchased an in-app purchase to remove ads.  This will go through each ad network class you have registered, remove it from the view heirarchy, then clean it up appropriately. As long as you don't call addAdContainerToView:withParentViewController: or addAdContainerToViewInViewController: again, no ads will be served.
  
  @warning Some ads may not clean up if there is a full-screen ad being interacted with.
  */

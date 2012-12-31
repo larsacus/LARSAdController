@@ -19,7 +19,7 @@
 #import "GADBannerViewDelegate.h"
 #import "GADBannerView.h"
 
-@interface TOLAdAdapterAdMobAds : NSObject <TOLAdAdapter, GADBannerViewDelegate>
+@interface TOLAdAdapterGoogleAds : NSObject <TOLAdAdapter, GADBannerViewDelegate>
 
 @property (weak, nonatomic) id<LARSAdControllerDelegate> adManager;
 @property (nonatomic) BOOL adVisible;

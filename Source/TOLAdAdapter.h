@@ -48,13 +48,13 @@
 
 /** Starts ad requests. This method is optional because not all ad networks have a the concept of "start" or "pause". If they are allocated and alive, they are service ads indefinitely until deallocated.
  
- If you implement startAdRequests, then you must also implement pauseAdRequests and vice versa. There's no point in implementing either if you don't implement both.
+ @discussion If you implement startAdRequests, then you must also implement pauseAdRequests and vice versa. There's no point in implementing either if you don't implement both.
  */
 - (void)startAdRequests;
 
 /** Pauses ad requests so that another ad network can begin displaying ads. This method is optional because not all ad networks have a concept of "pause". Ad networks that do not have this concept are simply deallocated and cleaned up when they are needed to be "paused".
  
- If you implement pauseAdRequests, then you must also implement startAdRequests and vice versa. There's no point in implementing either if you don't implement both.
+ @discussion If you implement pauseAdRequests, then you must also implement startAdRequests and vice versa. There's no point in implementing either if you don't implement both.
  */
 - (void)pauseAdRequests;
 

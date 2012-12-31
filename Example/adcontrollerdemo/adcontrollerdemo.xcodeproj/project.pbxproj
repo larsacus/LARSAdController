@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4641EBB5167EA96B00A4E590 /* LARSAdController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4641EBAD167EA96B00A4E590 /* LARSAdController.m */; };
-		4641EBB6167EA96B00A4E590 /* TOLAdAdapterAdMobAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4641EBB0167EA96B00A4E590 /* TOLAdAdapterAdMobAds.m */; };
 		4641EBB7167EA96B00A4E590 /* TOLAdAdapteriAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4641EBB2167EA96B00A4E590 /* TOLAdAdapteriAds.m */; };
 		4641EBB8167EA96B00A4E590 /* TOLAdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4641EBB4167EA96B00A4E590 /* TOLAdViewController.m */; };
 		4641EBBC167EAA2E00A4E590 /* TOLAdAdapterHouseAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4641EBBB167EAA2E00A4E590 /* TOLAdAdapterHouseAds.m */; };
@@ -29,14 +28,14 @@
 		46F29287164CBDE500AB7775 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 46F29273164CBDE500AB7775 /* .gitignore */; };
 		46F29288164CBDE500AB7775 /* GoogleAds.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 46F2927D164CBDE500AB7775 /* GoogleAds.podspec */; };
 		46F29289164CBDE500AB7775 /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46F2927E164CBDE500AB7775 /* libGoogleAdMobAds.a */; };
+		46F8742016915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4641EBAC167EA96B00A4E590 /* LARSAdController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARSAdController.h; sourceTree = "<group>"; };
 		4641EBAD167EA96B00A4E590 /* LARSAdController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARSAdController.m; sourceTree = "<group>"; };
 		4641EBAE167EA96B00A4E590 /* TOLAdAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapter.h; sourceTree = "<group>"; };
-		4641EBAF167EA96B00A4E590 /* TOLAdAdapterAdMobAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapterAdMobAds.h; sourceTree = "<group>"; };
-		4641EBB0167EA96B00A4E590 /* TOLAdAdapterAdMobAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapterAdMobAds.m; sourceTree = "<group>"; };
+		4641EBAF167EA96B00A4E590 /* TOLAdAdapterGoogleAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapterGoogleAds.h; sourceTree = "<group>"; };
 		4641EBB1167EA96B00A4E590 /* TOLAdAdapteriAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapteriAds.h; sourceTree = "<group>"; };
 		4641EBB2167EA96B00A4E590 /* TOLAdAdapteriAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapteriAds.m; sourceTree = "<group>"; };
 		4641EBB3167EA96B00A4E590 /* TOLAdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdViewController.h; sourceTree = "<group>"; };
@@ -80,6 +79,7 @@
 		46F29283164CBDE500AB7775 /* GADCustomEventInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADCustomEventInterstitial.h; sourceTree = "<group>"; };
 		46F29284164CBDE500AB7775 /* GADCustomEventInterstitialDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADCustomEventInterstitialDelegate.h; sourceTree = "<group>"; };
 		46F29285164CBDE500AB7775 /* GADCustomEventRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADCustomEventRequest.h; sourceTree = "<group>"; };
+		46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapterGoogleAds.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,8 +120,8 @@
 		4641EBB9167EAA0E00A4E590 /* Ad Network Adapters */ = {
 			isa = PBXGroup;
 			children = (
-				4641EBAF167EA96B00A4E590 /* TOLAdAdapterAdMobAds.h */,
-				4641EBB0167EA96B00A4E590 /* TOLAdAdapterAdMobAds.m */,
+				4641EBAF167EA96B00A4E590 /* TOLAdAdapterGoogleAds.h */,
+				46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */,
 				4641EBB1167EA96B00A4E590 /* TOLAdAdapteriAds.h */,
 				4641EBB2167EA96B00A4E590 /* TOLAdAdapteriAds.m */,
 				4641EBBA167EAA2E00A4E590 /* TOLAdAdapterHouseAds.h */,
@@ -310,10 +310,10 @@
 				46B9179F14425C60007EF823 /* LARSAppDelegate.m in Sources */,
 				46C1EAFF154C868500EBFEF1 /* LARSExampleViewController.m in Sources */,
 				4641EBB5167EA96B00A4E590 /* LARSAdController.m in Sources */,
-				4641EBB6167EA96B00A4E590 /* TOLAdAdapterAdMobAds.m in Sources */,
 				4641EBB7167EA96B00A4E590 /* TOLAdAdapteriAds.m in Sources */,
 				4641EBB8167EA96B00A4E590 /* TOLAdViewController.m in Sources */,
 				4641EBBC167EAA2E00A4E590 /* TOLAdAdapterHouseAds.m in Sources */,
+				46F8742016915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

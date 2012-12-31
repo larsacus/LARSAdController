@@ -1,10 +1,20 @@
-_*Note: This branch is currently in-development. Please feel free to integrate this code into your project and file any issues you see or anything you feel you are experiencing that you don't expect. I hope to merge this branch back into master sometime at the end of December. Thanks!*_
+_*Note: This branch is currently in-development. Please feel free to integrate this code into your project and file any issues you see or anything you feel you are experiencing that you don't expect. I hope to merge this branch back into master sometime soon. Thanks!*_
 
 ## Description
-`LARSAdController` 3.0 is a singleton ad management class that manages ad classes that conform to the `LARSAdAdapter` protocol. Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.
+LARSAdController 3.0 is a singleton ad management class that manages ad classes that conform to the `LARSAdAdapter` protocol. Ads are managed in a way that most closely adheres to best practices for ad networks using a single instance for each ad network in order to provide the best publishing platform for advertisers to maximize ad inventory based on your particular needs.  Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.
+
+##Linking
+In order to use `LARSAdController`, you will need to clone this repo and add the `Source/` directory to your project.
+
+`git add submodule <third_party_folder> https://github.com/larsacus/LARSAdController.git --init --recursive`
+
+Where `<third_party_folder>` is the folder where all of your third party code lives.
+
+###Cocoapods
+Alternatively, you can use [cocoapods](http://cocoapods.org/?q=LARSAdController) to include the source in your project, which is super easy.
 
 ## Usage
-Back in the days of yore, `LARSAdController` 2.0 forced you opt-in to rotation-handling.  This is no longer necessary as the ad management class will auto-detect your current orientation given that your current view controller that the ad container lives in is correctly setup.
+Back in the days of yore, `LARSAdController` 2.0 forced you opt-in to rotation-handling.  This is no longer necessary as the ad management class will auto-detect your current orientation given that the current view controller that the ad container lives in is correctly setup.
 
 The first step is to register your ad classes that the ad manager will use. The ad networks take priority in the order they were added in, so the first network registered is the highest priority, the second is below that, and so on:
 
@@ -12,8 +22,8 @@ In app delegate or somewhere else convenient before first banner is needed to di
 
 ``` objective-c
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
-    [[LARSAdController sharedManager] registerAdClass:[LARSAdControlleriAdAdapter class]];
-    [[LARSAdController sharedManager] registerAdClass:[LARSAdControllerAdMobAdapter class] withPublisherId:publisherId];
+    [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapteriAds class]];
+    [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapterGoogleAds class] withPublisherId:publisherId];
 }
 ```
 
@@ -23,7 +33,7 @@ Then the only line of code you need in your view controller is to add the contai
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [[LARSAdController sharedManager] addAdContainerToView:[self view] withViewController:self];
+    [[LARSAdController sharedManager] addAdContainerToView:self.view withViewController:self];
 }
 ```
 
@@ -37,10 +47,10 @@ or the simpler version:
 }
 ```
 
-Once the current highest-priority ad network fails to obtain an ad, it will continue to wait for an ad while the next-highest priority ad network is allocated and sends a request.  Once the ad network in priority above this network obtains an ad again, it will hide the lower-priority ad banner and display the higher-priority network banner.
+Once the current highest-priority ad network fails to obtain an ad, it will continue to wait for an ad while the next-highest priority ad network is allocated and sends a request.  Once the ad network in priority above this network obtains an ad again, it will hide the lower-priority ad banner, clean it up and display the higher-priority network banner.
 
 ###Ultra-Lazy Implementation
-To make your life even _easier_, all you need to do is have each of your view controllers that you would like to have an ad pinned to the top or bottom of your view controller's view is to have your view controller subclasses inherit from `TOLAdViewController`. This will automatigically add an ad view container to your view controller's view when it is supposed to. The only downside is less flexibility on ad placement in your view hierarchy.
+To make your life even _easier_, all you need to do is have each of your view controllers that you would like to have an ad pinned to the top or bottom of your view controller's view is to have your view controller subclasses inherit from `TOLAdViewController`. This will automagically add an ad view container to your view controller's view when it is supposed to. The only downside is less flexibility on ad placement in your view hierarchy.
 
 ``` objective-c
 @interface MYBestViewController : TOLAdViewController
@@ -88,8 +98,8 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 ```
 
 ##Currently Available Ad Network Adapters
-1. iAd - `LARSAdControlleriAdAdapter`
-2. Google Ads - `LARSAdControllerAdMobAdapter`
+1. iAd - `TOLAdAdapteriAds`
+2. Google Ads - `TOLAdAdapterGoogleAds`
 
 ###Planned Ad Network Adapters (Not Yet Implemented)
 1. House Ads - Display your own image with an action for a banner
@@ -100,6 +110,7 @@ In order to compile, you will need to include the following Apple frameworks:
 ###iAds
 
   1. `iAd.framework`
+  2. `AdSupport.framework` (weak-link for iOS 6)
   
 ###Google Ads
 
@@ -118,10 +129,6 @@ That's it.  Technically, this can be added to any `UIView` that is large enough 
 1. iOS 5.0+
 2. Xcode 4.3+ - LLVM 4.0 support. Objective-C container literals are used.
 
-#UPDATE THIS
-## Detailed Integration Instructions (UPDATE THIS)
-- Click here a more detailed [iAd integration tutorial](http://theonlylars.com/blog/2012/04/27/integrating-google-ads-with-iad/) blog post using LARSAdController.
-
 ##Creating a New Ad Network Adapter
 In order to create a new ad adapter for an ad vendor not already created, simply create a new `NSObject` subclass that conforms to the `LARSAdAdapter` protocol. There are a few required methods and properties that must be present in order for the adapter to function, as well as some optional ones that give some additional control/functionality of an ad banner. More detailed documentation can be found in the header file for `LARSAdAdapter.h`.
 
@@ -132,6 +139,15 @@ A good start would be to simply conform to the `LARSAdAdapter` protocol, compile
   //fill out the meaty part  
 @end
 ```
+
+##Installing Documentation
+LARSAdController 3.0's headers are fully documented using appledoc. In order to install the docset in Xcode, you will need to install appledoc, then run a command similar to the below in the root directory of the `LARSAdController` repository in order to install the docset:
+
+`appledoc -p "LARSAdController" -c "theonlylars" -d -n --company-id "com.theonlylars" --no-repeat-first-par -o ~/Docs Source`
+
+In the above example, you will need to create the `Docs` directory in your home directory before running this. You can just as easily change that path to any path you find convenient. Appledoc will install the docset in Xcode on completion.
+
+---
 
 ##License (MIT)
 I would love attribution and a link to this page on GitHub [here](https://github.com/larsacus/LARSAdController), but it is not required.
@@ -144,18 +160,16 @@ The above copyright notice and this permission notice shall be included in all c
 
 *THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*
 
-##Changelog
+##Change Log
 ###3.0
------
 - Refactored to add support for modular networks
 - Added modular network protocol for network adapters to conform to
 - Added modular ad network handling
 - Removed option to opt-in to orientation-handling. Now automatically queries view controller's orientation.
 - Now ARC-ready!
-- Added Google Ad test-ad support - will now serve test ads when running in debug mode (#def DEBUG=1)
+- Added Google Ad test-ad support - will now serve test ads when running in debug mode (`#ifdef DEBUG`)
 
 ###2.1
------
 - Added orientation auto-listening without use of view controller delegate callbacks
 - Added ability for ads to try and fit themselves into any view they are placed in.  Sizing is now done based on superview size vs just the orientation
 - Fixed Issue 3 - "Container frame is incorrect when returning from clicked ad"
@@ -164,15 +178,12 @@ The above copyright notice and this permission notice shall be included in all c
 - Updated example project
 
 ###2.0.1
------
-- Added demo project to make up for my instructions' shortfall
+- Added demo project to make up for my lackluster instructions
 
 ###2.0
------
 - Now with more rotation-ness support!
 - Pad support as well as pod support for all of your support needs
 
 ###1.x
----
 - Only pods are supported
 - Only portrait orientation is supported

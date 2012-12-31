@@ -12,10 +12,10 @@
 //
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import "TOLAdAdapterAdMobAds.h"
+#import "TOLAdAdapterGoogleAds.h"
 #import <AdSupport/AdSupport.h>
 
-@implementation TOLAdAdapterAdMobAds
+@implementation TOLAdAdapterGoogleAds
 
 #pragma mark - Required Adapted Implementation
 - (GADBannerView *)bannerView{
@@ -28,7 +28,7 @@
         _bannerView.delegate = self;
     }
     else if(!_publisherId){
-        TOLWLog(@"Google Ad Publisher ID not set. No ads will be served until you set one using setPublisherId:forClass: on %@!", @"LARSAdController");
+        TOLWLog(@"Google Ad Publisher ID not set. No ads will be served until you set one using %@ on %@!", NSStringFromSelector(@selector(registerAdClass:withPublisherId:)),NSStringFromClass([LARSAdController class]));
     }
     
     return _bannerView;
@@ -48,8 +48,8 @@
 }
 
 - (void)dealloc{
-    self.bannerView.delegate = nil;
-    self.bannerView = nil;
+    _bannerView.delegate = nil;
+    _bannerView = nil;
     
     self.adManager = nil;
     self.publisherId = nil;

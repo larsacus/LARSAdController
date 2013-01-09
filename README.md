@@ -1,27 +1,64 @@
-_*Note: This branch is currently in-development. Please feel free to integrate this code into your project and file any issues you see or anything you feel you are experiencing that you don't expect. I hope to merge this branch back into master sometime soon. Thanks!*_
-
 ## Description
 LARSAdController 3.0 is a singleton ad management class that manages ad classes that conform to the `LARSAdAdapter` protocol. Ads are managed in a way that most closely adheres to best practices for ad networks using a single instance for each ad network in order to provide the best publishing platform for advertisers to maximize ad inventory based on your particular needs.  Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.
 
 ##Linking
-In order to use `LARSAdController`, you will need to clone this repo and add the `Source/` directory to your project, as well as add the required frameworks.
+###Cocoapods
+The absolute easiest way to integrate the code into your project is to use [cocoapods](http://cocoapods.org/?q=LARSAdController) to include the source in your project.
+
+To use cocoapods with `LARSAdController`, simply create your new `Podfile` and include the following dependency:
+
+``` ruby
+platform :ios, '5.0'
+
+pod 'LARSAdController', '~> 3.0'
+```
+
+This will tell cocoapods to include all LARSAdController components of any version in v3.x. You will get the latest revision that cocoapods has in it's repository whose major revision is 3.x.
+
+####Subspecs
+If you are only interested in iAds _or_ GoogleAds, but not both, you can specify that you would only like to have one or the other using the following in your `Podfile`:
+
+``` ruby
+platform :ios, '5.0'
+
+pod 'LARSAdController/iAds', '~> 3.0'
+pod 'LARSAdController/GoogleAds', '~> 3.0'
+```
+
+If you only need the core files without any ad adapters, then your `Podfile` will look something like this:
+
+``` ruby
+platform :ios, '5.0'
+
+pod 'LARSAdController/Core', '~> 3.0'
+```
+
+The appropriate files and frameworks will be included in your project depending on which component you would like.
+
+Congratulations! You can now ignore the next section on doing all of this by hand.
+
+###Ye Olde Method
+
+If you're not using cocoapods, in order to use `LARSAdController`, you will need to clone this repo and add the `Source/` directory to your project, as well as add the required frameworks - all by hand.
+
+...like a caveman
 
 ###Git Submodule
 You can do this the old way by simply cloning the repository and adding the files to your project as a git submodule as shown below:
 
-`git add submodule <third_party_folder> https://github.com/larsacus/LARSAdController.git --init --recursive`
+`git add submodule <third_party_folder> https://github.com/larsacus/LARSAdController.git --recursive`
 
-Where `<third_party_folder>` is the folder where all of your third party code lives.
+Where `<third_party_folder>` is the folder where all of your third party code lives in your project file structure.
 
-### Framework Requirements
+## Framework Requirements
 In order to compile, you will need to include the following Apple frameworks:
 
-####iAds
+###iAds
 
   1. `iAd.framework`
   2. `AdSupport.framework` (weak-link for iOS 6)
   
-####Google Ads
+###Google Ads
 
   1. `StoreKit.framework`
   2. `AudioToolbox.framework`
@@ -38,24 +75,9 @@ That's it.  Technically, this can be added to any `UIView` that is large enough 
 1. iOS 5.0+
 2. Xcode 4.3+ - LLVM 4.0 support. Objective-C container literals are used.
 
-###Cocoapods
-Alternatively, you can use [cocoapods](http://cocoapods.org/?q=LARSAdController) to include the source in your project, which is super easy.
-
-To use cocoapods with `LARSAdController`, simply create your new podfile and include the following dependency:
-
-`pod 'LARSAdController', '~> 3.0'`
-
-This will tell cocoapods to use LARSAdController of any version in v3.x. You will get the latest revision that cocoapods has in it's repository whose major revision is 3.x.
-
-####Subspecs
-If you are only interested in iAds _or_ GoogleAds, but not both, you can specify that you would only like to have one or the other using the following:
-
-`pod 'LARSAdController/iAds', '~> 3.0'`  
-`pod 'LARSAdController/GoogleAds', '~>3.0'`
-
-The appropriate files and frameworks will be included in your project depending on which component you would like.
-
 ## Usage
+_**Cocoapods users you can resume reading here**_
+
 Back in the days of yore, `LARSAdController` 2.0 forced you opt-in to rotation-handling.  This is no longer necessary as the ad management class will auto-detect your current orientation given that the current view controller that the ad container lives in is correctly setup.
 
 The first step is to register your ad classes that the ad manager will use. The ad networks take priority in the order they were added in, so the first network registered is the highest priority, the second is below that, and so on:
@@ -145,6 +167,7 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 
 ###Planned Ad Network Adapters (Not Yet Implemented)
 1. House Ads - Display your own image with an action for a banner
+2. Developer Ads - Display auto-generated banner ads for all of your apps with a single line of code
 
 ##Creating a New Ad Network Adapter
 In order to create a new ad adapter for an ad vendor not already created, simply create a new `NSObject` subclass that conforms to the `LARSAdAdapter` protocol. There are a few required methods and properties that must be present in order for the adapter to function, as well as some optional ones that give some additional control/functionality of an ad banner. More detailed documentation can be found in the header file for `LARSAdAdapter.h`.

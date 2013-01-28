@@ -119,10 +119,11 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 - (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController{
     //remove container from superview
     //  add ad container to new view as subview at bottom
+    self.parentViewController = viewController;
+    self.parentView = view;
+    
     if (![view.subviews containsObject:_containerView]) {
         self.currentOrientation = viewController.interfaceOrientation;
-        self.parentViewController = viewController;
-        self.parentView = view;
         
         [self layoutContainerView];
         [view addSubview:self.containerView];
@@ -258,6 +259,16 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
             self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
             UIViewAutoresizingFlexibleBottomMargin;
             break;
+    }
+}
+
+- (void)setParentViewController:(UIViewController *)parentViewController{
+    _parentViewController = parentViewController;
+    
+    for (id<TOLAdAdapter> adAdapter in self.adapterInstances) {
+        if ([adAdapter respondsToSelector:@selector(setParentViewController:)]) {
+            [adAdapter setParentViewController:parentViewController];
+        }
     }
 }
 

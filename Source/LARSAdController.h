@@ -23,6 +23,10 @@
 
 #define TOLWLog(fmt, ...) NSLog((@"%@ WARNING [line %u]: " fmt), NSStringFromClass(self.class), __LINE__, ##__VA_ARGS__)
 
+/** A key to observe the value of the adVisible property.
+ */
+extern NSString * const kLARSAdObserverKeyPathIsAdVisible;
+
 typedef NS_ENUM(NSInteger, LARSAdControllerPresentationType){
     LARSAdControllerPresentationTypeBottom = 0,
     LARSAdControllerPresentationTypeTop,
@@ -99,6 +103,8 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 @property (nonatomic, readonly, weak) UIViewController *parentViewController;
 
 /** A boolean flag that indicates if _any_ ads are currently being displayed.
+ 
+ @discussion Value change will be triggered when any ads have a visibility state change. Key-value observable.
  */
 @property (nonatomic,
            getter = isAdVisible, readonly) BOOL adVisible;

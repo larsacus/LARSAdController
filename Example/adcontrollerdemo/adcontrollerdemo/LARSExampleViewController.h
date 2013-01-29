@@ -11,4 +11,6 @@
 
 @interface LARSExampleViewController : TOLAdViewController
 
+@property (nonatomic, retain) UILabel *adVisibleLabel;
+
 @end

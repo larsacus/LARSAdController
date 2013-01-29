@@ -18,7 +18,8 @@
 #import "LARSAdController.h"
 #import "TOLAdAdapter.h"
 
-const NSString * const kLARSAdObserverKeyPathAdLoaded = @"adLoaded";
+NSString * const kLARSAdObserverKeyPathAdLoaded = @"adLoaded";
+NSString * const kLARSAdObserverKeyPathIsAdVisible = @"adVisible";
 
 @implementation LARSAdContainer
 
@@ -337,10 +338,21 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 - (void)adInstanceNowAvailableForDeallocation:(id <TOLAdAdapter>)adapter{
     if ([self.instancesToCleanUp containsObject:adapter]) {
         [self animateBannerForAdapterHidden:adapter withCompletion:^{
-            [adapter.bannerView removeFromSuperview];
-            [self.adapterInstances removeObjectForKey:NSStringFromClass(adapter.class)];
-            [self.instancesToCleanUp removeObject:adapter];
+            [self cleanUpAdAdapter:adapter];
         }];
+    }
+}
+
+#pragma mark - Cleanup
+- (void)cleanUpAdAdapter:(NSObject<TOLAdAdapter> *)adapter{
+    [adapter removeObserver:self forKeyPath:kLARSAdObserverKeyPathIsAdVisible];
+    [adapter removeObserver:self forKeyPath:kLARSAdObserverKeyPathAdLoaded];
+    
+    [adapter.bannerView removeFromSuperview];
+    [self.adapterInstances removeObjectForKey:NSStringFromClass(adapter.class)];
+    
+    if ([self.instancesToCleanUp containsObject:adapter]) {
+        [self.instancesToCleanUp removeObject:adapter];
     }
 }
 
@@ -563,6 +575,11 @@ case LARSAdControllerPresentationTypeTop:{
                 break;
         }
         
+        [adapter addObserver:self
+                  forKeyPath:kLARSAdObserverKeyPathIsAdVisible
+                     options:NSKeyValueObservingOptionNew
+                     context:nil];
+        
         [self.clippingContainer addSubview:adapter.bannerView];
     }
     else if([adapter respondsToSelector:@selector(pauseAdRequests)] &&
@@ -581,21 +598,26 @@ case LARSAdControllerPresentationTypeTop:{
     //  supports it. makes for a much cleaner visual experience
     if ([adapter respondsToSelector:@selector(adLoaded)]) {
         if (adapter.adLoaded) {
-            [self animateBannerForAdapterVisible:adapter withCompletion:nil];
+            [self animateBannerForAdapterVisible:adapter
+                                  withCompletion:nil];
         }
         else{
-            [adapter addObserver:self forKeyPath:(NSString *)kLARSAdObserverKeyPathAdLoaded options:NSKeyValueObservingOptionNew context:nil];
+            [adapter addObserver:self
+                      forKeyPath:kLARSAdObserverKeyPathAdLoaded
+                         options:NSKeyValueObservingOptionNew
+                         context:nil];
         }
     }
     else if (adapter.adVisible == NO) {
-        [self animateBannerForAdapterVisible:adapter withCompletion:nil];
+        [self animateBannerForAdapterVisible:adapter
+                              withCompletion:nil];
     }
     
     return YES;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    if ([keyPath isEqualToString:(NSString *)kLARSAdObserverKeyPathAdLoaded]) {
+    if ([keyPath isEqualToString:kLARSAdObserverKeyPathAdLoaded]) {
         
         BOOL newAdLoadedValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
         NSString *friendlyNetworkDescription = [self friendlyNameForAdAdapter:object];
@@ -606,7 +628,7 @@ case LARSAdControllerPresentationTypeTop:{
                 [self animateBannerForAdapterVisible:object withCompletion:nil];
             }
             
-            [object removeObserver:self forKeyPath:(NSString *)kLARSAdObserverKeyPathAdLoaded];
+            [object removeObserver:self forKeyPath:kLARSAdObserverKeyPathAdLoaded];
         }
         else{
             TOLLog(@"Ad not loaded for %@!", friendlyNetworkDescription);
@@ -614,6 +636,9 @@ case LARSAdControllerPresentationTypeTop:{
                 [self animateBannerForAdapterHidden:object withCompletion:nil];
             }
         }
+    }
+    else if([keyPath isEqualToString:kLARSAdObserverKeyPathIsAdVisible]){
+        self.adVisible = [self areAnyAdsVisible];
     }
 }
 
@@ -643,8 +668,7 @@ case LARSAdControllerPresentationTypeTop:{
                 if ([adapter respondsToSelector:@selector(canDestroyAdBanner)]) {
                     if ([adapter canDestroyAdBanner]) {
                         TOLLog(@"Destroying %@ ad network instance", friendlyNetworkDescription);
-                        [adapter.bannerView removeFromSuperview];
-                        [self.adapterInstances removeObjectForKey:NSStringFromClass(class)];
+                        [self cleanUpAdAdapter:adapter];
                         
                         destroyed = YES;
                     }
@@ -652,8 +676,7 @@ case LARSAdControllerPresentationTypeTop:{
                 else{
                     //assume yes
                     TOLLog(@"Destroying %@ ad network instance", friendlyNetworkDescription);
-                    [adapter.bannerView removeFromSuperview];
-                    [self.adapterInstances removeObjectForKey:NSStringFromClass(class)];
+                    [self cleanUpAdAdapter:adapter];
                     
                     destroyed = YES;
                 }
@@ -680,7 +703,10 @@ case LARSAdControllerPresentationTypeTop:{
         self.registeredForOrientationChanges = YES;
         
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOrientationNotification:) name:UIDeviceOrientationDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleOrientationNotification:)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:nil];
     }
 }
 
@@ -689,7 +715,9 @@ case LARSAdControllerPresentationTypeTop:{
         TOLLog(@"Unregistering for orientation notifications");
         
         [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:UIDeviceOrientationDidChangeNotification
+                                                      object:nil];
         
         self.registeredForOrientationChanges = NO;
     }
@@ -734,7 +762,7 @@ case LARSAdControllerPresentationTypeTop:{
     for (id <TOLAdAdapter> adapterInstance in instances) {
         if (adapterInstance.adVisible) {
             [self animateBannerForAdapterHidden:adapterInstance withCompletion:^{
-                [adapterInstance.bannerView removeFromSuperview];
+                [self cleanUpAdAdapter:adapterInstance];
             }];
         }
     }

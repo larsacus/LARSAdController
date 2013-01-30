@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>LARSAdController by larsacus</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>LARSAdController</h1>
+        <p>Lightweight ad mediation for iOS to properly manage multiple ad networks dynamically including iAd and Google ads.</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/larsacus/LARSAdController" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/larsacus/LARSAdController/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/larsacus/LARSAdController/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h2>Description</h2>
+
+<p>LARSAdController 3.0 is a singleton ad management class that manages ad classes that conform to the <code>LARSAdAdapter</code> protocol. Ads are managed in a way that most closely adheres to best practices for ad networks using a single instance for each ad network in order to provide the best publishing platform for advertisers to maximize ad inventory based on your particular needs.  Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.</p>
+
+<h2>Installing</h2>
+
+<h3>Cocoapods</h3>
+
+<p>The absolute easiest way to integrate the code into your project is to use <a href="http://cocoapods.org/?q=LARSAdController">cocoapods</a> to include the source in your project. If you need more detailed instructions or choose not to use Cocoapods, <a href="https://github.com/larsacus/LARSAdController/blob/master/README.md">check out the README</a>.</p>
+
+<p>To use cocoapods with <code>LARSAdController</code>, simply create your new <code>Podfile</code> and include the following dependency:</p>
+
+<div class="highlight"><pre><span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'5.0'</span>
+
+<span class="n">pod</span> <span class="s1">'LARSAdController'</span><span class="p">,</span> <span class="s1">'~&gt; 3.0'</span>
+</pre></div>
+
+<p>This will tell cocoapods to include all LARSAdController components of any version in v3.x. You will get the latest revision that cocoapods has in it's repository whose major revision is 3.x.</p>
+
+<h3>Subspecs</h3>
+
+<p>If you are only interested in iAds <em>or</em> GoogleAds, but not both, you can specify that you would only like to have one or the other using the following in your <code>Podfile</code>:</p>
+
+<div class="highlight"><pre><span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'5.0'</span>
+
+<span class="n">pod</span> <span class="s1">'LARSAdController/iAds'</span><span class="p">,</span> <span class="s1">'~&gt; 3.0'</span>
+<span class="n">pod</span> <span class="s1">'LARSAdController/GoogleAds'</span><span class="p">,</span> <span class="s1">'~&gt; 3.0'</span>
+</pre></div>
+
+<p>If you only need the core files without any ad adapters, then your <code>Podfile</code> will look something like this:</p>
+
+<div class="highlight"><pre><span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'5.0'</span>
+
+<span class="n">pod</span> <span class="s1">'LARSAdController/Core'</span><span class="p">,</span> <span class="s1">'~&gt; 3.0'</span>
+</pre></div>
+
+<h3>Other Requirements</h3>
+
+<ol>
+<li>iOS 5.0+</li>
+<li>Xcode 4.3+ - LLVM 4.0 support. Objective-C container literals are used.</li>
+</ol><h2>Usage</h2>
+
+<p>Back in the days of yore, <code>LARSAdController</code> 2.0 forced you opt-in to rotation-handling.  This is no longer necessary as the ad management class will auto-detect your current orientation given that the current view controller that the ad container lives in is correctly setup.</p>
+
+<p>The first step is to register your ad classes that the ad manager will use. The ad networks take priority in the order they were added in, so the first network registered is the highest priority, the second is below that, and so on:</p>
+
+<p>In app delegate or somewhere else convenient before first banner is needed to display:</p>
+
+<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="nv">application</span> <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span><span class="p">{</span>
+    <span class="p">[[</span><span class="n">LARSAdController</span> <span class="n">sharedManager</span><span class="p">]</span> <span class="nl">registerAdClass:</span><span class="p">[</span><span class="n">TOLAdAdapteriAds</span> <span class="n">class</span><span class="p">]];</span>
+    <span class="p">[[</span><span class="n">LARSAdController</span> <span class="n">sharedManager</span><span class="p">]</span> <span class="nl">registerAdClass:</span><span class="p">[</span><span class="n">TOLAdAdapterGoogleAds</span> <span class="n">class</span><span class="p">]</span> <span class="nl">withPublisherId:</span><span class="n">publisherId</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Then the only line of code you need in your view controller is to add the container to your view using either of the following in <code>viewWillAppear:</code>:</p>
+
+<p><code>[[LARSAdController sharedManager] addAdContainerToView:self.view withViewController:self];</code></p>
+
+<p>or the simpler version:<br><code>[[LARSAdController sharedManager] addAdContainerToViewInViewController:self];</code></p>
+
+<p>Once the current highest-priority ad network fails to obtain an ad, it will continue to wait for an ad while the next-highest priority ad network is allocated and sends a request.  Once the ad network in priority above this network obtains an ad again, it will hide the lower-priority ad banner, clean it up and display the higher-priority network banner.</p>
+
+<h3>Ultra-Lazy Implementation</h3>
+
+<p>To make your life even <em>easier</em>, all you need to do is have each of your view controllers that you would like to have an ad pinned to the top or bottom of your view controller's view is to have your view controller subclasses inherit from <code>TOLAdViewController</code>. This will automagically add an ad view container to your view controller's view when it is supposed to. The only downside is less flexibility on ad placement in your view hierarchy.</p>
+
+<div class="highlight"><pre><span class="k">@interface</span> <span class="nc">MYBestViewController</span> : <span class="nc">TOLAdViewController</span>
+<span class="c1">//BOOM - Ads</span>
+<span class="k">@end</span>
+</pre></div>
+
+<h4>Conditionally Displaying Ads</h4>
+
+<p>If you'd only like the ads to be displayed under certain conditions (like when a user has purchased a certain in-app upgrade), then simply override <code>-shouldDisplayAds</code> in your <code>TOLAdViewController</code> subclass. Ads will not be loaded on <code>viewWillAppear:</code> if <code>shouldDisplayAds</code> returns <code>NO</code>:</p>
+
+<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">shouldDisplayAds</span><span class="p">{</span>
+  <span class="k">return</span> <span class="p">([</span><span class="n">self</span><span class="p">.</span><span class="n">purchaseTracker</span> <span class="n">hasPurchasedUpgrade</span><span class="p">]</span> <span class="o">==</span> <span class="n">NO</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>Ad Placement</h2>
+
+<p>In the past, you were only able to add a banner view to the bottom of a view and have it animate in from the bottom.  Now, you are able to not only control whether it resides at the top or bottom of your view, but control how it animates in and out of the screen.</p>
+
+<p>Two new properties are available on <code>LARSAdController</code>:</p>
+
+<div class="highlight"><pre><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">LARSAdControllerPresentationType</span> <span class="n">presentationType</span><span class="p">;</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">LARSAdControllerPinLocation</span> <span class="n">pinningLocation</span><span class="p">;</span>
+</pre></div>
+
+<p>The options for <code>presentationType</code> are as follows. These options will slide the ad banner in and out from the direction indicated in the enum:</p>
+
+<div class="highlight"><pre><span class="k">typedef</span> <span class="n">NS_ENUM</span><span class="p">(</span><span class="n">NSInteger</span><span class="p">,</span> <span class="n">LARSAdControllerPresentationType</span><span class="p">){</span>
+    <span class="n">LARSAdControllerPresentationTypeBottom</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">LARSAdControllerPresentationTypeTop</span><span class="p">,</span>
+    <span class="n">LARSAdControllerPresentationTypeLeft</span><span class="p">,</span>
+    <span class="n">LARSAdControllerPresentationTypeRight</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>These options will pin the ad view container to the bottom (default) or top of the view you specify and layout the banner inside the container accordingly:</p>
+
+<div class="highlight"><pre><span class="k">typedef</span> <span class="n">NS_ENUM</span><span class="p">(</span><span class="n">NSInteger</span><span class="p">,</span> <span class="n">LARSAdControllerPinLocation</span><span class="p">){</span>
+    <span class="n">LARSAdControllerPinLocationBottom</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">,</span>
+    <span class="n">LARSAdControllerPinLocationTop</span>
+<span class="p">};</span>
+</pre></div>
+
+<h2>Currently Available Ad Network Adapters</h2>
+
+<ol>
+<li>iAd - <code>TOLAdAdapteriAds</code>
+</li>
+<li>Google Ads - <code>TOLAdAdapterGoogleAds</code>
+</li>
+</ol><h3>Planned Ad Network Adapters (Not Yet Implemented)</h3>
+
+<ol>
+<li>House Ads - Display your own image with an action for a banner</li>
+<li>Developer Ads - Display auto-generated banner ads for all of your apps with a single line of code</li>
+</ol><h2>Creating a New Ad Network Adapter</h2>
+
+<p>In order to create a new ad adapter for an ad vendor not already created, simply create a new <code>NSObject</code> subclass that conforms to the <code>LARSAdAdapter</code> protocol. There are a few required methods and properties that must be present in order for the adapter to function, as well as some optional ones that give some additional control/functionality of an ad banner. More detailed documentation can be found in the header file for <code>LARSAdAdapter.h</code>.</p>
+
+<p>A good start would be to simply conform to the <code>LARSAdAdapter</code> protocol, compile, and let all of the warnings, errors, and runtime asserts help you complete the implementation:</p>
+
+<div class="highlight"><pre><span class="k">@interface</span> <span class="nc">LARSAdControllerHouseAdsAdapter</span> : <span class="nc">NSObject</span> <span class="o">&lt;</span><span class="n">LARSAdAdapter</span><span class="o">&gt;</span>
+  <span class="c1">//fill out the meaty part  </span>
+<span class="k">@end</span>
+</pre></div>
+
+<h2>Apps Using LARSAdController</h2>
+
+<p>If your app is using LARSAdController, and you'd like to be included in this list, please let me know either on twitter or by submitting a pull request with your app added to the README.</p>
+
+<ul>
+<li>Droid Light</li>
+</ul>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/larsacus">larsacus</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-38020983-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>

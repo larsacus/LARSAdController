@@ -171,22 +171,25 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     CGFloat width;
     CGFloat yOrigin = 0.f;
     
+    CGFloat parentWidth = CGRectGetWidth(self.parentView.frame);
+    CGFloat parentHeight = CGRectGetHeight(self.parentView.frame);
+    
     if (UIInterfaceOrientationIsLandscape(orientation)) {
         TOLLog(@"View is landscape");
         
         if (pinningLocation == LARSAdControllerPinLocationBottom) {
-            yOrigin = CGRectGetWidth(self.parentView.frame);
+            yOrigin = MIN(parentHeight, parentWidth);
         }
-        width = CGRectGetHeight(self.parentView.frame);
+        width = MAX(parentHeight, parentWidth);
         self.lastOrientationWasPortrait = NO;
     }
     else{//portrait
         TOLLog(@"View is portrait");
         
         if (pinningLocation == LARSAdControllerPinLocationBottom) {
-            yOrigin = CGRectGetHeight(self.parentView.frame);
+            yOrigin = MAX(parentHeight, parentWidth);
         }
-        width = CGRectGetWidth(self.parentView.frame);
+        width = MIN(parentHeight, parentWidth);
         self.lastOrientationWasPortrait = YES;
     }
     

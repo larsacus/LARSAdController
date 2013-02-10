@@ -167,7 +167,7 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 
 ###Planned Ad Network Adapters (Not Yet Implemented)
 1. House Ads - Display your own image with an action for a banner
-2. Developer Ads - Display auto-generated banner ads for all of your apps with a single line of code
+2. [TOLDeveloperAds](https://github.com/larsacus/TOLDeveloperAds) - Display auto-generated banner ads for all of your apps with a single line of code
 
 ##Creating a New Ad Network Adapter
 In order to create a new ad adapter for an ad vendor not already created, simply create a new `NSObject` subclass that conforms to the `LARSAdAdapter` protocol. There are a few required methods and properties that must be present in order for the adapter to function, as well as some optional ones that give some additional control/functionality of an ad banner. More detailed documentation can be found in the header file for `LARSAdAdapter.h`.

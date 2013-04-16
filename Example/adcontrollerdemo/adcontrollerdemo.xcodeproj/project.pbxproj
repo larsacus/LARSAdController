@@ -26,6 +26,8 @@
 		46C1EAFC154C706300EBFEF1 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46C1EAFB154C706300EBFEF1 /* MessageUI.framework */; };
 		46C1EAFF154C868500EBFEF1 /* LARSExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C1EAFE154C868500EBFEF1 /* LARSExampleViewController.m */; };
 		46F8742016915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */; };
+		B6E8CC91171BD94500D45BD7 /* RevMobAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6E8CC90171BD94500D45BD7 /* RevMobAds.framework */; };
+		B6E8CC94171BD96500D45BD7 /* TOLAdAdapterRevMobAds.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E8CC93171BD96500D45BD7 /* TOLAdAdapterRevMobAds.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +69,9 @@
 		46C1EAFD154C868500EBFEF1 /* LARSExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARSExampleViewController.h; sourceTree = "<group>"; };
 		46C1EAFE154C868500EBFEF1 /* LARSExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARSExampleViewController.m; sourceTree = "<group>"; };
 		46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapterGoogleAds.m; sourceTree = "<group>"; };
+		B6E8CC90171BD94500D45BD7 /* RevMobAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RevMobAds.framework; sourceTree = "<group>"; };
+		B6E8CC92171BD96500D45BD7 /* TOLAdAdapterRevMobAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapterRevMobAds.h; sourceTree = "<group>"; };
+		B6E8CC93171BD96500D45BD7 /* TOLAdAdapterRevMobAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapterRevMobAds.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +89,7 @@
 				46B9179114425C5F007EF823 /* Foundation.framework in Frameworks */,
 				46B9179314425C5F007EF823 /* CoreGraphics.framework in Frameworks */,
 				4652137116ACF9D5003635AB /* libGoogleAdMobAds.a in Frameworks */,
+				B6E8CC91171BD94500D45BD7 /* RevMobAds.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,6 +113,8 @@
 		4641EBB9167EAA0E00A4E590 /* Ad Network Adapters */ = {
 			isa = PBXGroup;
 			children = (
+				B6E8CC92171BD96500D45BD7 /* TOLAdAdapterRevMobAds.h */,
+				B6E8CC93171BD96500D45BD7 /* TOLAdAdapterRevMobAds.m */,
 				4641EBAF167EA96B00A4E590 /* TOLAdAdapterGoogleAds.h */,
 				46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */,
 				4641EBB1167EA96B00A4E590 /* TOLAdAdapteriAds.h */,
@@ -156,6 +164,7 @@
 		46B9178D14425C5F007EF823 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B6E8CC90171BD94500D45BD7 /* RevMobAds.framework */,
 				4691CC6E165202A700559F58 /* StoreKit.framework */,
 				465B42961623820900CBC997 /* AdSupport.framework */,
 				46C1EAFB154C706300EBFEF1 /* MessageUI.framework */,
@@ -280,6 +289,7 @@
 				4641EBB7167EA96B00A4E590 /* TOLAdAdapteriAds.m in Sources */,
 				4641EBB8167EA96B00A4E590 /* TOLAdViewController.m in Sources */,
 				46F8742016915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m in Sources */,
+				B6E8CC94171BD96500D45BD7 /* TOLAdAdapterRevMobAds.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,6 +364,10 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";
 				INFOPLIST_FILE = "adcontrollerdemo/adcontrollerdemo-Info.plist";
@@ -377,6 +391,10 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";
 				INFOPLIST_FILE = "adcontrollerdemo/adcontrollerdemo-Info.plist";

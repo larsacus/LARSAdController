@@ -9,6 +9,7 @@
 #import "LARSAppDelegate.h"
 #import "LARSExampleViewController.h"
 #import "LARSAdController.h"
+#import "TOLAdAdapterRevMobAds.h"
 #import "TOLAdAdapterGoogleAds.h"
 #import "TOLAdAdapteriAds.h"
 
@@ -39,9 +40,13 @@
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notified:) name:nil object:nil];
         
         //This publisher id is a test account setup to test google ads since there is no good way to only send test ads without one - ad request will simply fail
-        [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapterGoogleAds class]
+        
+        NSString *strRevMob = @"516ba3bf2d5537a5a0000013"; // Test account set up for this purpose
+        
+        [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapterRevMobAds class] withPublisherId:strRevMob]; // Primary ad network
+        [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapterGoogleAds class] // If Revmob not available
                                           withPublisherId:@"a14e55c99c24b43"];
-        [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapteriAds class]];
+        [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapteriAds class]]; // If RevMob and AdMob not available
         
         
         

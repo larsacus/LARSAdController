@@ -14,6 +14,7 @@
 		4652137116ACF9D5003635AB /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4652133316ACF9D5003635AB /* libGoogleAdMobAds.a */; };
 		465B42971623820900CBC997 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 465B42961623820900CBC997 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4691CC6F165202A700559F58 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4691CC6E165202A700559F58 /* StoreKit.framework */; };
+		469220DA171E28F7000B8AC1 /* TOLAdAdapterRevMobAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 469220D9171E28F7000B8AC1 /* TOLAdAdapterRevMobAds.m */; };
 		46B9178F14425C5F007EF823 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9178E14425C5F007EF823 /* UIKit.framework */; };
 		46B9179114425C5F007EF823 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9179014425C5F007EF823 /* Foundation.framework */; };
 		46B9179314425C5F007EF823 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9179214425C5F007EF823 /* CoreGraphics.framework */; };
@@ -27,7 +28,6 @@
 		46C1EAFF154C868500EBFEF1 /* LARSExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C1EAFE154C868500EBFEF1 /* LARSExampleViewController.m */; };
 		46F8742016915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */; };
 		B6E8CC91171BD94500D45BD7 /* RevMobAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6E8CC90171BD94500D45BD7 /* RevMobAds.framework */; };
-		B6E8CC94171BD96500D45BD7 /* TOLAdAdapterRevMobAds.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E8CC93171BD96500D45BD7 /* TOLAdAdapterRevMobAds.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +52,8 @@
 		4652133316ACF9D5003635AB /* libGoogleAdMobAds.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAdMobAds.a; path = ../AdMob/libGoogleAdMobAds.a; sourceTree = SOURCE_ROOT; };
 		465B42961623820900CBC997 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		4691CC6E165202A700559F58 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		469220D8171E28F7000B8AC1 /* TOLAdAdapterRevMobAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapterRevMobAds.h; sourceTree = "<group>"; };
+		469220D9171E28F7000B8AC1 /* TOLAdAdapterRevMobAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapterRevMobAds.m; sourceTree = "<group>"; };
 		46B9178A14425C5F007EF823 /* adcontrollerdemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adcontrollerdemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46B9178E14425C5F007EF823 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		46B9179014425C5F007EF823 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -70,8 +72,6 @@
 		46C1EAFE154C868500EBFEF1 /* LARSExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARSExampleViewController.m; sourceTree = "<group>"; };
 		46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapterGoogleAds.m; sourceTree = "<group>"; };
 		B6E8CC90171BD94500D45BD7 /* RevMobAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RevMobAds.framework; sourceTree = "<group>"; };
-		B6E8CC92171BD96500D45BD7 /* TOLAdAdapterRevMobAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapterRevMobAds.h; sourceTree = "<group>"; };
-		B6E8CC93171BD96500D45BD7 /* TOLAdAdapterRevMobAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapterRevMobAds.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,8 +113,8 @@
 		4641EBB9167EAA0E00A4E590 /* Ad Network Adapters */ = {
 			isa = PBXGroup;
 			children = (
-				B6E8CC92171BD96500D45BD7 /* TOLAdAdapterRevMobAds.h */,
-				B6E8CC93171BD96500D45BD7 /* TOLAdAdapterRevMobAds.m */,
+				469220D8171E28F7000B8AC1 /* TOLAdAdapterRevMobAds.h */,
+				469220D9171E28F7000B8AC1 /* TOLAdAdapterRevMobAds.m */,
 				4641EBAF167EA96B00A4E590 /* TOLAdAdapterGoogleAds.h */,
 				46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */,
 				4641EBB1167EA96B00A4E590 /* TOLAdAdapteriAds.h */,
@@ -289,7 +289,7 @@
 				4641EBB7167EA96B00A4E590 /* TOLAdAdapteriAds.m in Sources */,
 				4641EBB8167EA96B00A4E590 /* TOLAdViewController.m in Sources */,
 				46F8742016915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m in Sources */,
-				B6E8CC94171BD96500D45BD7 /* TOLAdAdapterRevMobAds.m in Sources */,
+				469220DA171E28F7000B8AC1 /* TOLAdAdapterRevMobAds.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,6 +367,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/..\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";
@@ -394,6 +395,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/..\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";

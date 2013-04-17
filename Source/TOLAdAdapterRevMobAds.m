@@ -24,62 +24,54 @@
         
         [RevMobAds startSessionWithAppID:_publisherId];
 
-        //[RevMobAds session].testingMode = RevMobAdsTestingModeWithoutAds;  //Choose this testing mode to simulate ad loading error
-        [RevMobAds session].testingMode = RevMobAdsTestingModeWithAds;
+//        [RevMobAds session].testingMode = RevMobAdsTestingModeWithoutAds;  //Choose this testing mode to simulate ad loading error
+        [[RevMobAds session] setTestingMode:RevMobAdsTestingModeWithAds];
         
-        _bannerView = [[RevMobAds session] bannerView];
+        _bannerView = [[RevMobAds session] bannerViewWithPlacementId:nil];
         _bannerView.delegate = self;
         [_bannerView loadAd];
         
-        // Couldn't get layoutBannerForInterfaceOrientation method working, used this solution for now:
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            _bannerView.frame = CGRectMake(0, 0, 768, 90);
-          } else {
-            _bannerView.frame = CGRectMake(0, 0, 320, 40);
-        }
         [self.bannerView setNeedsLayout];
     }
     else if(!_publisherId){
-        NSLog(@"RevMob Publisher ID not set. No ads will be served until you set one using %@ on %@!", NSStringFromSelector(@selector(registerAdClass:withPublisherId:)),NSStringFromClass([LARSAdController class]));
+        TOLWLog(@"RevMob Publisher ID not set. No ads will be served until you set one using %@ on %@!", NSStringFromSelector(@selector(registerAdClass:withPublisherId:)),NSStringFromClass([LARSAdController class]));
     }
+    
     return _bannerView;
 }
 
 - (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
-
-    // Solution yet to be found
-
+    //Simply sets the banner view to inherit the same bounds as the container
+    self.bannerView.frame = self.bannerView.superview.bounds;
 }
 
 #pragma mark - Required RevMob methods
 
 
 -(void)revmobAdDidFailWithError:(NSError *)error {
-    NSLog(@"Ad failed with error: %@", error);
-    if ([self.adManager respondsToSelector:@selector(adFailedForNetworkAdapterClass:)]) {
-        [self.adManager adFailedForNetworkAdapterClass:[self class]];
-    }
+    TOLLog(@"Ad failed with error: %@", error);
+    
+    [self.adManager adFailedForNetworkAdapterClass:[self class]];
 }
 
 -(void)revmobAdDidReceive {
-    NSLog(@"Ad loaded successfullly");
+    TOLLog(@"Ad loaded successfullly");
     if ([self.adManager respondsToSelector:@selector(adSucceededForNetworkAdapterClass:)]) {
         [self.adManager adSucceededForNetworkAdapterClass:[self class]];
     }
 }
 
 -(void)revmobAdDisplayed {
-    NSLog(@"Ad displayed");
-
+    TOLLog(@"Ad displayed");
+    [self.adManager adSucceededForNetworkAdapterClass:self.class];
 }
 
 -(void)revmobUserClickedInTheAd {
-    NSLog(@"User clicked in the ad");
+    TOLLog(@"User clicked in the ad");
 }
 
 -(void)revmobUserClosedTheAd {
-    NSLog(@"User closed the ad");
+    TOLLog(@"User closed the ad");
 }
 
 - (void)dealloc{

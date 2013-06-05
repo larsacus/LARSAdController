@@ -3,6 +3,8 @@ LARSAdController 3.0 is a singleton ad management class that manages ad classes 
 
 ##Linking
 ###Cocoapods
+![LARSAdController Platform](http://cocoapod-badges.herokuapp.com/p/LARSAdController/badge.png)  
+![LARSAdController Version](http://cocoapod-badges.herokuapp.com/v/LARSAdController/badge.png)  
 The absolute easiest way to integrate the code into your project is to use [cocoapods](http://cocoapods.org/?q=LARSAdController) to include the source in your project.
 
 To use cocoapods with `LARSAdController`, simply create your new `Podfile` and include the following dependency:

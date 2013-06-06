@@ -234,3 +234,4 @@ The above copyright notice and this permission notice shall be included in all c
 If your app is using LARSAdController, and you'd like to be included in this list, please let me know either on twitter or by submitting a pull request with your app added.
 
 - Droid Light
+- MasjidNow

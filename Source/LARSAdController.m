@@ -768,9 +768,10 @@ case LARSAdControllerPresentationTypeTop:{
                 [self cleanUpAdAdapter:adapterInstance];
             }];
         }
+        else{
+            [self cleanUpAdAdapter:adapterInstance];
+        }
     }
-    
-    [self.adapterInstances removeAllObjects];
 }
 
 #pragma mark - Misc Helpers

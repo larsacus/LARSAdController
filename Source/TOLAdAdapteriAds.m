@@ -73,6 +73,10 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
     return _bannerView;
 }
 
+- (BOOL)isBannerViewLoaded{
+    return (_bannerView != nil);
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change

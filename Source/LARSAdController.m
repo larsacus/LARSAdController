@@ -47,6 +47,7 @@ NSString * const kLARSAdObserverKeyPathIsAdVisible = @"adVisible";
            getter = isRegisteredForOrientationChanges) BOOL registeredForOrientationChanges;
 @property (nonatomic, strong) NSMutableSet *instancesToCleanUp;
 @property (nonatomic, readwrite) BOOL adVisible;
+@property (nonatomic, strong) UIButton *actionButton;
 
 /* Contains the ads so they will clip since the outer container does not clip subviews to retain shadows
  */
@@ -156,6 +157,15 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         _containerView.layer.shouldRasterize = YES;
         _containerView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
         
+        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.actionButton.bounds = (CGRect){
+            CGPointMake(0.f, 0.f),
+            CGSizeMake(20.f, 20.f)
+        };
+        self.actionButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        self.actionButton.backgroundColor = [UIColor blueColor];
+        [self.containerView addSubview:self.actionButton];
+        
         _clippingContainer = [[LARSAdContainer alloc] initWithFrame:_containerView.bounds];
         self.clippingContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         self.clippingContainer.backgroundColor = [UIColor clearColor];
@@ -249,6 +259,20 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     }
     
     adapter.bannerView.frame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+    
+    [self layoutActionButton];
+}
+
+- (void)layoutActionButton{
+    CGFloat minY = [self minYForAllBannerViews];
+    self.actionButton.center = CGPointMake(CGRectGetWidth(self.containerView.bounds) - CGRectGetWidth(self.actionButton.bounds)/2.f - 10.f,
+                                           minY - CGRectGetHeight(self.actionButton.bounds)/2.f);
+    if (minY >= CGRectGetHeight(self.containerView.bounds)) {
+        self.actionButton.alpha = 0.f;
+    }
+    else{
+        self.actionButton.alpha = 1.f;
+    }
 }
 
 - (void)layoutContainerView{
@@ -264,6 +288,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
             UIViewAutoresizingFlexibleBottomMargin;
             break;
     }
+    
+    [self layoutActionButton];
 }
 
 - (void)setParentViewController:(UIViewController *)parentViewController{
@@ -287,6 +313,18 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     }
     
     return NO;
+}
+
+- (NSObject<TOLAdAdapter> *)visibleAdAdapter{
+    NSArray *instances = [self.adapterInstances allValues];
+    
+    for (id <TOLAdAdapter> adapter in instances) {
+        if (adapter.adVisible) {
+            return adapter;
+        }
+    }
+    
+    return nil;
 }
 
 #pragma mark - Ad Network Management
@@ -428,8 +466,42 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                         options:options
                      animations:^{
                          adapter.bannerView.frame = newFrame;
+                         [self layoutActionButton];
                      }
                      completion:completion];
+}
+
+- (CGFloat)minYForAllBannerViews{
+    NSArray *instances = [self.adapterInstances allValues];
+    
+    if (instances.count > 0) {
+        CGRect unionFrame = CGRectZero;
+        for (id <TOLAdAdapter> adapter in instances) {
+            if ([adapter respondsToSelector:@selector(isBannerViewLoaded)] &&
+                [adapter isBannerViewLoaded]) {
+                NSLog(@"intersection rect: %@", NSStringFromCGRect(unionFrame));
+                NSLog(@"banner frame: %@ -- %@", NSStringFromCGRect(adapter.bannerView.frame), adapter.bannerView);
+                if (CGRectEqualToRect(unionFrame, CGRectZero)) {
+                    unionFrame = adapter.bannerView.frame;
+                }
+                else{
+                    unionFrame = CGRectUnion(unionFrame, adapter.bannerView.frame);
+                }
+            }
+            else if([adapter respondsToSelector:@selector(isBannerViewLoaded)] == NO){
+                TOLLog(@"Adapter %@ does not respond to %@", [adapter friendlyNetworkDescription], NSStringFromSelector(@selector(isBannerViewLoaded)));
+            }
+            else{
+                TOLLog(@"Adapter %@ is not loaded... skipping...", [adapter friendlyNetworkDescription]);
+            }
+        }
+        
+        NSLog(@"final frame: %@", NSStringFromCGRect(unionFrame));
+        
+        return CGRectGetMinY(unionFrame);
+    }
+    
+    return CGRectGetHeight(self.containerView.bounds);
 }
 
 - (CGRect)offScreenBannerFrameForAdapter:(id<TOLAdAdapter>)adapter presentationAnimationType:(LARSAdControllerPresentationType)presentationType{
@@ -457,13 +529,13 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                                             finalBannerFrame.origin.y);
         }
             break;
-case LARSAdControllerPresentationTypeTop:{
-    CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter
-                                              withPinningLocation:self.pinningLocation];
-
+        case LARSAdControllerPresentationTypeTop:{
+            CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter
+                                                      withPinningLocation:self.pinningLocation];
+            
             beginFrame.origin = CGPointMake(finalBannerFrame.origin.x,
                                             -bannerViewSize.height);
-}
+        }
             break;
     }
     

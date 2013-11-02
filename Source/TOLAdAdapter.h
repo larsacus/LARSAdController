@@ -78,4 +78,8 @@
  */
 @property (nonatomic, readonly) BOOL adLoaded;
 
+/** A readonly property that indicates whether the banner ad has been instantiated or not. Very similar to UIViewController's isViewLoaded property.
+ */
+@property (nonatomic, assign, readonly) BOOL isBannerViewLoaded;
+
 @end

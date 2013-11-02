@@ -34,6 +34,10 @@
     return _bannerView;
 }
 
+- (BOOL)isBannerViewLoaded{
+    return (_bannerView != nil);
+}
+
 - (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
     if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
         if (GADAdSizeEqualToSize(self.bannerView.adSize, kGADAdSizeSmartBannerLandscape) == NO) {

@@ -25,8 +25,9 @@ NSString * const kLARSAdObserverKeyPathIsAdVisible = @"adVisible";
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
     
-    for (UIView *subview in self.subviews) {
-        if ([subview hitTest:point withEvent:event]) {
+    for (UIView *subview in [self.subviews reverseObjectEnumerator]) {
+        CGPoint localPoint = [self convertPoint:point toView:subview];
+        if ([subview hitTest:localPoint withEvent:event]) {
             return [super hitTest:point withEvent:event];
         }
     }
@@ -47,7 +48,7 @@ NSString * const kLARSAdObserverKeyPathIsAdVisible = @"adVisible";
            getter = isRegisteredForOrientationChanges) BOOL registeredForOrientationChanges;
 @property (nonatomic, strong) NSMutableSet *instancesToCleanUp;
 @property (nonatomic, readwrite) BOOL adVisible;
-@property (nonatomic, strong) UIButton *actionButton;
+@property (nonatomic, strong, readwrite) UIButton *actionButton;
 
 /* Contains the ads so they will clip since the outer container does not clip subviews to retain shadows
  */
@@ -157,14 +158,9 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         _containerView.layer.shouldRasterize = YES;
         _containerView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
         
-        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.actionButton.bounds = (CGRect){
-            CGPointMake(0.f, 0.f),
-            CGSizeMake(20.f, 20.f)
-        };
-        self.actionButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        self.actionButton.backgroundColor = [UIColor blueColor];
-        [self.containerView addSubview:self.actionButton];
+        if (_actionButton) {
+            [self.containerView addSubview:self.actionButton];
+        }
         
         _clippingContainer = [[LARSAdContainer alloc] initWithFrame:_containerView.bounds];
         self.clippingContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -174,6 +170,29 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         [_containerView addSubview:self.clippingContainer];
     }
     return _containerView;
+}
+
+- (UIButton *)actionButton{
+    if (_actionButton == nil) {
+        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.actionButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        
+        [self.actionButton addTarget:self
+                              action:@selector(actionButtonTapped:)
+                    forControlEvents:UIControlEventTouchUpInside];
+        
+        if (_containerView) {
+            [self.containerView addSubview:_actionButton];
+            [self layoutActionButton];
+        }
+    }
+    return _actionButton;
+}
+
+- (void)actionButtonTapped:(UIButton *)actionButton{
+    if (self.actionButtonBlock) {
+        self.actionButtonBlock();
+    }
 }
 
 - (CGRect)containerFrameForInterfaceOrientation:(UIInterfaceOrientation)orientation withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
@@ -264,10 +283,10 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 - (void)layoutActionButton{
-    CGFloat minY = [self minYForAllBannerViews];
-    self.actionButton.center = CGPointMake(CGRectGetWidth(self.containerView.bounds) - CGRectGetWidth(self.actionButton.bounds)/2.f - 10.f,
-                                           minY - CGRectGetHeight(self.actionButton.bounds)/2.f);
-    if (minY >= CGRectGetHeight(self.containerView.bounds)) {
+    CGPoint topRight = [self topRightPointForAllBannerViews];
+    self.actionButton.center = CGPointMake(topRight.x - CGRectGetWidth(self.actionButton.bounds)/2.f - 10.f,
+                                           topRight.y - CGRectGetHeight(self.actionButton.bounds)/2.f);
+    if (topRight.y >= CGRectGetHeight(self.containerView.bounds)) {
         self.actionButton.alpha = 0.f;
     }
     else{
@@ -471,7 +490,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                      completion:completion];
 }
 
-- (CGFloat)minYForAllBannerViews{
+- (CGPoint)topRightPointForAllBannerViews{
     NSArray *instances = [self.adapterInstances allValues];
     
     if (instances.count > 0) {
@@ -479,8 +498,6 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         for (id <TOLAdAdapter> adapter in instances) {
             if ([adapter respondsToSelector:@selector(isBannerViewLoaded)] &&
                 [adapter isBannerViewLoaded]) {
-                NSLog(@"intersection rect: %@", NSStringFromCGRect(unionFrame));
-                NSLog(@"banner frame: %@ -- %@", NSStringFromCGRect(adapter.bannerView.frame), adapter.bannerView);
                 if (CGRectEqualToRect(unionFrame, CGRectZero)) {
                     unionFrame = adapter.bannerView.frame;
                 }
@@ -496,12 +513,11 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
             }
         }
         
-        NSLog(@"final frame: %@", NSStringFromCGRect(unionFrame));
-        
-        return CGRectGetMinY(unionFrame);
+        return CGPointMake(CGRectGetMaxX(unionFrame), CGRectGetMinY(unionFrame));
     }
     
-    return CGRectGetHeight(self.containerView.bounds);
+    return CGPointMake(CGRectGetHeight(self.containerView.bounds),
+                       CGRectGetMaxX(self.containerView.bounds));
 }
 
 - (CGRect)offScreenBannerFrameForAdapter:(id<TOLAdAdapter>)adapter presentationAnimationType:(LARSAdControllerPresentationType)presentationType{

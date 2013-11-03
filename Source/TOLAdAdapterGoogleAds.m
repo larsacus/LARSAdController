@@ -39,13 +39,20 @@
 }
 
 - (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
-    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
-        if (GADAdSizeEqualToSize(self.bannerView.adSize, kGADAdSizeSmartBannerLandscape) == NO) {
-            self.bannerView.adSize = kGADAdSizeSmartBannerLandscape;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (GADAdSizeEqualToSize(self.bannerView.adSize, kGADAdSizeLeaderboard) == NO) {
+            self.bannerView.adSize = kGADAdSizeLeaderboard;
         }
     }
-    else if (GADAdSizeEqualToSize(self.bannerView.adSize,kGADAdSizeSmartBannerPortrait) == NO){
+    else{
+        if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+            if (GADAdSizeEqualToSize(self.bannerView.adSize, kGADAdSizeSmartBannerLandscape) == NO) {
+                self.bannerView.adSize = kGADAdSizeSmartBannerLandscape;
+            }
+        }
+        else if (GADAdSizeEqualToSize(self.bannerView.adSize,kGADAdSizeSmartBannerPortrait) == NO){
             self.bannerView.adSize = kGADAdSizeSmartBannerPortrait;
+        }
     }
     
     [self.bannerView setNeedsLayout];
@@ -92,10 +99,6 @@
 
 - (void)startAdRequests{
     GADRequest *request = [GADRequest request];
-    
-#if TARGET_IPHONE_SIMULATOR
-    request.testDevices = [NSArray arrayWithObjects:GAD_SIMULATOR_ID, nil];
-#endif
     
     [self.bannerView loadRequest:request];
 }

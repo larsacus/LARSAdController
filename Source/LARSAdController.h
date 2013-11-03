@@ -113,6 +113,12 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
  */
 @property (nonatomic, readonly, strong) LARSAdContainer *containerView;
 
+/** The action button that sits above the ads (currently only works for bottom-pinned ads)
+ */
+@property (nonatomic, strong, readonly) UIButton *actionButton;
+
+@property (nonatomic, copy) void(^actionButtonBlock)(void);
+
 /** Class method that gives access to the shared instance.
  */
 + (LARSAdController *)sharedManager;

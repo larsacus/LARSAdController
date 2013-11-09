@@ -284,8 +284,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 
 - (void)layoutActionButton{
     CGPoint topRight = [self topRightPointForAllBannerViews];
-    self.actionButton.center = CGPointMake(topRight.x - CGRectGetWidth(self.actionButton.bounds)/2.f - 10.f,
-                                           topRight.y - CGRectGetHeight(self.actionButton.bounds)/2.f);
+    self.actionButton.center = CGPointMake(topRight.x - CGRectGetWidth(self.actionButton.bounds)/2.f,
+                                           topRight.y - CGRectGetHeight(self.actionButton.bounds)/4.f);
     if (topRight.y >= CGRectGetHeight(self.containerView.bounds)) {
         self.actionButton.alpha = 0.f;
     }

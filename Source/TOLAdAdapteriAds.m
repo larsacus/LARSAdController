@@ -123,7 +123,7 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
         [self.adManager adFailedForNetworkAdapterClass:self.class];
     }
 
-    TOLLog(@"iAd did fail to receive ad");
+    TOLLog(@"iAd did fail to receive ad: %@", error);
 }
 
 - (BOOL)canDestroyAdBanner{

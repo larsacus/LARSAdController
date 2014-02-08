@@ -469,7 +469,7 @@ case LARSAdControllerPresentationTypeTop:{
     
     beginFrame.size = bannerViewSize;
     
-    NSString *adapterName = [self friendlyNameForAdAdapter:adapter];
+    NSString * __unused adapterName = [self friendlyNameForAdAdapter:adapter];
     
     TOLLog(@"Initial banner frame <%@>: %@", adapterName, NSStringFromCGRect(beginFrame));
     
@@ -494,7 +494,7 @@ case LARSAdControllerPresentationTypeTop:{
     
     finalFrame.size = bannerViewSize;
     
-    NSString *adapterName = [self friendlyNameForAdAdapter:adapter];
+    NSString * __unused adapterName = [self friendlyNameForAdAdapter:adapter];
     
     TOLLog(@"Final banner frame <%@>: %@", adapterName, NSStringFromCGRect(finalFrame));
     
@@ -625,7 +625,7 @@ case LARSAdControllerPresentationTypeTop:{
     if ([keyPath isEqualToString:kLARSAdObserverKeyPathAdLoaded]) {
         
         BOOL newAdLoadedValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
-        NSString *friendlyNetworkDescription = [self friendlyNameForAdAdapter:object];
+        NSString * __unused friendlyNetworkDescription = [self friendlyNameForAdAdapter:object];
         
         if (newAdLoadedValue) {
             TOLLog(@"Ad loaded for %@!", friendlyNetworkDescription);
@@ -654,7 +654,7 @@ case LARSAdControllerPresentationTypeTop:{
         return;
     }
     
-    NSString *friendlyNetworkDescription = [self friendlyNameForAdAdapter:adapter];
+    NSString * __unused friendlyNetworkDescription = [self friendlyNameForAdAdapter:adapter];
     
     TOLLog(@"Attempting to halt %@ ad network", friendlyNetworkDescription);
     

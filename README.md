@@ -235,6 +235,7 @@ If your app is using LARSAdController, and you'd like to be included in this lis
 
 - Droid Light
 - MasjidNow
+- Health Lottery Results Free
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/larsacus/larsadcontroller/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

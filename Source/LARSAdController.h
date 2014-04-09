@@ -48,8 +48,8 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 @protocol LARSAdControllerDelegate <NSObject>
 
 @required
-- (void)adFailedForNetworkAdapterClass:(Class)class;
-- (void)adSucceededForNetworkAdapterClass:(Class)class;
+- (void)adFailedForNetworkAdapterClass:(Class)klass;
+- (void)adSucceededForNetworkAdapterClass:(Class)klass;
 - (void)adInstanceNowAvailableForDeallocation:(id <TOLAdAdapter>)adInstance;
 
 @end
@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
  @param class An ad network adapter class that will be used to present an ad banner for a particular ad network
  @param publisherId A string that identifies you as a publisher to your ad network provider to server you ad inventory
  */
-- (void)registerAdClass:(Class)class withPublisherId:(NSString *)publisherId;
+- (void)registerAdClass:(Class)klass withPublisherId:(NSString *)publisherId;
 
 /** The primary method to register an ad adapter class for network requests.
  
@@ -71,7 +71,7 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
  
  @param class An ad network adapter class that will be used to present an ad banner for a particular ad network
  */
-- (void)registerAdClass:(Class)class;
+- (void)registerAdClass:(Class)klass;
 
 /** The registered ad adapters that will be executed in order to request ads.
  */

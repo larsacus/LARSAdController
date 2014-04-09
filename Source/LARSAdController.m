@@ -290,15 +290,15 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 #pragma mark - Ad Network Management
-- (void)registerAdClass:(Class)class withPublisherId:(NSString *)publisherId{
+- (void)registerAdClass:(Class)klass withPublisherId:(NSString *)publisherId{
     
-    if ([self.registeredClasses containsObject:class]) {
+    if ([self.registeredClasses containsObject:klass]) {
         //If you need this functionality, open an issue on GitHub
-        TOLWLog(@"Registered adapter classes already contains \"%@\" class. Registering the same adapter with multiple publisher IDs is currently unsupported.", NSStringFromClass(class));
+        TOLWLog(@"Registered adapter classes already contains \"%@\" class. Registering the same adapter with multiple publisher IDs is currently unsupported.", NSStringFromClass(klass));
     }
     
-    [self registerAdClass:class];
-    [self.adapterClassPublisherIds setObject:publisherId forKey:NSStringFromClass(class)];
+    [self registerAdClass:klass];
+    [self.adapterClassPublisherIds setObject:publisherId forKey:NSStringFromClass(klass)];
 }
 
 - (void)registerAdClass:(Class)class{
@@ -309,10 +309,10 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 #pragma mark - Ad Adapter Delegate
-- (void)adFailedForNetworkAdapterClass:(Class)class{
+- (void)adFailedForNetworkAdapterClass:(Class)klass{
     //get index of adapter class
-    NSInteger failedNetworkIndex = [self.registeredClasses indexOfObject:class];
-    id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    NSInteger failedNetworkIndex = [self.registeredClasses indexOfObject:klass];
+    id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(klass)];
     
     [self animateBannerForAdapterHidden:adapter withCompletion:nil];
     
@@ -322,16 +322,16 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     }
 }
 
-- (void)adSucceededForNetworkAdapterClass:(Class)class{
+- (void)adSucceededForNetworkAdapterClass:(Class)klass{
     //get index of adapter class
-    NSInteger succeededNetworkIndex = [self.registeredClasses indexOfObject:class];
+    NSInteger succeededNetworkIndex = [self.registeredClasses indexOfObject:klass];
     
     //Halt all networks with lower priority than succeeded network
     for (int i = succeededNetworkIndex+1; i < self.registeredClasses.count; i++) {
         [self haltAdNetworkAdapterClass:self.registeredClasses[i]];
     }
     
-    id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(klass)];
     
     if (adapter.adVisible == NO) {
         [self animateBannerForAdapterVisible:adapter withCompletion:nil];
@@ -516,13 +516,13 @@ case LARSAdControllerPresentationTypeTop:{
     }
 }
 
-- (BOOL)startAdNetworkAdapterClass:(Class)class{
-    NSObject <TOLAdAdapter> *adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+- (BOOL)startAdNetworkAdapterClass:(Class)klass{
+    NSObject <TOLAdAdapter> *adapter = [self.adapterInstances objectForKey:NSStringFromClass(klass)];
     
     if (!adapter) {
-        TOLLog(@"Creating new instance of adapter class \"%@\"", NSStringFromClass(class));
+        TOLLog(@"Creating new instance of adapter class \"%@\"", NSStringFromClass(klass));
         
-        adapter = [[class alloc] init];
+        adapter = [[klass alloc] init];
         adapter.adManager = self;
         
         if ([adapter respondsToSelector:@selector(pauseAdRequests)] &&
@@ -530,27 +530,27 @@ case LARSAdControllerPresentationTypeTop:{
             NSAssert2(NO, @"You should probably implement %@ in addition to %@ to be consistent. Otherwise, the ad controller has no means to restart the ads requests.", NSStringFromSelector(@selector(startAdRequests)), NSStringFromSelector(@selector(pauseAdRequests)));
         }
         
-        Method requiresPublisherId = class_getClassMethod(class, @selector(requiresPublisherId));
+        Method requiresPublisherId = class_getClassMethod(klass, @selector(requiresPublisherId));
 
 //Let clang know I know what I'm doing
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         if(requiresPublisherId &&
-           [[class class] performSelector:method_getName(requiresPublisherId)]){
-            NSString *publisherId = [self.adapterClassPublisherIds objectForKey:NSStringFromClass(class)];
+           [[klass class] performSelector:method_getName(requiresPublisherId)]){
+            NSString *publisherId = [self.adapterClassPublisherIds objectForKey:NSStringFromClass(klass)];
             
             if (publisherId) {
                 [adapter setPublisherId:publisherId];
             }
             else{
-                TOLWLog(@"Ad network adapter %@ requires a publisher ID, but none was specified when instance was initialized! Please set a publisher ID from your ad network vendor and set during adapter registration using %@", NSStringFromClass(class), NSStringFromSelector(@selector(registerAdClass:withPublisherId:)));
+                TOLWLog(@"Ad network adapter %@ requires a publisher ID, but none was specified when instance was initialized! Please set a publisher ID from your ad network vendor and set during adapter registration using %@", NSStringFromClass(klass), NSStringFromSelector(@selector(registerAdClass:withPublisherId:)));
                 return NO;
             }
         }
         
         Method requiresParentViewControllerClassMethod = nil;
-        if ( (requiresParentViewControllerClassMethod = class_getClassMethod(class, @selector(requiresParentViewController))) ) {
-            if ([[class class] performSelector:method_getName(requiresParentViewControllerClassMethod)]) {
+        if ( (requiresParentViewControllerClassMethod = class_getClassMethod(klass, @selector(requiresParentViewController))) ) {
+            if ([[klass class] performSelector:method_getName(requiresParentViewControllerClassMethod)]) {
                 [adapter setParentViewController:self.parentViewController];
             }
         }
@@ -560,9 +560,9 @@ case LARSAdControllerPresentationTypeTop:{
             [adapter startAdRequests];
         }
         
-        TOLLog(@"Successfully created instance of \"%@\"", NSStringFromClass(class));
+        TOLLog(@"Successfully created instance of \"%@\"", NSStringFromClass(klass));
         
-        [self.adapterInstances setObject:adapter forKey:NSStringFromClass(class)];
+        [self.adapterInstances setObject:adapter forKey:NSStringFromClass(klass)];
         
         if (adapter.adVisible) {
             adapter.bannerView.frame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
@@ -645,10 +645,10 @@ case LARSAdControllerPresentationTypeTop:{
     }
 }
 
-- (void)haltAdNetworkAdapterClass:(Class)class{
+- (void)haltAdNetworkAdapterClass:(Class)klass{
     
     
-    id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(class)];
+    id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(klass)];
     
     if (adapter == nil) {
         return;

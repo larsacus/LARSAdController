@@ -585,8 +585,15 @@ case LARSAdControllerPresentationTypeTop:{
                   forKeyPath:kLARSAdObserverKeyPathIsAdVisible
                      options:NSKeyValueObservingOptionNew
                      context:nil];
-        
+      
         [self.clippingContainer addSubview:adapter.bannerView];
+      
+        if ([adapter respondsToSelector:@selector(adLoaded)]) {
+          [adapter addObserver:self
+                    forKeyPath:kLARSAdObserverKeyPathAdLoaded
+                       options:NSKeyValueObservingOptionNew
+                       context:nil];
+        }
     }
     else if([adapter respondsToSelector:@selector(pauseAdRequests)] &&
             [adapter respondsToSelector:@selector(startAdRequests)]){
@@ -603,11 +610,6 @@ case LARSAdControllerPresentationTypeTop:{
     //  is loaded before actually displaying it if the ad adapter
     //  supports it. makes for a much cleaner visual experience
     if ([adapter respondsToSelector:@selector(adLoaded)]) {
-        [adapter addObserver:self
-                  forKeyPath:kLARSAdObserverKeyPathAdLoaded
-                     options:NSKeyValueObservingOptionNew
-                     context:nil];
-        
         if (adapter.adLoaded) {
             [self animateBannerForAdapterVisible:adapter
                                   withCompletion:nil];

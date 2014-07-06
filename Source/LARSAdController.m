@@ -381,15 +381,13 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     [self animateAdapterBannerView:adapter
                            toFrame:finalFrame
                     withCompletion:^(BOOL finished) {
-                        if (finished) {
-                            BOOL anyAdsVisible = [self areAnyAdsVisible];
-                            if (self.isAdVisible != anyAdsVisible) {
-                                self.adVisible = anyAdsVisible;
-                            }
+                        BOOL anyAdsVisible = [self areAnyAdsVisible];
+                        if (self.isAdVisible != anyAdsVisible) {
+                            self.adVisible = anyAdsVisible;
+                        }
                             
-                            if (completion) {
-                                completion();
-                            }
+                        if (completion) {
+                            completion();
                         }
                     }];
 }
@@ -404,15 +402,13 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     [self animateAdapterBannerView:adapter
                            toFrame:finalFrame
                     withCompletion:^(BOOL finished) {
-                        if (finished) {
-                            BOOL anyAdsVisible = [self areAnyAdsVisible];
-                            if (self.isAdVisible != anyAdsVisible) {
-                                self.adVisible = anyAdsVisible;
-                            }
+                        BOOL anyAdsVisible = [self areAnyAdsVisible];
+                        if (self.isAdVisible != anyAdsVisible) {
+                            self.adVisible = anyAdsVisible;
+                        }
                             
-                            if (completion) {
-                                completion();
-                            }
+                        if (completion) {
+                            completion();
                         }
                     }];
 }

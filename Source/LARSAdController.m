@@ -392,6 +392,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                             if (completion) {
                                 completion();
                             }
+                            
+                            self.containerView.hidden = false;
                         }
                     }];
 }
@@ -415,6 +417,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                             if (completion) {
                                 completion();
                             }
+                            
+                            self.containerView.hidden = true;
                         }
                     }];
 }

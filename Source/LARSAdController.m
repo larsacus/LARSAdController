@@ -91,7 +91,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         _sharedManager.adapterClassPublisherIds = [NSMutableDictionary dictionary];
         _sharedManager.adapterInstances = [NSMutableDictionary dictionary];
         _sharedManager.instancesToCleanUp = [NSMutableSet set];
-        _sharedManager.isSuspended = false;
+        _sharedManager.isSuspended = NO;
     });
     
     return _sharedManager;
@@ -393,7 +393,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                                 completion();
                             }
                             
-                            self.containerView.hidden = false;
+                            self.containerView.hidden = NO;
                         }
                     }];
 }
@@ -418,7 +418,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                                 completion();
                             }
                             
-                            self.containerView.hidden = true;
+                            self.containerView.hidden = YES;
                         }
                     }];
 }
@@ -783,25 +783,17 @@ case LARSAdControllerPresentationTypeTop:{
 }
 
 - (void)suspend {
-    self.isSuspended = true;
-    NSArray *instances = [self.adapterInstances allValues];
+    self.isSuspended = YES;
     
-    for (id <TOLAdAdapter> adapterInstance in instances) {
-        if (adapterInstance.adVisible) {
-            [self animateBannerForAdapterHidden:adapterInstance withCompletion:nil];
-        }
+    for (int i = 0; i < self.registeredClasses.count; i++) {
+        [self haltAdNetworkAdapterClass:self.registeredClasses[i]];
     }
 }
 
 - (void)resume {
-    self.isSuspended = false;
-    NSArray *instances = [self.adapterInstances allValues];
+    self.isSuspended = NO;
     
-    for (id <TOLAdAdapter> adapterInstance in instances) {
-        if (!adapterInstance.adVisible) {
-            [self animateBannerForAdapterVisible:adapterInstance withCompletion:nil];
-        }
-    }
+    [self startAdNetworkAdapterClassAtIndex:0];
 }
 
 #pragma mark - Misc Helpers

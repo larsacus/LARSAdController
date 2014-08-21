@@ -529,14 +529,11 @@ case LARSAdControllerPresentationTypeTop:{
             ([adapter respondsToSelector:@selector(startAdRequests)] == NO)) {
             NSAssert2(NO, @"You should probably implement %@ in addition to %@ to be consistent. Otherwise, the ad controller has no means to restart the ads requests.", NSStringFromSelector(@selector(startAdRequests)), NSStringFromSelector(@selector(pauseAdRequests)));
         }
-        
-        Method requiresPublisherId = class_getClassMethod(klass, @selector(requiresPublisherId));
 
 //Let clang know I know what I'm doing
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        if(requiresPublisherId &&
-           [[klass class] performSelector:method_getName(requiresPublisherId)]){
+        if([klass instancesRespondToSelector:@selector(setPublisherId:)]){
             NSString *publisherId = [self.adapterClassPublisherIds objectForKey:NSStringFromClass(klass)];
             
             if (publisherId) {
@@ -548,11 +545,8 @@ case LARSAdControllerPresentationTypeTop:{
             }
         }
         
-        Method requiresParentViewControllerClassMethod = nil;
-        if ( (requiresParentViewControllerClassMethod = class_getClassMethod(klass, @selector(requiresParentViewController))) ) {
-            if ([[klass class] performSelector:method_getName(requiresParentViewControllerClassMethod)]) {
-                [adapter setParentViewController:self.parentViewController];
-            }
+        if ([klass instancesRespondToSelector:@selector(setParentViewController:)]) {
+            [adapter setParentViewController:self.parentViewController];
         }
 #pragma clang diagnostic pop
         

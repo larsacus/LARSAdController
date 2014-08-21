@@ -38,13 +38,6 @@
 - (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 
 @optional
-/** Class method that determines if an ad adapter requires a publisher id in order to begin serving ads.
- */
-+ (BOOL)requiresPublisherId;
-
-/** Class method that outlines if an ad adapter requires a parent view controller in order to be displayed.
- */
-+ (BOOL)requiresParentViewController;
 
 /** Starts ad requests. This method is optional because not all ad networks have a the concept of "start" or "pause". If they are allocated and alive, they are service ads indefinitely until deallocated.
  

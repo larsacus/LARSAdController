@@ -128,16 +128,16 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         
         [self layoutContainerView];
         [view addSubview:self.containerView];
-        
-        if (self.adapterInstances.count == 0) {
-            [self startAdNetworkAdapterClassAtIndex:0];
-        }
     }
     else{
         //ad container exists, and bring to front
         [view bringSubviewToFront:self.containerView];
     }
-    
+
+    if (self.adapterInstances.count == 0) {
+        [self startAdNetworkAdapterClassAtIndex:0];
+    }
+
     [self registerForDeviceRotationNotifications];
     
     [self layoutBannerViewsForCurrentOrientation:viewController.interfaceOrientation];

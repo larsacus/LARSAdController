@@ -1,0 +1,2 @@
+pod 'Google-Mobile-Ads-SDK'
+pod 'LARSAdController', :path => '../..'

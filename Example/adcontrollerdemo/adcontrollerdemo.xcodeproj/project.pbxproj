@@ -7,11 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4641EBB5167EA96B00A4E590 /* LARSAdController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4641EBAD167EA96B00A4E590 /* LARSAdController.m */; };
-		4641EBB7167EA96B00A4E590 /* TOLAdAdapteriAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4641EBB2167EA96B00A4E590 /* TOLAdAdapteriAds.m */; };
-		4641EBB8167EA96B00A4E590 /* TOLAdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4641EBB4167EA96B00A4E590 /* TOLAdViewController.m */; };
 		4642C0A7167CFB040039EE16 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4642C0A6167CFB040039EE16 /* Default-568h@2x.png */; };
-		4652137116ACF9D5003635AB /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4652133316ACF9D5003635AB /* libGoogleAdMobAds.a */; };
 		465B42971623820900CBC997 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 465B42961623820900CBC997 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4691CC6F165202A700559F58 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4691CC6E165202A700559F58 /* StoreKit.framework */; };
 		46B9178F14425C5F007EF823 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9178E14425C5F007EF823 /* UIKit.framework */; };
@@ -25,29 +21,11 @@
 		46C1EAFA154C705E00EBFEF1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46C1EAF9154C705E00EBFEF1 /* AudioToolbox.framework */; };
 		46C1EAFC154C706300EBFEF1 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46C1EAFB154C706300EBFEF1 /* MessageUI.framework */; };
 		46C1EAFF154C868500EBFEF1 /* LARSExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C1EAFE154C868500EBFEF1 /* LARSExampleViewController.m */; };
-		46F8742016915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */; };
+		5199BE0C6B9E4BDD87A09166 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7A88736DF24448861BB125 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4641EBAC167EA96B00A4E590 /* LARSAdController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARSAdController.h; sourceTree = "<group>"; };
-		4641EBAD167EA96B00A4E590 /* LARSAdController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARSAdController.m; sourceTree = "<group>"; };
-		4641EBAE167EA96B00A4E590 /* TOLAdAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapter.h; sourceTree = "<group>"; };
-		4641EBAF167EA96B00A4E590 /* TOLAdAdapterGoogleAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapterGoogleAds.h; sourceTree = "<group>"; };
-		4641EBB1167EA96B00A4E590 /* TOLAdAdapteriAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdAdapteriAds.h; sourceTree = "<group>"; };
-		4641EBB2167EA96B00A4E590 /* TOLAdAdapteriAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapteriAds.m; sourceTree = "<group>"; };
-		4641EBB3167EA96B00A4E590 /* TOLAdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOLAdViewController.h; sourceTree = "<group>"; };
-		4641EBB4167EA96B00A4E590 /* TOLAdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdViewController.m; sourceTree = "<group>"; };
 		4642C0A6167CFB040039EE16 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		4652132916ACF9D5003635AB /* GADAdMobExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADAdMobExtras.h; path = ../AdMob/GADAdMobExtras.h; sourceTree = SOURCE_ROOT; };
-		4652132A16ACF9D5003635AB /* GADAdNetworkExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADAdNetworkExtras.h; path = ../AdMob/GADAdNetworkExtras.h; sourceTree = SOURCE_ROOT; };
-		4652132B16ACF9D5003635AB /* GADAdSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADAdSize.h; path = ../AdMob/GADAdSize.h; sourceTree = SOURCE_ROOT; };
-		4652132C16ACF9D5003635AB /* GADBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADBannerView.h; path = ../AdMob/GADBannerView.h; sourceTree = SOURCE_ROOT; };
-		4652132D16ACF9D5003635AB /* GADBannerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADBannerViewDelegate.h; path = ../AdMob/GADBannerViewDelegate.h; sourceTree = SOURCE_ROOT; };
-		4652132E16ACF9D5003635AB /* GADInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADInterstitial.h; path = ../AdMob/GADInterstitial.h; sourceTree = SOURCE_ROOT; };
-		4652132F16ACF9D5003635AB /* GADInterstitialDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADInterstitialDelegate.h; path = ../AdMob/GADInterstitialDelegate.h; sourceTree = SOURCE_ROOT; };
-		4652133016ACF9D5003635AB /* GADRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADRequest.h; path = ../AdMob/GADRequest.h; sourceTree = SOURCE_ROOT; };
-		4652133116ACF9D5003635AB /* GADRequestError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADRequestError.h; path = ../AdMob/GADRequestError.h; sourceTree = SOURCE_ROOT; };
-		4652133316ACF9D5003635AB /* libGoogleAdMobAds.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAdMobAds.a; path = ../AdMob/libGoogleAdMobAds.a; sourceTree = SOURCE_ROOT; };
 		465B42961623820900CBC997 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		4691CC6E165202A700559F58 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		46B9178A14425C5F007EF823 /* adcontrollerdemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adcontrollerdemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,7 +44,8 @@
 		46C1EAFB154C706300EBFEF1 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		46C1EAFD154C868500EBFEF1 /* LARSExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARSExampleViewController.h; sourceTree = "<group>"; };
 		46C1EAFE154C868500EBFEF1 /* LARSExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARSExampleViewController.m; sourceTree = "<group>"; };
-		46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOLAdAdapterGoogleAds.m; sourceTree = "<group>"; };
+		476CEFE7144B4C53A913C9F3 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		7E7A88736DF24448861BB125 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,65 +62,21 @@
 				46B9178F14425C5F007EF823 /* UIKit.framework in Frameworks */,
 				46B9179114425C5F007EF823 /* Foundation.framework in Frameworks */,
 				46B9179314425C5F007EF823 /* CoreGraphics.framework in Frameworks */,
-				4652137116ACF9D5003635AB /* libGoogleAdMobAds.a in Frameworks */,
+				5199BE0C6B9E4BDD87A09166 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4641EBAB167EA96B00A4E590 /* LARSAdController */ = {
-			isa = PBXGroup;
-			children = (
-				4641EBAC167EA96B00A4E590 /* LARSAdController.h */,
-				4641EBAD167EA96B00A4E590 /* LARSAdController.m */,
-				4641EBAE167EA96B00A4E590 /* TOLAdAdapter.h */,
-				4641EBB9167EAA0E00A4E590 /* Ad Network Adapters */,
-				4641EBB3167EA96B00A4E590 /* TOLAdViewController.h */,
-				4641EBB4167EA96B00A4E590 /* TOLAdViewController.m */,
-			);
-			name = LARSAdController;
-			path = ../../Source;
-			sourceTree = "<group>";
-		};
-		4641EBB9167EAA0E00A4E590 /* Ad Network Adapters */ = {
-			isa = PBXGroup;
-			children = (
-				4641EBAF167EA96B00A4E590 /* TOLAdAdapterGoogleAds.h */,
-				46F8741F16915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m */,
-				4641EBB1167EA96B00A4E590 /* TOLAdAdapteriAds.h */,
-				4641EBB2167EA96B00A4E590 /* TOLAdAdapteriAds.m */,
-			);
-			name = "Ad Network Adapters";
-			sourceTree = "<group>";
-		};
-		465212CF16ACF9D5003635AB /* AdMob */ = {
-			isa = PBXGroup;
-			children = (
-				4652132916ACF9D5003635AB /* GADAdMobExtras.h */,
-				4652132A16ACF9D5003635AB /* GADAdNetworkExtras.h */,
-				4652132B16ACF9D5003635AB /* GADAdSize.h */,
-				4652132C16ACF9D5003635AB /* GADBannerView.h */,
-				4652132D16ACF9D5003635AB /* GADBannerViewDelegate.h */,
-				4652132E16ACF9D5003635AB /* GADInterstitial.h */,
-				4652132F16ACF9D5003635AB /* GADInterstitialDelegate.h */,
-				4652133016ACF9D5003635AB /* GADRequest.h */,
-				4652133116ACF9D5003635AB /* GADRequestError.h */,
-				4652133316ACF9D5003635AB /* libGoogleAdMobAds.a */,
-			);
-			name = AdMob;
-			path = ../AdMob;
-			sourceTree = SOURCE_ROOT;
-		};
 		46B9177F14425C5F007EF823 = {
 			isa = PBXGroup;
 			children = (
 				4642C0A6167CFB040039EE16 /* Default-568h@2x.png */,
-				465212CF16ACF9D5003635AB /* AdMob */,
-				4641EBAB167EA96B00A4E590 /* LARSAdController */,
 				46B9179414425C5F007EF823 /* adcontrollerdemo */,
 				46B9178D14425C5F007EF823 /* Frameworks */,
 				46B9178B14425C5F007EF823 /* Products */,
+				476CEFE7144B4C53A913C9F3 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -165,6 +100,7 @@
 				46B9178E14425C5F007EF823 /* UIKit.framework */,
 				46B9179014425C5F007EF823 /* Foundation.framework */,
 				46B9179214425C5F007EF823 /* CoreGraphics.framework */,
+				7E7A88736DF24448861BB125 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -199,10 +135,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 46B917B414425C60007EF823 /* Build configuration list for PBXNativeTarget "adcontrollerdemo" */;
 			buildPhases = (
+				2A88FC2A9EA64C9DBE91CEB0 /* Check Pods Manifest.lock */,
 				46B9178614425C5F007EF823 /* Sources */,
 				46B9178714425C5F007EF823 /* Frameworks */,
 				46B9178814425C5F007EF823 /* Resources */,
 				4691CC68164EC49200559F58 /* ShellScript */,
+				15C6BD15AF1A4EC1AE618964 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -220,7 +158,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = LARS;
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = theonlylars;
 			};
 			buildConfigurationList = 46B9178414425C5F007EF823 /* Build configuration list for PBXProject "adcontrollerdemo" */;
@@ -253,6 +191,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		15C6BD15AF1A4EC1AE618964 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2A88FC2A9EA64C9DBE91CEB0 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		4691CC68164EC49200559F58 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -276,10 +244,6 @@
 				46B9179B14425C60007EF823 /* main.m in Sources */,
 				46B9179F14425C60007EF823 /* LARSAppDelegate.m in Sources */,
 				46C1EAFF154C868500EBFEF1 /* LARSExampleViewController.m in Sources */,
-				4641EBB5167EA96B00A4E590 /* LARSAdController.m in Sources */,
-				4641EBB7167EA96B00A4E590 /* TOLAdAdapteriAds.m in Sources */,
-				4641EBB8167EA96B00A4E590 /* TOLAdViewController.m in Sources */,
-				46F8742016915DDF001A2DF8 /* TOLAdAdapterGoogleAds.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,8 +265,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -315,10 +284,15 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -329,15 +303,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -350,6 +333,7 @@
 		};
 		46B917B514425C60007EF823 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 476CEFE7144B4C53A913C9F3 /* Pods.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
@@ -361,13 +345,7 @@
 				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";
 				INFOPLIST_FILE = "adcontrollerdemo/adcontrollerdemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../AdMob\"/**",
-					"\"$(SRCROOT)/../AdMob/Add-ons/GoogleAnalyticsiOS_2.0beta3/Library\"",
-					"\"$(SRCROOT)/../AdMob\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -377,6 +355,7 @@
 		};
 		46B917B614425C60007EF823 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 476CEFE7144B4C53A913C9F3 /* Pods.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
@@ -387,13 +366,7 @@
 				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";
 				INFOPLIST_FILE = "adcontrollerdemo/adcontrollerdemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../AdMob\"/**",
-					"\"$(SRCROOT)/../AdMob/Add-ons/GoogleAnalyticsiOS_2.0beta3/Library\"",
-					"\"$(SRCROOT)/../AdMob\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;

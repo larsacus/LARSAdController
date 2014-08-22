@@ -7,8 +7,8 @@
 //
 
 #import "LARSExampleViewController.h"
-#import "LARSAdController.h"
-#import "TOLAdAdapter.h"
+#import <LARSAdController/LARSAdController.h>
+#import <LARSAdController/TOLAdAdapter.h>
 
 @interface LARSExampleViewController ()
 

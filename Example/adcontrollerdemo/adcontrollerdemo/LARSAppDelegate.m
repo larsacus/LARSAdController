@@ -8,9 +8,9 @@
 
 #import "LARSAppDelegate.h"
 #import "LARSExampleViewController.h"
-#import "LARSAdController.h"
-#import "TOLAdAdapterGoogleAds.h"
-#import "TOLAdAdapteriAds.h"
+#import <LARSAdController/LARSAdController.h>
+#import <LARSAdController/TOLAdAdapterGoogleAds.h>
+#import <LARSAdController/TOLAdAdapteriAds.h>
 
 @implementation LARSAppDelegate
 

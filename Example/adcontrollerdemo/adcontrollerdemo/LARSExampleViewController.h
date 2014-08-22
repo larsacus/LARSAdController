@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TOLAdViewController.h"
+#import <LARSAdController/TOLAdViewController.h>
 
 @interface LARSExampleViewController : TOLAdViewController
 

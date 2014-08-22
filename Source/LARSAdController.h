@@ -140,4 +140,14 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
  @warning Some ads may not clean up if there is a full-screen ad being interacted with.
  */
 - (void)destroyAllAdBanners;
+
+/** Temporary pause ads.
+ 
+ @discussion This will just hide the banners (move out of screen).
+ */
+- (void)suspend;
+
+/** Resume again after suspend. Will make banners re-appear (move in screen).
+ */
+- (void)resume;
 @end

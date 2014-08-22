@@ -47,6 +47,7 @@ NSString * const kLARSAdObserverKeyPathIsAdVisible = @"adVisible";
            getter = isRegisteredForOrientationChanges) BOOL registeredForOrientationChanges;
 @property (nonatomic, strong) NSMutableSet *instancesToCleanUp;
 @property (nonatomic, readwrite) BOOL adVisible;
+@property (nonatomic) BOOL isSuspended;
 
 /* Contains the ads so they will clip since the outer container does not clip subviews to retain shadows
  */
@@ -90,6 +91,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         _sharedManager.adapterClassPublisherIds = [NSMutableDictionary dictionary];
         _sharedManager.adapterInstances = [NSMutableDictionary dictionary];
         _sharedManager.instancesToCleanUp = [NSMutableSet set];
+        _sharedManager.isSuspended = NO;
     });
     
     return _sharedManager;
@@ -333,7 +335,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     
     id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(klass)];
     
-    if (adapter.adVisible == NO) {
+    if (adapter.adVisible == NO && !self.isSuspended) {
         [self animateBannerForAdapterVisible:adapter withCompletion:nil];
     }
 }
@@ -388,6 +390,9 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                             
                         if (completion) {
                             completion();
+                            }
+                            
+                            self.containerView.hidden = NO;
                         }
                     }];
 }
@@ -409,6 +414,9 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                             
                         if (completion) {
                             completion();
+                            }
+                            
+                            self.containerView.hidden = YES;
                         }
                     }];
 }
@@ -600,12 +608,12 @@ case LARSAdControllerPresentationTypeTop:{
     //  is loaded before actually displaying it if the ad adapter
     //  supports it. makes for a much cleaner visual experience
     if ([adapter respondsToSelector:@selector(adLoaded)]) {
-        if (adapter.adLoaded) {
+        if (adapter.adLoaded && !self.isSuspended) {
             [self animateBannerForAdapterVisible:adapter
                                   withCompletion:nil];
         }
     }
-    else if (adapter.adVisible == NO) {
+    else if (adapter.adVisible == NO && !self.isSuspended) {
         [self animateBannerForAdapterVisible:adapter
                               withCompletion:nil];
     }
@@ -764,6 +772,20 @@ case LARSAdControllerPresentationTypeTop:{
             [self cleanUpAdAdapter:adapterInstance];
         }
     }
+}
+
+- (void)suspend {
+    self.isSuspended = YES;
+    
+    for (int i = 0; i < self.registeredClasses.count; i++) {
+        [self haltAdNetworkAdapterClass:self.registeredClasses[i]];
+        }
+    }
+
+- (void)resume {
+    self.isSuspended = NO;
+    
+    [self startAdNetworkAdapterClassAtIndex:0];
 }
 
 #pragma mark - Misc Helpers

@@ -47,7 +47,7 @@ NSString * const kLARSAdObserverKeyPathIsAdVisible = @"adVisible";
            getter = isRegisteredForOrientationChanges) BOOL registeredForOrientationChanges;
 @property (nonatomic, strong) NSMutableSet *instancesToCleanUp;
 @property (nonatomic, readwrite) BOOL adVisible;
-@property (nonatomic) BOOL isSuspended;
+@property (nonatomic, assign, getter = isSuspended) BOOL suspended;
 
 /* Contains the ads so they will clip since the outer container does not clip subviews to retain shadows
  */
@@ -91,22 +91,14 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         _sharedManager.adapterClassPublisherIds = [NSMutableDictionary dictionary];
         _sharedManager.adapterInstances = [NSMutableDictionary dictionary];
         _sharedManager.instancesToCleanUp = [NSMutableSet set];
-        _sharedManager.isSuspended = NO;
+        _sharedManager.suspended = NO;
     });
     
     return _sharedManager;
 }
 
-+ (id)allocWithZone:(NSZone *)zone{
-    return [self sharedManager];
-}
-
 #pragma mark -
 #pragma mark Singleton Implementation Methods
-
-- (id)copyWithZone:(NSZone *)zone{
-    return self;
-}
 
 - (void)dealloc{//this should never get called
     _containerView = nil;
@@ -119,7 +111,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     [self addAdContainerToView:viewController.view withParentViewController:viewController];
 }
 
-- (void)addAdContainerToView:(UIView *)view withParentViewController:(UIViewController *)viewController{
+- (void)addAdContainerToView:(UIView *)view
+    withParentViewController:(UIViewController *)viewController{
     //remove container from superview
     //  add ad container to new view as subview at bottom
     self.parentViewController = viewController;
@@ -168,7 +161,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     return _containerView;
 }
 
-- (CGRect)containerFrameForInterfaceOrientation:(UIInterfaceOrientation)orientation withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
+- (CGRect)containerFrameForInterfaceOrientation:(UIInterfaceOrientation)orientation
+                            withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
     //TODO: Modify height so that the container does not contain any whitespace above ad. This will enable others to add a background to the container (a la weather channel app).
     CGFloat width;
     CGFloat yOrigin = 0.f;
@@ -250,7 +244,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         }
     }
     
-    adapter.bannerView.frame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+    adapter.bannerView.frame = [self onScreenBannerFrameForAdapter:adapter
+                                               withPinningLocation:self.pinningLocation];
 }
 
 - (void)layoutContainerView{
@@ -329,7 +324,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     NSInteger succeededNetworkIndex = [self.registeredClasses indexOfObject:klass];
     
     //Halt all networks with lower priority than succeeded network
-    for (int i = succeededNetworkIndex+1; i < self.registeredClasses.count; i++) {
+    for (NSInteger i = succeededNetworkIndex+1; i < self.registeredClasses.count; i++) {
         [self haltAdNetworkAdapterClass:self.registeredClasses[i]];
     }
     
@@ -390,14 +385,14 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                             
                         if (completion) {
                             completion();
-                            }
-                            
-                            self.containerView.hidden = NO;
                         }
+                        
+                        self.containerView.hidden = NO;
                     }];
 }
 
-- (void)animateBannerForAdapterHidden:(id <TOLAdAdapter>)adapter withCompletion:(void(^)(void))completion{
+- (void)animateBannerForAdapterHidden:(id <TOLAdAdapter>)adapter
+                       withCompletion:(void(^)(void))completion{
     
     CGRect finalFrame = [self offScreenBannerFrameForAdapter:adapter
                                    presentationAnimationType:self.presentationType];
@@ -414,14 +409,15 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                             
                         if (completion) {
                             completion();
-                            }
-                            
-                            self.containerView.hidden = YES;
                         }
+                        
+                        self.containerView.hidden = YES;
                     }];
 }
 
-- (void)animateAdapterBannerView:(id <TOLAdAdapter>)adapter toFrame:(CGRect)newFrame withCompletion:(void(^)(BOOL finished))completion{
+- (void)animateAdapterBannerView:(id <TOLAdAdapter>)adapter
+                         toFrame:(CGRect)newFrame
+                  withCompletion:(void(^)(BOOL finished))completion{
     UIViewAnimationOptions options =
     UIViewAnimationOptionAllowAnimatedContent |
     UIViewAnimationOptionBeginFromCurrentState |
@@ -436,7 +432,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                      completion:completion];
 }
 
-- (CGRect)offScreenBannerFrameForAdapter:(id<TOLAdAdapter>)adapter presentationAnimationType:(LARSAdControllerPresentationType)presentationType{
+- (CGRect)offScreenBannerFrameForAdapter:(id<TOLAdAdapter>)adapter
+               presentationAnimationType:(LARSAdControllerPresentationType)presentationType{
     
     CGRect beginFrame;
     CGSize bannerViewSize = adapter.bannerView.frame.size;
@@ -480,7 +477,8 @@ case LARSAdControllerPresentationTypeTop:{
     return beginFrame;
 }
 
-- (CGRect)onScreenBannerFrameForAdapter:(id<TOLAdAdapter>)adapter withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
+- (CGRect)onScreenBannerFrameForAdapter:(id<TOLAdAdapter>)adapter
+                    withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
 
     CGRect finalFrame;
     CGSize bannerViewSize = adapter.bannerView.frame.size;
@@ -621,7 +619,10 @@ case LARSAdControllerPresentationTypeTop:{
     return YES;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context{
     if ([keyPath isEqualToString:kLARSAdObserverKeyPathAdLoaded]) {
         
         BOOL newAdLoadedValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
@@ -646,8 +647,6 @@ case LARSAdControllerPresentationTypeTop:{
 }
 
 - (void)haltAdNetworkAdapterClass:(Class)klass{
-    
-    
     id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(klass)];
     
     if (adapter == nil) {
@@ -775,15 +774,15 @@ case LARSAdControllerPresentationTypeTop:{
 }
 
 - (void)suspend {
-    self.isSuspended = YES;
+    self.suspended = YES;
     
-    for (int i = 0; i < self.registeredClasses.count; i++) {
+    for (NSInteger i = 0; i < self.registeredClasses.count; i++) {
         [self haltAdNetworkAdapterClass:self.registeredClasses[i]];
-        }
     }
+}
 
 - (void)resume {
-    self.isSuspended = NO;
+    self.suspended = NO;
     
     [self startAdNetworkAdapterClassAtIndex:0];
 }

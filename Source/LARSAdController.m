@@ -26,7 +26,8 @@ NSString * const kLARSAdObserverKeyPathIsAdVisible = @"adVisible";
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
     
     for (UIView *subview in self.subviews) {
-        if ([subview hitTest:point withEvent:event]) {
+        CGPoint newPoint = [subview convertPoint:point fromView:self];
+        if ([subview hitTest:newPoint withEvent:event]) {
             return [super hitTest:point withEvent:event];
         }
     }

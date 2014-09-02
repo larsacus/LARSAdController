@@ -39,8 +39,8 @@
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notified:) name:nil object:nil];
         
         //This publisher id is a test account setup to test google ads since there is no good way to only send test ads without one - ad request will simply fail
-//        [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapterGoogleAds class]
-//                                          withPublisherId:@"a14e55c99c24b43"];
+        [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapterGoogleAds class]
+                                          withPublisherId:@"a14e55c99c24b43"];
         [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapteriAds class]];
         
         

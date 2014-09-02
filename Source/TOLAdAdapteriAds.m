@@ -57,7 +57,6 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
 #if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#error error
         if ([_bannerView respondsToSelector:@selector(adType)] == NO) {
             if ((&ADBannerContentSizeIdentifierLandscape != nil)) {
                 _bannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil];

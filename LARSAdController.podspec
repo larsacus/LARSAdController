@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'LARSAdController'
-  s.version = '3.0.6'
+  s.version = '3.0.7'
   s.summary = 'Lightweight ad mediation for iOS to properly manage multiple ad networks dynamically including iAd and Google ads.'
   s.description = 'A lightweight singleton ad mediation platform for iOS. Ads are managed in a way that most closely adheres to best practices for ad networks using a single instance for each ad network in order to provide the best publishing platform for advertisers to maximize ad inventory based on your particular needs. Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.'
   s.homepage = 'http://larsacus.github.com/LARSAdController/'

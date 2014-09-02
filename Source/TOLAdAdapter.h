@@ -34,8 +34,11 @@
 /** Lays out the banner view for a given orientation. Does not necessarily need to set the frame's origin correctly, just the banner's size. The banner's position is set by the ad controller.
  
  @param interfaceOrientation The interface orientation to layout the banner view for
+ @param containerView The UIView that the bannerView will live inside
  */
-- (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
+
+- (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+                               forContainer:(UIView *)containerView;
 
 @optional
 

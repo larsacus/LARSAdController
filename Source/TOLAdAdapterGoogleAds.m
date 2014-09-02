@@ -34,7 +34,8 @@
     return _bannerView;
 }
 
-- (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
+- (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+                               forContainer:(UIView *)containerView{
     if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
         if (GADAdSizeEqualToSize(self.bannerView.adSize, kGADAdSizeSmartBannerLandscape) == NO) {
             self.bannerView.adSize = kGADAdSizeSmartBannerLandscape;
@@ -71,7 +72,8 @@
     
     self.bannerView.rootViewController = viewController;
     
-    [self layoutBannerForInterfaceOrientation:viewController.interfaceOrientation];
+    [self layoutBannerForInterfaceOrientation:viewController.interfaceOrientation
+                                 forContainer:self.bannerView.superview];
 }
 
 - (void)setPublisherId:(NSString *)publisherId{

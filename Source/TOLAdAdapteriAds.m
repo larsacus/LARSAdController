@@ -57,6 +57,7 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
 #if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#error error
         if ([_bannerView respondsToSelector:@selector(adType)] == NO) {
             if ((&ADBannerContentSizeIdentifierLandscape != nil)) {
                 _bannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil];
@@ -130,19 +131,25 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
     return (self.bannerView.isBannerViewActionInProgress == NO);
 }
 
-- (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
+- (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+                               forContainer:(UIView *)containerView {
+    if ([self.bannerView respondsToSelector:@selector(adType)]) {
+        CGSize bannerSize = [self.bannerView sizeThatFits:containerView.bounds.size];
+        self.bannerView.frame = CGRectMake(0.f, 0.f, bannerSize.width, bannerSize.height);
+    } else {
 #if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #pragma clang diagnostic ignored "-Wunreachable-code"
-    if ((&ADBannerContentSizeIdentifierLandscape != nil)) {
-        self.bannerView.currentContentSizeIdentifier = UIInterfaceOrientationIsPortrait(interfaceOrientation) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifierLandscape;
-    }
-    else {
-        self.bannerView.currentContentSizeIdentifier = UIInterfaceOrientationIsPortrait(interfaceOrientation) ? ADBannerContentSizeIdentifier320x50 : ADBannerContentSizeIdentifier480x32;
-    }
+        if ((&ADBannerContentSizeIdentifierLandscape != nil)) {
+            self.bannerView.currentContentSizeIdentifier = UIInterfaceOrientationIsPortrait(interfaceOrientation) ? ADBannerContentSizeIdentifierPortrait : ADBannerContentSizeIdentifierLandscape;
+        }
+        else {
+            self.bannerView.currentContentSizeIdentifier = UIInterfaceOrientationIsPortrait(interfaceOrientation) ? ADBannerContentSizeIdentifier320x50 : ADBannerContentSizeIdentifier480x32;
+        }
 #pragma clang diagnostic pop
 #endif
+    }
 }
 
 @end

@@ -228,20 +228,26 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
         return;
     }
     
+    UIView *container = self.clippingContainer;
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (CGRectGetWidth(self.containerView.frame) < 1024.f) {
-            [adapter layoutBannerForInterfaceOrientation:UIInterfaceOrientationPortrait];
+            [adapter layoutBannerForInterfaceOrientation:UIInterfaceOrientationPortrait
+                                            forContainer:container];
         }
         else {
-            [adapter layoutBannerForInterfaceOrientation:UIInterfaceOrientationLandscapeLeft];
+            [adapter layoutBannerForInterfaceOrientation:UIInterfaceOrientationLandscapeLeft
+                                            forContainer:container];
         }
     }
     else{
         if (CGRectGetWidth(self.containerView.frame) < 480.f) {
-            [adapter layoutBannerForInterfaceOrientation:UIInterfaceOrientationPortrait];
+            [adapter layoutBannerForInterfaceOrientation:UIInterfaceOrientationPortrait
+                                            forContainer:container];
         }
         else{
-            [adapter layoutBannerForInterfaceOrientation:UIInterfaceOrientationLandscapeLeft];
+            [adapter layoutBannerForInterfaceOrientation:UIInterfaceOrientationLandscapeLeft
+                                            forContainer:container];
         }
     }
     
@@ -363,7 +369,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 #pragma mark - Banner Frames
 - (void)animateBannerForAdapterVisible:(id <TOLAdAdapter>)adapter withCompletion:(void(^)(void))completion{
     
-    [adapter layoutBannerForInterfaceOrientation:self.currentOrientation];
+    [adapter layoutBannerForInterfaceOrientation:self.currentOrientation
+                                    forContainer:self.clippingContainer];
     
     if ([self.clippingContainer.subviews containsObject:adapter.bannerView] == NO) {
         //configure initial state for banner view off-screen

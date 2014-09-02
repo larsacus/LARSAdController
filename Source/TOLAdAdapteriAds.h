@@ -24,6 +24,7 @@
 @property (nonatomic) BOOL adVisible;
 @property (weak, nonatomic) id <LARSAdControllerDelegate> adManager;
 
-- (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
+- (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+                               forContainer:(UIView *)containerView;
 
 @end

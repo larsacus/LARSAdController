@@ -40,18 +40,9 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
     LARSAdControllerPinLocationTop
 };
 
-@protocol TOLAdAdapter;
+@protocol LARSBannerVisibilityDelegate;
 
 @interface LARSAdContainer : UIView
-
-@end
-
-@protocol LARSAdControllerDelegate <NSObject>
-
-@required
-- (void)adFailedForNetworkAdapterClass:(Class)klass;
-- (void)adSucceededForNetworkAdapterClass:(Class)klass;
-- (void)adInstanceNowAvailableForDeallocation:(id <TOLAdAdapter>)adInstance;
 
 @end
 
@@ -114,6 +105,8 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
  */
 @property (nonatomic, readonly, strong) LARSAdContainer *containerView;
 
+@property (nonatomic, weak) id<LARSBannerVisibilityDelegate> delegate;
+
 /** Class method that gives access to the shared instance.
  */
 + (LARSAdController *)sharedManager;
@@ -150,4 +143,11 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 /** Resume again after suspend. Will make banners re-appear (move in screen).
  */
 - (void)resume;
+@end
+
+@protocol LARSBannerVisibilityDelegate <NSObject>
+
+@required
+- (void)adController:(LARSAdController *)adController bannerChangedVisibility:(BOOL)anyBannerVisible;
+
 @end

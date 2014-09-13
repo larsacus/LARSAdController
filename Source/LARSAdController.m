@@ -386,17 +386,25 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     [self animateAdapterBannerView:adapter
                            toFrame:finalFrame
                     withCompletion:^(BOOL finished) {
-                        BOOL anyAdsVisible = [self areAnyAdsVisible];
-                        if (self.isAdVisible != anyAdsVisible) {
-                            self.adVisible = anyAdsVisible;
-                        }
-                            
+                        self.adVisible = [self areAnyAdsVisible];
+                        
                         if (completion) {
                             completion();
                         }
                         
-                        self.containerView.hidden = NO;
+                        self.containerView.hidden = !self.adVisible;
                     }];
+}
+
+- (void)setAdVisible:(BOOL)adVisible {
+    if (_adVisible != adVisible) {
+        NSString *key = NSStringFromSelector(@selector(adVisible));
+        [self willChangeValueForKey:key];
+        _adVisible = adVisible;
+        [self didChangeValueForKey:key];
+        
+        [self.delegate adController:self bannerChangedVisibility:adVisible];
+    }
 }
 
 - (void)animateBannerForAdapterHidden:(id <TOLAdAdapter>)adapter
@@ -410,16 +418,13 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     [self animateAdapterBannerView:adapter
                            toFrame:finalFrame
                     withCompletion:^(BOOL finished) {
-                        BOOL anyAdsVisible = [self areAnyAdsVisible];
-                        if (self.isAdVisible != anyAdsVisible) {
-                            self.adVisible = anyAdsVisible;
-                        }
-                            
+                        self.adVisible = [self areAnyAdsVisible];
+                        
                         if (completion) {
                             completion();
                         }
                         
-                        self.containerView.hidden = YES;
+                        self.containerView.hidden = !self.adVisible;
                     }];
 }
 

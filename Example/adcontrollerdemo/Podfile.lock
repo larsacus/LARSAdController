@@ -1,14 +1,14 @@
 PODS:
   - Google-Mobile-Ads-SDK (6.11.1)
-  - LARSAdController (3.0.5):
+  - LARSAdController (3.0.7):
     - LARSAdController/Core
     - LARSAdController/GoogleAds
     - LARSAdController/iAds
-  - LARSAdController/Core (3.0.5)
-  - LARSAdController/GoogleAds (3.0.5):
+  - LARSAdController/Core (3.0.7)
+  - LARSAdController/GoogleAds (3.0.7):
     - Google-Mobile-Ads-SDK
     - LARSAdController/Core
-  - LARSAdController/iAds (3.0.5):
+  - LARSAdController/iAds (3.0.7):
     - LARSAdController/Core
 
 DEPENDENCIES:
@@ -21,6 +21,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 657fcbf9436363d0f925cf905d176fb1cb10df85
-  LARSAdController: b41dc91aa4440508cb709ccfc5a14c67d680d217
+  LARSAdController: bdcca2807b3766d4455685d78cd2879b76f59a62
 
 COCOAPODS: 0.33.1

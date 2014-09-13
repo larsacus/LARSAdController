@@ -10,7 +10,7 @@
 #import <LARSAdController/LARSAdController.h>
 #import <LARSAdController/TOLAdAdapter.h>
 
-@interface LARSExampleViewController ()
+@interface LARSExampleViewController () <LARSBannerVisibilityDelegate>
 
 @end
 
@@ -54,7 +54,13 @@
                                           options:NSKeyValueObservingOptionNew
                                           context:nil];
     
+    [[LARSAdController sharedManager] setDelegate:self];
+    
     self.bannerIsVisible = NO;
+}
+
+- (void)adController:(LARSAdController *)adController bannerChangedVisibility:(BOOL)anyBannerVisible {
+    NSLog(@"Changing visibility: %@", anyBannerVisible ? @"visible" : @"hidden");
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{

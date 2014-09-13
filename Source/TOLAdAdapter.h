@@ -14,7 +14,16 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol LARSAdControllerDelegate;
+@protocol TOLAdAdapter;
+
+@protocol LARSAdControllerDelegate <NSObject>
+
+@required
+- (void)adFailedForNetworkAdapterClass:(Class)klass;
+- (void)adSucceededForNetworkAdapterClass:(Class)klass;
+- (void)adInstanceNowAvailableForDeallocation:(id <TOLAdAdapter>)adInstance;
+
+@end
 
 @protocol TOLAdAdapter <NSObject>
 

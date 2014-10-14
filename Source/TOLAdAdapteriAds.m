@@ -6,11 +6,21 @@
 //
 //  Copyright (c) 2011-2013 Lars Anderson, drink&apple, theonlylars
 //
-//Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+//Permission is hereby granted, free of charge, to any person obtaining a copy of this
+//software and associated documentation files (the "Software"), to deal in the Software
+//without restriction, including without limitation the rights to use, copy, modify, merge,
+//publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+//persons to whom the Software is furnished to do so, subject to the following conditions:
 //
-//The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+//The above copyright notice and this permission notice shall be included in all
+//copies or substantial portions of the Software.
 //
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+//INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+//PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+//LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+//TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+//USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import "TOLAdAdapteriAds.h"
 
@@ -24,7 +34,7 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
 
 @implementation TOLAdAdapteriAds
 
-- (void)dealloc{
+- (void)dealloc {
     [_bannerView removeObserver:self
                          forKeyPath:kTOLAdAdapterBannerLoadedObserverKeyPath];
     _bannerView.delegate = nil;
@@ -36,11 +46,11 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
 }
 
 #pragma mark - Required Adapter Implementation 
-- (BOOL)requiresPublisherId{
+- (BOOL)requiresPublisherId {
     return NO;
 }
 
-- (ADBannerView *)bannerView{
+- (ADBannerView *)bannerView {
     if (!_bannerView) {
         
         if ([ADBannerView instancesRespondToSelector:@selector(initWithAdType:)]) {
@@ -76,8 +86,7 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
-                       context:(void *)context
-{
+                       context:(void *)context {
     if ([keyPath isEqual:kTOLAdAdapterBannerLoadedObserverKeyPath]) {
         self.adLoaded = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
     }
@@ -92,13 +101,13 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
 }
 
 #pragma mark - Optional Adapter Implementation
-- (NSString *)friendlyNetworkDescription{
+- (NSString *)friendlyNetworkDescription {
     return @"iAds";
 }
 
 #pragma mark -
 #pragma mark iAd Delegate Methods
-- (void)bannerViewDidLoadAd:(ADBannerView *)banner{
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner {
     
     if ([self.adManager respondsToSelector:@selector(adSucceededForNetworkAdapterClass:)]) {
         [self.adManager adSucceededForNetworkAdapterClass:self.class];
@@ -107,17 +116,17 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
     TOLLog(@"iAd did load ad");
 }
 
-- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
+- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave {
     return YES;
 }
 
-- (void)bannerViewActionDidFinish:(ADBannerView *)banner{
+- (void)bannerViewActionDidFinish:(ADBannerView *)banner {
     if([self.adManager respondsToSelector:@selector(adInstanceNowAvailableForDeallocation:)]){
         [self.adManager adInstanceNowAvailableForDeallocation:self];
     }
 }
 
-- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error {
     
     if ([self.adManager respondsToSelector:@selector(adFailedForNetworkAdapterClass:)]) {
         [self.adManager adFailedForNetworkAdapterClass:self.class];
@@ -126,7 +135,7 @@ NSString * const kTOLAdAdapterBannerLoadedObserverKeyPath = @"bannerLoaded";
     TOLLog(@"iAd did fail to receive ad: %@", error);
 }
 
-- (BOOL)canDestroyAdBanner{
+- (BOOL)canDestroyAdBanner {
     return (self.bannerView.isBannerViewActionInProgress == NO);
 }
 

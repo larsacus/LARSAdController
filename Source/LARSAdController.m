@@ -6,11 +6,21 @@
 //
 //  Copyright (c) 2011-2013 Lars Anderson, drink&apple, theonlylars
 //
-//Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+//Permission is hereby granted, free of charge, to any person obtaining a copy of this
+//software and associated documentation files (the "Software"), to deal in the Software
+//without restriction, including without limitation the rights to use, copy, modify, merge,
+//publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+//persons to whom the Software is furnished to do so, subject to the following conditions:
 //
-//The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+//The above copyright notice and this permission notice shall be included in all
+//copies or substantial portions of the Software.
 //
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+//INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+//PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+//LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+//TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+//USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import <QuartzCore/QuartzCore.h>
 #import "objc/runtime.h"
@@ -50,7 +60,7 @@ NSString * const kLARSAdObserverKeyPathIsAdVisible = @"adVisible";
 @property (nonatomic, readwrite) BOOL adVisible;
 @property (nonatomic, assign, getter = isSuspended) BOOL suspended;
 
-/* Contains the ads so they will clip since the outer container does not clip subviews to retain shadows
+/** Contains the ads so they will clip since the outer container does not clip subviews to retain shadows
  */
 @property (strong, nonatomic) LARSAdContainer *clippingContainer;
 
@@ -80,7 +90,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 #pragma mark -
 #pragma mark Class Methods
 
-+ (LARSAdController *)sharedManager{
++ (LARSAdController *)sharedManager {
     
     static LARSAdController *_sharedManager;
     
@@ -101,19 +111,19 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 #pragma mark -
 #pragma mark Singleton Implementation Methods
 
-- (void)dealloc{//this should never get called
+- (void)dealloc { //this should never get called
     _containerView = nil;
     _clippingContainer = nil;
 }
 
 #pragma mark -
 #pragma mark Public Methods
-- (void)addAdContainerToViewInViewController:(UIViewController *)viewController{
+- (void)addAdContainerToViewInViewController:(UIViewController *)viewController {
     [self addAdContainerToView:viewController.view withParentViewController:viewController];
 }
 
 - (void)addAdContainerToView:(UIView *)view
-    withParentViewController:(UIViewController *)viewController{
+    withParentViewController:(UIViewController *)viewController {
     //remove container from superview
     //  add ad container to new view as subview at bottom
     self.parentViewController = viewController;
@@ -139,7 +149,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     [self layoutBannerViewsForCurrentOrientation:viewController.interfaceOrientation];
 }
 
-- (LARSAdContainer *)containerView{
+- (LARSAdContainer *)containerView {
     if (!_containerView) {
         _containerView = [[LARSAdContainer alloc] init];
         _containerView.backgroundColor = [UIColor clearColor];
@@ -163,8 +173,9 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 - (CGRect)containerFrameForInterfaceOrientation:(UIInterfaceOrientation)orientation
-                            withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
-    //TODO: Modify height so that the container does not contain any whitespace above ad. This will enable others to add a background to the container (a la weather channel app).
+                            withPinningLocation:(LARSAdControllerPinLocation)pinningLocation {
+    //TODO: Modify height so that the container does not contain any whitespace above ad.
+    //This will enable others to add a background to the container (a la weather channel app).
     CGFloat width;
     CGFloat yOrigin = 0.f;
     
@@ -209,7 +220,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     return newFrame;
 }
 
-- (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation{
+- (void)layoutBannerViewsForCurrentOrientation:(UIInterfaceOrientation)orientation {
     self.currentOrientation = orientation;
     [self layoutContainerView];
     
@@ -255,22 +266,23 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                                                withPinningLocation:self.pinningLocation];
 }
 
-- (void)layoutContainerView{
-    self.containerView.frame = [self containerFrameForInterfaceOrientation:self.currentOrientation withPinningLocation:self.pinningLocation];
+- (void)layoutContainerView {
+    self.containerView.frame = [self containerFrameForInterfaceOrientation:self.currentOrientation
+                                                       withPinningLocation:self.pinningLocation];
     
     switch (self.pinningLocation) {
         case LARSAdControllerPinLocationBottom:
-            self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
-            UIViewAutoresizingFlexibleTopMargin;
+            self.containerView.autoresizingMask = (UIViewAutoresizingFlexibleWidth |
+                                                   UIViewAutoresizingFlexibleTopMargin);
             break;
         case LARSAdControllerPinLocationTop:
-            self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
-            UIViewAutoresizingFlexibleBottomMargin;
+            self.containerView.autoresizingMask = (UIViewAutoresizingFlexibleWidth |
+                                                   UIViewAutoresizingFlexibleBottomMargin);
             break;
     }
 }
 
-- (void)setParentViewController:(UIViewController *)parentViewController{
+- (void)setParentViewController:(UIViewController *)parentViewController {
     _parentViewController = parentViewController;
     
     for (id<TOLAdAdapter> adAdapter in self.adapterInstances) {
@@ -281,7 +293,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 #pragma mark - Ads Visible
-- (BOOL)areAnyAdsVisible{
+- (BOOL)areAnyAdsVisible {
     NSArray *instances = [self.adapterInstances allValues];
     
     for (id <TOLAdAdapter> adapter in instances) {
@@ -294,26 +306,30 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 #pragma mark - Ad Network Management
-- (void)registerAdClass:(Class)klass withPublisherId:(NSString *)publisherId{
+- (void)registerAdClass:(Class)klass withPublisherId:(NSString *)publisherId {
     
     if ([self.registeredClasses containsObject:klass]) {
         //If you need this functionality, open an issue on GitHub
-        TOLWLog(@"Registered adapter classes already contains \"%@\" class. Registering the same adapter with multiple publisher IDs is currently unsupported.", NSStringFromClass(klass));
+        TOLWLog(@"Registered adapter classes already contains \"%@\" class. Registering the same "
+                @"adapter with multiple publisher IDs is currently unsupported.",
+                NSStringFromClass(klass));
     }
     
     [self registerAdClass:klass];
     [self.adapterClassPublisherIds setObject:publisherId forKey:NSStringFromClass(klass)];
 }
 
-- (void)registerAdClass:(Class)class{
+- (void)registerAdClass:(Class)class {
     
-    NSAssert1(class_conformsToProtocol(class, @protocol(TOLAdAdapter)), @"Registered class does not conform to %@ protocol", NSStringFromProtocol(@protocol(TOLAdAdapter)));
+    NSAssert1(class_conformsToProtocol(class, @protocol(TOLAdAdapter)),
+              @"Registered class does not conform to %@ protocol",
+              NSStringFromProtocol(@protocol(TOLAdAdapter)));
     
     [self.registeredClasses addObject:class];
 }
 
 #pragma mark - Ad Adapter Delegate
-- (void)adFailedForNetworkAdapterClass:(Class)klass{
+- (void)adFailedForNetworkAdapterClass:(Class)klass {
     //get index of adapter class
     NSInteger failedNetworkIndex = [self.registeredClasses indexOfObject:klass];
     id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(klass)];
@@ -326,7 +342,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     }
 }
 
-- (void)adSucceededForNetworkAdapterClass:(Class)klass{
+- (void)adSucceededForNetworkAdapterClass:(Class)klass {
     //get index of adapter class
     NSInteger succeededNetworkIndex = [self.registeredClasses indexOfObject:klass];
     
@@ -342,7 +358,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
     }
 }
 
-- (void)adInstanceNowAvailableForDeallocation:(id <TOLAdAdapter>)adapter{
+- (void)adInstanceNowAvailableForDeallocation:(id <TOLAdAdapter>)adapter {
     if ([self.instancesToCleanUp containsObject:adapter]) {
         [self animateBannerForAdapterHidden:adapter withCompletion:^{
             [self cleanUpAdAdapter:adapter];
@@ -351,7 +367,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 #pragma mark - Cleanup
-- (void)cleanUpAdAdapter:(NSObject<TOLAdAdapter> *)adapter{
+- (void)cleanUpAdAdapter:(NSObject<TOLAdAdapter> *)adapter {
     [adapter removeObserver:self forKeyPath:kLARSAdObserverKeyPathIsAdVisible];
     
     if ([adapter respondsToSelector:@selector(adLoaded)]) {
@@ -367,7 +383,8 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 #pragma mark - Banner Frames
-- (void)animateBannerForAdapterVisible:(id <TOLAdAdapter>)adapter withCompletion:(void(^)(void))completion{
+- (void)animateBannerForAdapterVisible:(id <TOLAdAdapter>)adapter
+                        withCompletion:(void(^)(void))completion {
     
     [adapter layoutBannerForInterfaceOrientation:self.currentOrientation
                                     forContainer:self.clippingContainer];
@@ -408,7 +425,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 - (void)animateBannerForAdapterHidden:(id <TOLAdAdapter>)adapter
-                       withCompletion:(void(^)(void))completion{
+                       withCompletion:(void(^)(void))completion {
     
     CGRect finalFrame = [self offScreenBannerFrameForAdapter:adapter
                                    presentationAnimationType:self.presentationType];
@@ -430,7 +447,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 
 - (void)animateAdapterBannerView:(id <TOLAdAdapter>)adapter
                          toFrame:(CGRect)newFrame
-                  withCompletion:(void(^)(BOOL finished))completion{
+                  withCompletion:(void(^)(BOOL finished))completion {
     UIViewAnimationOptions options =
     UIViewAnimationOptionAllowAnimatedContent |
     UIViewAnimationOptionBeginFromCurrentState |
@@ -446,7 +463,7 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
 }
 
 - (CGRect)offScreenBannerFrameForAdapter:(id<TOLAdAdapter>)adapter
-               presentationAnimationType:(LARSAdControllerPresentationType)presentationType{
+               presentationAnimationType:(LARSAdControllerPresentationType)presentationType {
     
     CGRect beginFrame;
     CGSize bannerViewSize = adapter.bannerView.frame.size;
@@ -471,13 +488,13 @@ CGFloat const kLARSAdContainerHeightPod = 50.0f;
                                             finalBannerFrame.origin.y);
         }
             break;
-case LARSAdControllerPresentationTypeTop:{
-    CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter
-                                              withPinningLocation:self.pinningLocation];
-
+        case LARSAdControllerPresentationTypeTop: {
+            CGRect finalBannerFrame = [self onScreenBannerFrameForAdapter:adapter
+                                                      withPinningLocation:self.pinningLocation];
+            
             beginFrame.origin = CGPointMake(finalBannerFrame.origin.x,
                                             -bannerViewSize.height);
-}
+        }
             break;
     }
     
@@ -491,7 +508,7 @@ case LARSAdControllerPresentationTypeTop:{
 }
 
 - (CGRect)onScreenBannerFrameForAdapter:(id<TOLAdAdapter>)adapter
-                    withPinningLocation:(LARSAdControllerPinLocation)pinningLocation{
+                    withPinningLocation:(LARSAdControllerPinLocation)pinningLocation {
 
     CGRect finalFrame;
     CGSize bannerViewSize = adapter.bannerView.frame.size;
@@ -517,10 +534,12 @@ case LARSAdControllerPresentationTypeTop:{
 }
 
 #pragma mark - Starting/Stopping
-- (void)startAdNetworkAdapterClassAtIndex:(NSInteger)index{
+- (void)startAdNetworkAdapterClassAtIndex:(NSInteger)index {
     if ((index == 0) &&
         (self.registeredClasses.count == 0)) {
-        TOLWLog(@"There are no registered ad network adapter classes. Please register an ad network class using %@ before attempting to add ad container view into your view heirarchy.", NSStringFromSelector(@selector(registerAdClass:)));
+        TOLWLog(@"There are no registered ad network adapter classes. Please register an ad network "
+                @"class using %@ before attempting to add ad container view into your view heirarchy.",
+                NSStringFromSelector(@selector(registerAdClass:)));
     }
     else if (index < self.registeredClasses.count) {
         Class currentClass = [self.registeredClasses objectAtIndex:index];
@@ -531,7 +550,7 @@ case LARSAdControllerPresentationTypeTop:{
     }
 }
 
-- (BOOL)startAdNetworkAdapterClass:(Class)klass{
+- (BOOL)startAdNetworkAdapterClass:(Class)klass {
     NSObject <TOLAdAdapter> *adapter = [self.adapterInstances objectForKey:NSStringFromClass(klass)];
     
     if (!adapter) {
@@ -542,20 +561,27 @@ case LARSAdControllerPresentationTypeTop:{
         
         if ([adapter respondsToSelector:@selector(pauseAdRequests)] &&
             ([adapter respondsToSelector:@selector(startAdRequests)] == NO)) {
-            NSAssert2(NO, @"You should probably implement %@ in addition to %@ to be consistent. Otherwise, the ad controller has no means to restart the ads requests.", NSStringFromSelector(@selector(startAdRequests)), NSStringFromSelector(@selector(pauseAdRequests)));
+            NSAssert2(NO, @"You should probably implement %@ in addition to %@ to be consistent. "
+                      @"Otherwise, the ad controller has no means to restart the ads requests.",
+                      NSStringFromSelector(@selector(startAdRequests)),
+                      NSStringFromSelector(@selector(pauseAdRequests)));
         }
 
 //Let clang know I know what I'm doing
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        if([klass instancesRespondToSelector:@selector(setPublisherId:)]){
+        if([klass instancesRespondToSelector:@selector(setPublisherId:)]) {
             NSString *publisherId = [self.adapterClassPublisherIds objectForKey:NSStringFromClass(klass)];
             
             if (publisherId) {
                 [adapter setPublisherId:publisherId];
             }
             else{
-                TOLWLog(@"Ad network adapter %@ requires a publisher ID, but none was specified when instance was initialized! Please set a publisher ID from your ad network vendor and set during adapter registration using %@", NSStringFromClass(klass), NSStringFromSelector(@selector(registerAdClass:withPublisherId:)));
+                TOLWLog(@"Ad network adapter %@ requires a publisher ID, but none was specified when "
+                        @"instance was initialized! Please set a publisher ID from your ad network "
+                        @"vendor and set during adapter registration using %@",
+                        NSStringFromClass(klass),
+                        NSStringFromSelector(@selector(registerAdClass:withPublisherId:)));
                 return NO;
             }
         }
@@ -574,12 +600,15 @@ case LARSAdControllerPresentationTypeTop:{
         [self.adapterInstances setObject:adapter forKey:NSStringFromClass(klass)];
         
         if (adapter.adVisible) {
-            adapter.bannerView.frame = [self onScreenBannerFrameForAdapter:adapter withPinningLocation:self.pinningLocation];
+            adapter.bannerView.frame = [self onScreenBannerFrameForAdapter:adapter
+                                                       withPinningLocation:self.pinningLocation];
         }
         else{
-            adapter.bannerView.frame = [self offScreenBannerFrameForAdapter:adapter presentationAnimationType:self.presentationType];
+            adapter.bannerView.frame = [self offScreenBannerFrameForAdapter:adapter
+                                                  presentationAnimationType:self.presentationType];
         }
-        adapter.bannerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        adapter.bannerView.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin |
+                                               UIViewAutoresizingFlexibleRightMargin);
         
         switch (self.pinningLocation) {
             case LARSAdControllerPinLocationBottom:
@@ -605,7 +634,7 @@ case LARSAdControllerPresentationTypeTop:{
         }
     }
     else if([adapter respondsToSelector:@selector(pauseAdRequests)] &&
-            [adapter respondsToSelector:@selector(startAdRequests)]){
+            [adapter respondsToSelector:@selector(startAdRequests)]) {
         //If adapter implements pauseAdRequests, then we'll need to
         // call startAdRequests here.  If it does not implement it,
         // then we know that we simply deallocated the instance and
@@ -635,7 +664,7 @@ case LARSAdControllerPresentationTypeTop:{
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
-                       context:(void *)context{
+                       context:(void *)context {
     if ([keyPath isEqualToString:kLARSAdObserverKeyPathAdLoaded]) {
         
         BOOL newAdLoadedValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
@@ -659,7 +688,7 @@ case LARSAdControllerPresentationTypeTop:{
     }
 }
 
-- (void)haltAdNetworkAdapterClass:(Class)klass{
+- (void)haltAdNetworkAdapterClass:(Class)klass {
     id <TOLAdAdapter> adapter = [self.adapterInstances objectForKey:NSStringFromClass(klass)];
     
     if (adapter == nil) {
@@ -711,7 +740,7 @@ case LARSAdControllerPresentationTypeTop:{
 }
 
 #pragma mark - Orientation Handlers
-- (void)registerForDeviceRotationNotifications{
+- (void)registerForDeviceRotationNotifications {
     if (!self.isRegisteredForOrientationChanges) {
         TOLLog(@"Registering for orientation notifications");
         
@@ -725,7 +754,7 @@ case LARSAdControllerPresentationTypeTop:{
     }
 }
 
-- (void)unRegisterFromDeviceRotationNotifications{
+- (void)unRegisterFromDeviceRotationNotifications {
     if (self.isRegisteredForOrientationChanges == YES) {
         TOLLog(@"Unregistering for orientation notifications");
         
@@ -738,7 +767,7 @@ case LARSAdControllerPresentationTypeTop:{
     }
 }
 
-- (void)handleOrientationNotification:(NSNotification *)orientationNotification{
+- (void)handleOrientationNotification:(NSNotification *)orientationNotification {
     TOLLog(@"Handling orientation change");
     
     double delayInSeconds = 0.001f;
@@ -762,7 +791,7 @@ case LARSAdControllerPresentationTypeTop:{
     });
 }
 
-- (void)setShouldHandleOrientationChanges:(BOOL)shouldHandleOrientationChanges{
+- (void)setShouldHandleOrientationChanges:(BOOL)shouldHandleOrientationChanges {
     if (shouldHandleOrientationChanges == YES) {
         [self registerForDeviceRotationNotifications];
     }
@@ -771,7 +800,7 @@ case LARSAdControllerPresentationTypeTop:{
     }
 }
 
-- (void)destroyAllAdBanners{
+- (void)destroyAllAdBanners {
     NSArray *instances = [self.adapterInstances allValues];
     
     for (id <TOLAdAdapter> adapterInstance in instances) {
@@ -801,7 +830,7 @@ case LARSAdControllerPresentationTypeTop:{
 }
 
 #pragma mark - Misc Helpers
-- (NSString *)friendlyNameForAdAdapter:(NSObject <TOLAdAdapter>*)adapter{
+- (NSString *)friendlyNameForAdAdapter:(NSObject <TOLAdAdapter>*)adapter {
     if ([adapter respondsToSelector:@selector(friendlyNetworkDescription)]) {
         NSString *friendlyDescription = [adapter friendlyNetworkDescription];
         if (friendlyDescription != nil) {

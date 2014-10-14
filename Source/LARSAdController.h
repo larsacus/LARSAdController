@@ -6,11 +6,21 @@
 //
 //  Copyright (c) 2011-2013 Lars Anderson, drink&apple, theonlylars
 //
-//Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+//Permission is hereby granted, free of charge, to any person obtaining a copy of this
+//software and associated documentation files (the "Software"), to deal in the Software
+//without restriction, including without limitation the rights to use, copy, modify, merge,
+//publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+//persons to whom the Software is furnished to do so, subject to the following conditions:
 //
-//The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+//The above copyright notice and this permission notice shall be included in all
+//copies or substantial portions of the Software.
 //
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+//INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+//PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+//LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+//TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+//USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -50,7 +60,8 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 
 /** A secondary method to register an ad adapter class for network requests that accepts or requires a publisher ID.
  
- @discussion Ad network priority is assigned based on the order in which each ad network was added using this method or registerAdClass:.
+ @discussion Ad network priority is assigned based on the order in which each ad network was 
+             added using this method or registerAdClass:.
  
  @param class An ad network adapter class that will be used to present an ad banner for a particular ad network
  @param publisherId A string that identifies you as a publisher to your ad network provider to server you ad inventory
@@ -59,9 +70,11 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 
 /** The primary method to register an ad adapter class for network requests.
  
- @discussion Ad network priority is assigned based on the order in which each ad network was added using this method or registerAdClass:withPublisherId:.
+ @discussion Ad network priority is assigned based on the order in which each ad network was 
+             added using this method or registerAdClass:withPublisherId:.
  
- @param class An ad network adapter class that will be used to present an ad banner for a particular ad network
+ @param class An ad network adapter class that will be used to present an ad banner for a 
+        particular ad network
  */
 - (void)registerAdClass:(Class)klass;
 
@@ -73,11 +86,14 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
  */
 @property (strong, nonatomic, readonly) NSMutableDictionary *adapterClassPublisherIds;
 
-/** The instances for each ad adapter that are currently instantiated. Not all registered ad adapters will be instantiated at any given time. Only the active ad adapters currently waiting on ad network requests will be included in this dictionary.
+/** The instances for each ad adapter that are currently instantiated. Not all registered ad adapters 
+    will be instantiated at any given time. Only the active ad adapters currently waiting on ad network
+    requests will be included in this dictionary.
  */
 @property (strong, nonatomic, readonly) NSMutableDictionary *adapterInstances;
 
-/** The presentation type for the ad banner to use when it presents and hides itself. You can think of this as the location that ad banner will be at before it animates on screen.
+/** The presentation type for the ad banner to use when it presents and hides itself. You can think 
+    of this as the location that ad banner will be at before it animates on screen.
  */
 @property (nonatomic) LARSAdControllerPresentationType presentationType;
 
@@ -90,7 +106,8 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
  */
 @property (nonatomic, readonly, weak) UIView *parentView;
 
-/** The parent view controller that the shared instance is currently hosted in. Typically, this is the same view controller that is managing parentView.
+/** The parent view controller that the shared instance is currently hosted in. 
+    Typically, this is the same view controller that is managing parentView.
  */
 @property (nonatomic, readonly, weak) UIViewController *parentViewController;
 
@@ -111,15 +128,21 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
  */
 + (LARSAdController *)sharedManager;
 
-/** The simplified primary method of adding your ads to a view and view controller. For most, this will be the only method that is ever called besides registering your ad networks. Call this method in every view controller's viewWillAppear: method in order to add the shared ad instance to your view heirarchy.
+/** The simplified primary method of adding your ads to a view and view controller. 
+    For most, this will be the only method that is ever called besides registering your ad networks.
+    Call this method in every view controller's viewWillAppear: method in order to add the shared ad
+    instance to your view heirarchy.
  
- @discussion This method will call addAdContainerToView:withParentViewController: with viewController.view as the view parameter.
+ @discussion This method will call addAdContainerToView:withParentViewController: 
+             with viewController.view as the view parameter.
  
  @param viewController The view controller that will be managing the ad.
  */
 - (void)addAdContainerToViewInViewController:(UIViewController *)viewController;
 
-/** The primary method of adding your ads to a view and view controller. For most, this will be the only method that is ever called besides registering your ad networks. Call this method in every view controller's viewWillAppear method in order to add the shared ad instance to your view heirarchy.
+/** The primary method of adding your ads to a view and view controller. For most, this will be the 
+    only method that is ever called besides registering your ad networks. Call this method in every view
+    controller's viewWillAppear method in order to add the shared ad instance to your view heirarchy.
  
  @param view The view you would like the ad container added to.
  @param viewController The view controller that will be managing the ad.
@@ -128,7 +151,10 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 
 /** Destroys all ad banners that are currently requesting ads from their ad network.
  
- @discussion Call this when a user has purchased an in-app purchase to remove ads.  This will go through each ad network class you have registered, remove it from the view heirarchy, then clean it up appropriately. As long as you don't call addAdContainerToView:withParentViewController: or addAdContainerToViewInViewController: again, no ads will be served.
+ @discussion Call this when a user has purchased an in-app purchase to remove ads.  This will go 
+             through each ad network class you have registered, remove it from the view heirarchy, 
+             then clean it up appropriately. As long as you don't call addAdContainerToView:withParentViewController: 
+             or addAdContainerToViewInViewController: again, no ads will be served.
  
  @warning Some ads may not clean up if there is a full-screen ad being interacted with.
  */
@@ -143,6 +169,7 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 /** Resume again after suspend. Will make banners re-appear (move in screen).
  */
 - (void)resume;
+
 @end
 
 @protocol LARSBannerVisibilityDelegate <NSObject>

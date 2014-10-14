@@ -6,11 +6,21 @@
 //
 //  Copyright (c) 2011-2013 Lars Anderson, drink&apple, theonlylars
 //
-//Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+//Permission is hereby granted, free of charge, to any person obtaining a copy of this
+//software and associated documentation files (the "Software"), to deal in the Software
+//without restriction, including without limitation the rights to use, copy, modify, merge,
+//publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+//persons to whom the Software is furnished to do so, subject to the following conditions:
 //
-//The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+//The above copyright notice and this permission notice shall be included in all
+//copies or substantial portions of the Software.
 //
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+//INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+//PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+//LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+//TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+//USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import "TOLAdAdapterGoogleAds.h"
 #import <AdSupport/AdSupport.h>
@@ -18,7 +28,7 @@
 @implementation TOLAdAdapterGoogleAds
 
 #pragma mark - Required Adapted Implementation
-- (GADBannerView *)bannerView{
+- (GADBannerView *)bannerView {
     if (_bannerView == nil && _publisherId) {
         
         //start in portrait
@@ -28,14 +38,16 @@
         _bannerView.delegate = self;
     }
     else if(!_publisherId){
-        TOLWLog(@"Google Ad Publisher ID not set. No ads will be served until you set one using %@ on %@!", NSStringFromSelector(@selector(registerAdClass:withPublisherId:)),NSStringFromClass([LARSAdController class]));
+        TOLWLog(@"Google Ad Publisher ID not set. No ads will be served until you set one using %@ on %@!",
+                NSStringFromSelector(@selector(registerAdClass:withPublisherId:)),
+                NSStringFromClass([LARSAdController class]));
     }
     
     return _bannerView;
 }
 
 - (void)layoutBannerForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-                               forContainer:(UIView *)containerView{
+                               forContainer:(UIView *)containerView {
     if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
         if (GADAdSizeEqualToSize(self.bannerView.adSize, kGADAdSizeSmartBannerLandscape) == NO) {
             self.bannerView.adSize = kGADAdSizeSmartBannerLandscape;
@@ -48,7 +60,7 @@
     [self.bannerView setNeedsLayout];
 }
 
-- (void)dealloc{
+- (void)dealloc {
     _bannerView.delegate = nil;
     _bannerView = nil;
     
@@ -59,15 +71,15 @@
 }
 
 #pragma mark - Optional Adapter Implementation
-+ (BOOL)requiresPublisherId{
++ (BOOL)requiresPublisherId {
     return YES;
 }
 
-+ (BOOL)requiresParentViewController{
++ (BOOL)requiresParentViewController {
     return YES;
 }
 
-- (void)setParentViewController:(UIViewController *)viewController{
+- (void)setParentViewController:(UIViewController *)viewController {
     _parentViewController = viewController;
     
     self.bannerView.rootViewController = viewController;
@@ -76,7 +88,7 @@
                                  forContainer:self.bannerView.superview];
 }
 
-- (void)setPublisherId:(NSString *)publisherId{
+- (void)setPublisherId:(NSString *)publisherId {
     _publisherId = [publisherId copy];
     
     if (_bannerView != nil) {
@@ -84,11 +96,11 @@
     }
 }
 
-- (NSString *)friendlyNetworkDescription{
+- (NSString *)friendlyNetworkDescription {
     return @"Google Ads";
 }
 
-- (void)startAdRequests{
+- (void)startAdRequests {
     GADRequest *request = [GADRequest request];
     
 #if TARGET_IPHONE_SIMULATOR
@@ -99,7 +111,7 @@
 }
 
 #pragma mark - AdMob Delegate Methods
-- (void)adViewDidReceiveAd:(GADBannerView *)bannerView{
+- (void)adViewDidReceiveAd:(GADBannerView *)bannerView {
     
     if ([self.adManager respondsToSelector:@selector(adSucceededForNetworkAdapterClass:)]) {
         [self.adManager adSucceededForNetworkAdapterClass:[self class]];
@@ -108,7 +120,7 @@
     TOLLog(@"Google ad did receive ad");
 }
 
-- (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error{
+- (void)adView:(GADBannerView *)bannerView didFailToReceiveAdWithError:(GADRequestError *)error {
     
     if ([self.adManager respondsToSelector:@selector(adFailedForNetworkAdapterClass:)]) {
         [self.adManager adFailedForNetworkAdapterClass:[self class]];
@@ -117,8 +129,8 @@
     TOLLog(@"Google ad did fail to receive ad");
 }
 
-// Unused Google Ad Delegate Methods
-//
+/** Unused Google Ad Delegate Methods
+*/
 //- (void)adViewWillPresentScreen:(GADBannerView *)bannerView{
 //
 //}

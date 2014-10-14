@@ -16,7 +16,7 @@
 
 @implementation LARSExampleViewController
 
-- (void)loadView{
+- (void)loadView {
     UIView *view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [view setBackgroundColor:[UIColor orangeColor]];
@@ -43,11 +43,14 @@
     self.view = view;
 }
 
-- (void)viewDidLoad{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.adVisibleLabel.center = CGPointMake(CGRectGetWidth(self.view.frame)/2, CGRectGetHeight(self.view.frame)/2);
-    self.adVisibleLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
+    self.adVisibleLabel.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin |
+                                            UIViewAutoresizingFlexibleLeftMargin |
+                                            UIViewAutoresizingFlexibleRightMargin |
+                                            UIViewAutoresizingFlexibleHeight);
     
     [[LARSAdController sharedManager] addObserver:self
                                        forKeyPath:kLARSAdObserverKeyPathIsAdVisible
@@ -63,7 +66,7 @@
     NSLog(@"Changing visibility: %@", anyBannerVisible ? @"visible" : @"hidden");
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:kLARSAdObserverKeyPathIsAdVisible]) {
         NSLog(@"Observing keypath \"%@\"", keyPath);
         
@@ -116,23 +119,25 @@
     }
 }
 
-- (void)dealloc{
+- (void)dealloc {
     [[LARSAdController sharedManager] removeObserver:self forKeyPath:kLARSAdObserverKeyPathIsAdVisible];
 }
 
-/* If this view controller did not inherit from TOLAdViewController, then you would need to uncomment the below method and implement adding the ad container to the view yourself. You will also need to uncomment line 10 to import the class.
+/** If this view controller did not inherit from TOLAdViewController, then you would need to 
+ uncomment the below method and implement adding the ad container to the view yourself. 
+ You will also need to uncomment line 10 to import the class.
  */
 /*
- - (void)viewWillAppear:(BOOL)animated{
+ - (void)viewWillAppear:(BOOL)animated {
  [super viewWillAppear:animated];
  
  [[LARSAdController sharedManager] addAdContainerToViewInViewController:self];
  }
- */
+*/
 
 //Deprecated
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
     return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 #endif

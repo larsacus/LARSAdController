@@ -1,2 +1,2 @@
-pod 'Google-Mobile-Ads-SDK'
-pod 'LARSAdController', :path => '../..'
+pod 'LARSAdController/GoogleAds', :path => '../..'
+pod 'LARSAdController/iAds', :path => '../..'

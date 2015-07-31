@@ -44,8 +44,9 @@
 		46C1EAFB154C706300EBFEF1 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		46C1EAFD154C868500EBFEF1 /* LARSExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARSExampleViewController.h; sourceTree = "<group>"; };
 		46C1EAFE154C868500EBFEF1 /* LARSExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARSExampleViewController.m; sourceTree = "<group>"; };
-		476CEFE7144B4C53A913C9F3 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		7E7A88736DF24448861BB125 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		886666C17318F43456DD1947 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		8A47102C6CA44FF81FC7335A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +77,7 @@
 				46B9179414425C5F007EF823 /* adcontrollerdemo */,
 				46B9178D14425C5F007EF823 /* Frameworks */,
 				46B9178B14425C5F007EF823 /* Products */,
-				476CEFE7144B4C53A913C9F3 /* Pods.xcconfig */,
+				6C0975E76A52FF5E1AFC8678 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,6 +127,15 @@
 				46B9179C14425C60007EF823 /* adcontrollerdemo-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6C0975E76A52FF5E1AFC8678 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8A47102C6CA44FF81FC7335A /* Pods.debug.xcconfig */,
+				886666C17318F43456DD1947 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,7 +213,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2A88FC2A9EA64C9DBE91CEB0 /* Check Pods Manifest.lock */ = {
@@ -333,7 +343,7 @@
 		};
 		46B917B514425C60007EF823 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 476CEFE7144B4C53A913C9F3 /* Pods.xcconfig */;
+			baseConfigurationReference = 8A47102C6CA44FF81FC7335A /* Pods.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
@@ -344,7 +354,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";
 				INFOPLIST_FILE = "adcontrollerdemo/adcontrollerdemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -355,7 +365,7 @@
 		};
 		46B917B614425C60007EF823 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 476CEFE7144B4C53A913C9F3 /* Pods.xcconfig */;
+			baseConfigurationReference = 886666C17318F43456DD1947 /* Pods.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
@@ -365,7 +375,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "adcontrollerdemo/adcontrollerdemo-Prefix.pch";
 				INFOPLIST_FILE = "adcontrollerdemo/adcontrollerdemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

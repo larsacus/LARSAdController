@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'LARSAdController'
-  s.version = '3.0.7'
+  s.version = '3.1.0'
   s.summary = 'Lightweight ad mediation for iOS to properly manage multiple ad networks dynamically including iAd and Google ads.'
   s.description = 'A lightweight singleton ad mediation platform for iOS. Ads are managed in a way that most closely adheres to best practices for ad networks using a single instance for each ad network in order to provide the best publishing platform for advertisers to maximize ad inventory based on your particular needs. Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.'
   s.homepage = 'http://larsacus.github.com/LARSAdController/'
@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
     :git => 'https://github.com/larsacus/LARSAdController.git',
     :tag => s.version.to_s
   }
-  s.platform = :ios, 5.0
+  s.platform = :ios, '7.0'
   s.license = 'MIT'
   s.requires_arc = true
   s.frameworks = 'CoreGraphics'
@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   
   s.subspec 'GoogleAds' do |g|
       g.source_files = 'Source/TOLAdAdapterGoogleAds.{h,m}'
-      g.dependency 'Google-Mobile-Ads-SDK'
+      g.dependency 'Google-Mobile-Ads-SDK', '~> 7.2'
       g.dependency 'LARSAdController/Core'
       g.weak_frameworks = 'AdSupport'
       g.frameworks = 'AudioToolbox', 'MessageUI', 'SystemConfiguration', 'CoreGraphics', 'StoreKit'

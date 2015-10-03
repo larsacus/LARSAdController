@@ -1,6 +1,6 @@
 language: objective-c
 
-xcode_project: Example/adcontrollerdemo/adcontrollerdemo.xcworkspace
+xcode_workspace: Example/adcontrollerdemo/adcontrollerdemo.xcworkspace
 
 xcode_scheme: adcontrollerdemo
 

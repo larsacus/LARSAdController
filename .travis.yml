@@ -4,11 +4,13 @@ xcode_workspace: Example/adcontrollerdemo/adcontrollerdemo.xcworkspace
 
 xcode_scheme: adcontrollerdemo
 
-xcode_sdk:
-  - iphonesimulator9.0
-  - iphonesimulator8.4
-  - iphonesimulator8.3
-  - iphonesimulator8.2
-  - iphonesimulator8.1
+podfile: Example/adcontrollerdemo/Podfile
+
+xcode_sdk: iphonesimulator9.0
+  # - iphonesimulator9.0
+  # - iphonesimulator8.4
+  # - iphonesimulator8.3
+  # - iphonesimulator8.2
+  # - iphonesimulator8.1
   
 osx_image: xcode7

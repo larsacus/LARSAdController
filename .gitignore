@@ -1,5 +1,4 @@
 *.DS_Store
 Docs/
 xcuserdata/
-xcshareddata/
 Pods/

@@ -10,9 +10,9 @@ The absolute easiest way to integrate the code into your project is to use [coco
 To use cocoapods with `LARSAdController`, simply create your new `Podfile` and include the following dependency:
 
 ``` ruby
-platform :ios, '5.0'
+platform :ios, '7.0'
 
-pod 'LARSAdController', '~> 3.0'
+pod 'LARSAdController', '~> 3.1'
 ```
 
 This will tell cocoapods to include all LARSAdController components of any version in v3.x. You will get the latest revision that cocoapods has in it's repository whose major revision is 3.x.
@@ -21,18 +21,18 @@ This will tell cocoapods to include all LARSAdController components of any versi
 If you are only interested in iAds _or_ GoogleAds, but not both, you can specify that you would only like to have one or the other using the following in your `Podfile`:
 
 ``` ruby
-platform :ios, '5.0'
+platform :ios, '7.0'
 
-pod 'LARSAdController/iAds', '~> 3.0'
-pod 'LARSAdController/GoogleAds', '~> 3.0'
+pod 'LARSAdController/iAds', '~> 3.1'
+pod 'LARSAdController/GoogleAds', '~> 3.1'
 ```
 
 If you only need the core files without any ad adapters, then your `Podfile` will look something like this:
 
 ``` ruby
-platform :ios, '5.0'
+platform :ios, '7.0'
 
-pod 'LARSAdController/Core', '~> 3.0'
+pod 'LARSAdController/Core', '~> 3.1'
 ```
 
 The appropriate files and frameworks will be included in your project depending on which component you would like.

@@ -26,8 +26,8 @@
 
 #import "LARSAdController.h"
 #import "TOLAdAdapter.h"
-#import "GADBannerViewDelegate.h"
-#import "GADBannerView.h"
+#import <GoogleMobileAds/GADBannerViewDelegate.h>
+#import <GoogleMobileAds/GADBannerView.h>
 
 @interface TOLAdAdapterGoogleAds : NSObject <TOLAdAdapter, GADBannerViewDelegate>
 

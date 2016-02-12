@@ -2,7 +2,7 @@
 LARSAdController 3.0 is a singleton ad management class that manages ad classes that conform to the `LARSAdAdapter` protocol. Ads are managed in a way that most closely adheres to best practices for ad networks using a single instance for each ad network in order to provide the best publishing platform for advertisers to maximize ad inventory based on your particular needs.  Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.
 
 ##Linking
-###Cocoapods
+###CocoaPods
 ![LARSAdController Platform](https://cocoapod-badges.herokuapp.com/p/LARSAdController/badge.png)&nbsp;![LARSAdController Version](https://cocoapod-badges.herokuapp.com/v/LARSAdController/badge.png)
 
 The absolute easiest way to integrate the code into your project is to use [cocoapods](http://cocoapods.org/?q=LARSAdController) to include the source in your project.
@@ -78,7 +78,7 @@ That's it.  Technically, this can be added to any `UIView` that is large enough 
 2. Xcode 4.3+ - LLVM 4.0 support. Objective-C container literals are used.
 
 ## Usage
-_**Cocoapods users you can resume reading here**_
+_**CocoaPods users you can resume reading here**_
 
 Back in the days of yore, `LARSAdController` 2.0 forced you opt-in to rotation-handling.  This is no longer necessary as the ad management class will auto-detect your current orientation given that the current view controller that the ad container lives in is correctly setup.
 

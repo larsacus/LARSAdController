@@ -1,3 +1,8 @@
+# DONT USE THIS COMPONENT ANYMORE
+
+1. The iAd network is shutting down. This component has limited to no usefulness outside of iAds: https://developer.apple.com/support/iad/
+2. If you will be using Google ads, Google has a built-in ad mediation platform, outlined here: https://firebase.google.com/docs/admob/ios/mediation
+
 ## Description
 LARSAdController 3.0 is a singleton ad management class that manages ad classes that conform to the `LARSAdAdapter` protocol. Ads are managed in a way that most closely adheres to best practices for ad networks using a single instance for each ad network in order to provide the best publishing platform for advertisers to maximize ad inventory based on your particular needs.  Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.
 

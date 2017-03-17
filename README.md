@@ -6,8 +6,8 @@
 ## Description
 LARSAdController 3.0 is a singleton ad management class that manages ad classes that conform to the `LARSAdAdapter` protocol. Ads are managed in a way that most closely adheres to best practices for ad networks using a single instance for each ad network in order to provide the best publishing platform for advertisers to maximize ad inventory based on your particular needs.  Currently there are two adapters available (iAd and Google Ads). The adapters can be extended to any ad framework wanted.
 
-##Linking
-###CocoaPods
+## Linking
+### CocoaPods
 ![LARSAdController Platform](https://cocoapod-badges.herokuapp.com/p/LARSAdController/badge.png)&nbsp;![LARSAdController Version](https://cocoapod-badges.herokuapp.com/v/LARSAdController/badge.png)
 
 The absolute easiest way to integrate the code into your project is to use [cocoapods](http://cocoapods.org/?q=LARSAdController) to include the source in your project.
@@ -22,7 +22,7 @@ pod 'LARSAdController', '~> 3.1'
 
 This will tell cocoapods to include all LARSAdController components of any version in v3.x. You will get the latest revision that cocoapods has in it's repository whose major revision is 3.x.
 
-####Subspecs
+#### Subspecs
 If you are only interested in iAds _or_ GoogleAds, but not both, you can specify that you would only like to have one or the other using the following in your `Podfile`:
 
 ``` ruby
@@ -44,13 +44,13 @@ The appropriate files and frameworks will be included in your project depending 
 
 Congratulations! You can now ignore the next section on doing all of this by hand.
 
-###Ye Olde Method
+### Ye Olde Method
 
 If you're not using cocoapods, in order to use `LARSAdController`, you will need to clone this repo and add the `Source/` directory to your project, as well as add the required frameworks - all by hand.
 
 ...like a caveman
 
-###Git Submodule
+### Git Submodule
 You can do this the old way by simply cloning the repository and adding the files to your project as a git submodule as shown below:
 
 `git add submodule <third_party_folder> https://github.com/larsacus/LARSAdController.git --recursive`
@@ -60,12 +60,12 @@ Where `<third_party_folder>` is the folder where all of your third party code li
 ## Framework Requirements
 In order to compile, you will need to include the following Apple frameworks:
 
-###iAds
+### iAds
 
   1. `iAd.framework`
   2. `AdSupport.framework` (weak-link for iOS 6)
   
-###Google Ads
+### Google Ads
 
   1. `StoreKit.framework`
   2. `AudioToolbox.framework`
@@ -78,7 +78,7 @@ You will also need the `Google AdMob SDK` available from [Google](https://develo
 
 That's it.  Technically, this can be added to any `UIView` that is large enough and managed by a view controller.
 
-###Other Requirements
+### Other Requirements
 1. iOS 5.0+
 2. Xcode 4.3+ - LLVM 4.0 support. Objective-C container literals are used.
 
@@ -129,7 +129,7 @@ To make your life even _easier_, all you need to do is have each of your view co
 @end
 ```
 
-####Conditionally Displaying Ads
+#### Conditionally Displaying Ads
 If you'd only like the ads to be displayed under certain conditions (like when a user has purchased a certain in-app upgrade), then simply override `-shouldDisplayAds` in your `TOLAdViewController` subclass. Ads will not be loaded on `viewWillAppear:` if `shouldDisplayAds` returns `NO`:
 
 ``` objective-c
@@ -138,7 +138,7 @@ If you'd only like the ads to be displayed under certain conditions (like when a
 }
 ```
 
-##Ad Placement
+## Ad Placement
 In the past, you were only able to add a banner view to the bottom of a view and have it animate in from the bottom.  Now, you are able to not only control whether it resides at the top or bottom of your view, but control how it animates in and out of the screen.
 
 Two new properties are available on `LARSAdController`:
@@ -168,15 +168,15 @@ typedef NS_ENUM(NSInteger, LARSAdControllerPinLocation){
 };
 ```
 
-##Currently Available Ad Network Adapters
+## Currently Available Ad Network Adapters
 1. iAd - `TOLAdAdapteriAds`
 2. Google Ads - `TOLAdAdapterGoogleAds`
 
-###Planned Ad Network Adapters (Not Yet Implemented)
+### Planned Ad Network Adapters (Not Yet Implemented)
 1. House Ads - Display your own image with an action for a banner
 2. [TOLDeveloperAds](https://github.com/larsacus/TOLDeveloperAds) - Display auto-generated banner ads for all of your apps with a single line of code
 
-##Creating a New Ad Network Adapter
+## Creating a New Ad Network Adapter
 In order to create a new ad adapter for an ad vendor not already created, simply create a new `NSObject` subclass that conforms to the `LARSAdAdapter` protocol. There are a few required methods and properties that must be present in order for the adapter to function, as well as some optional ones that give some additional control/functionality of an ad banner. More detailed documentation can be found in the header file for `LARSAdAdapter.h`.
 
 A good start would be to simply conform to the `LARSAdAdapter` protocol, compile, and let all of the warnings, errors, and runtime asserts help you complete the implementation:
@@ -187,7 +187,7 @@ A good start would be to simply conform to the `LARSAdAdapter` protocol, compile
 @end
 ```
 
-##Installing Documentation
+## Installing Documentation
 LARSAdController 3.0's headers are fully documented using appledoc. In order to install the docset in Xcode, you will need to install appledoc, then run a command similar to the below in the root directory of the `LARSAdController` repository in order to install the docset:
 
 `appledoc -p "LARSAdController" -c "theonlylars" -d -n --company-id "com.theonlylars" --no-repeat-first-par -o ~/Docs Source`
@@ -207,8 +207,8 @@ The above copyright notice and this permission notice shall be included in all c
 
 *THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*
 
-##Change Log
-###3.0
+## Change Log
+### 3.0
 - Refactored to add support for modular networks
 - Added modular network protocol for network adapters to conform to
 - Added modular ad network handling
@@ -216,7 +216,7 @@ The above copyright notice and this permission notice shall be included in all c
 - Now ARC-ready!
 - Added Google Ad test-ad support - will now serve test ads when running in debug mode (`#ifdef DEBUG`)
 
-###2.1
+### 2.1
 - Added orientation auto-listening without use of view controller delegate callbacks
 - Added ability for ads to try and fit themselves into any view they are placed in.  Sizing is now done based on superview size vs just the orientation
 - Fixed Issue 3 - "Container frame is incorrect when returning from clicked ad"
@@ -224,24 +224,20 @@ The above copyright notice and this permission notice shall be included in all c
 - Moved some method signatures from .h to private interface in .m file
 - Updated example project
 
-###2.0.1
+### 2.0.1
 - Added demo project to make up for my lackluster instructions
 
-###2.0
+### 2.0
 - Now with more rotation-ness support!
 - Pad support as well as pod support for all of your support needs
 
-###1.x
+### 1.x
 - Only pods are supported
 - Only portrait orientation is supported
 
-##Apps Using LARSAdController
+## Apps Using LARSAdController
 If your app is using LARSAdController, and you'd like to be included in this list, please let me know either on twitter or by submitting a pull request with your app added.
 
 - Droid Light
 - MasjidNow
 - Health Lottery Results Free
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/larsacus/larsadcontroller/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
